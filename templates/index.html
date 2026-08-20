@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Flanders Trophy{% endblock %}
+
+{% block content %}
+<section class="home-hero">
+    <div class="home-hero-inner">
+        <div class="home-hero-card">
+            <h1>Flanders Trophy</h1>
+            <p>Welkom op de website van de Flanders Trophy, een handbaltoernooi in Vlaanderen.</p>
+            <p class="muted">Deze site is nog in opbouw - de echte inhoud (toernooi-informatie, kalender, ploegen, ...) volgt binnenkort. Beheer je pagina's ondertussen via <a href="{{ url_for('admin.dashboard') }}">het adminpaneel</a>.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

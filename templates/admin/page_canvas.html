@@ -1,0 +1,107 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - {{ page.title }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  .page-settings-toggle { cursor: pointer; font-weight: 600; color: var(--blue); }
+  .page-settings-body { margin-top: 16px; }
+  .block-add-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+
+  .canvas-list { display: flex; flex-direction: column; gap: 20px; }
+  .canvas-block { border: 1px solid var(--border); border-radius: var(--radius); background: var(--white); overflow: hidden; }
+  .canvas-block-toolbar { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--blue-light); border-bottom: 1px solid var(--border); }
+  .canvas-drag-handle { cursor: grab; color: var(--muted); font-size: 16px; user-select: none; }
+  .canvas-block-type-badge { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+  .canvas-block-toolbar-actions { display: flex; gap: 8px; margin-left: auto; }
+  .canvas-delete-form { display: inline-flex; }
+  .canvas-toolbar-btn { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--white); color: var(--ink); cursor: pointer; text-decoration: none; }
+  .canvas-toolbar-btn:hover { background: var(--blue-light); }
+  .canvas-toolbar-btn-danger { color: var(--danger); }
+  .canvas-block > .page-block { margin-top: 0; padding: 24px; }
+  .canvas-block.sortable-ghost { opacity: 0.4; }
+
+  .canvas-placeholder-box, .canvas-placeholder-text {
+    color: var(--muted); font-style: italic; background: var(--bg); border: 1px dashed var(--border);
+    border-radius: var(--radius-sm); padding: 20px; text-align: center;
+  }
+
+  .block-faq-item-editable { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; }
+  .block-faq-item-editable .block-faq-vraag { font-weight: 700; color: var(--blue); margin: 0 0 8px; }
+  .block-faq-item-editable p:last-child { margin: 0; color: var(--muted); }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>{{ page.title }}</h1>
+    <p>
+        <a href="{{ url_for('admin.pages') }}">&larr; Terug naar Pagina's</a>
+        {% if page.is_published %}
+        &middot; <a href="{{ url_for('pages.view', slug=page.slug) }}" target="_blank" rel="noopener">Bekijk pagina &rarr;</a>
+        {% else %}
+        &middot; <a href="{{ url_for('admin.preview_page', page_id=page.id) }}" target="_blank" rel="noopener">Voorbeeld bekijken &rarr;</a>
+        {% endif %}
+    </p>
+</div>
+
+<section class="section">
+    {% if error %}
+    <p class="alert alert-error" style="margin-bottom:20px;">{{ error }}</p>
+    {% endif %}
+
+    <details class="page-settings" {{ 'open' if error else '' }}>
+        <summary class="page-settings-toggle">Pagina-instellingen (titel, slug, afbeelding, publiceren)</summary>
+        <div class="page-settings-body">
+            <form action="{{ url_for('admin.edit_page', page_id=page.id) }}" method="post" class="admin-form" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div>
+                    <label for="title">Titel</label>
+                    <input type="text" id="title" name="title" value="{{ form_title if form_title is defined else page.title }}" required>
+                </div>
+                <div>
+                    <label for="slug">Slug (URL: /pagina/&lt;slug&gt;)</label>
+                    <input type="text" id="slug" name="slug" value="{{ form_slug if form_slug is defined else page.slug }}">
+                </div>
+                <div>
+                    <label for="hero_image">Afbeelding bovenaan (optioneel)</label>
+                    <input type="file" id="hero_image" name="hero_image" accept="image/*">
+                    {% if page.hero_image %}<p class="muted">Huidige afbeelding: {{ page.hero_image }}</p>{% endif %}
+                </div>
+                <div class="checkbox-field">
+                    {% set published = form_is_published if form_is_published is defined else page.is_published %}
+                    <label for="is_published"><input type="checkbox" id="is_published" name="is_published" {{ 'checked' if published else '' }}> Gepubliceerd (zichtbaar voor bezoekers)</label>
+                </div>
+                <div class="form-actions" style="grid-column:1/-1;">
+                    <button type="submit" class="admin-button">Instellingen opslaan</button>
+                </div>
+            </form>
+        </div>
+    </details>
+</section>
+
+<section class="section">
+    <h2 class="section-title" style="margin-bottom:12px;">Blok toevoegen</h2>
+    <div class="block-add-row">
+        {% for bt in block_types %}
+        <a href="{{ url_for('admin.add_page_block', page_id=page.id, block_type=bt) }}" class="admin-button btn-sm">+ {{ block_type_labels[bt] }}</a>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title" style="margin-bottom:12px;">Inhoud (versleep om te herordenen)</h2>
+    {% if page.blocks %}
+    <div class="canvas-list" id="canvas-list" data-page-id="{{ page.id }}">
+        {% for block in page.blocks %}
+            {% include "admin/_canvas_block.html" %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Deze pagina heeft nog geen blokken. Voeg er hierboven één toe.</p>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='vendor/sortablejs/Sortable.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin_page_canvas.js') }}"></script>
+{% endblock %}

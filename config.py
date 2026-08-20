@@ -1,0 +1,81 @@
+"""
+config.py
+---------
+Alle instellingen voor de Flask-app staan hier gebundeld, zodat je nooit
+gevoelige gegevens (zoals een secret key of database-wachtwoord) hardcoded
+in je code hoeft te zetten. Instellingen worden uit omgevingsvariabelen
+gehaald (.env-bestand), met een veilige standaardwaarde voor development.
+"""
+
+import os
+from dotenv import load_dotenv
+
+# Basisdirectory van het project, handig voor bestandspaden
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+# Laad variabelen uit het .env-bestand in de projectroot (indien aanwezig).
+# Expliciet pad i.p.v. load_dotenv() zonder argument: dat laatste zoekt vanaf
+# de working directory van het proces, en die klopt niet noodzakelijk onder
+# een WSGI-server (bv. PythonAnywhere) - .env werd daardoor stilzwijgend
+# genegeerd in plaats van een fout te geven.
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+
+# Enkel bedoeld als snelle fallback voor lokaal ontwikkelen. create_app()
+# (app.py) weigert op te starten met config_name="production" zolang
+# SECRET_KEY nog op deze waarde staat.
+ONVEILIGE_STANDAARD_SECRET_KEY = "verander-deze-sleutel-in-productie"
+
+
+class Config:
+    """Instellingen die in elke omgeving gelden."""
+    SECRET_KEY = os.environ.get("SECRET_KEY", ONVEILIGE_STANDAARD_SECRET_KEY)
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # Sessiecookie hardening: HttpOnly voorkomt uitlezen via JavaScript (bv.
+    # bij een XSS-lek elders), SameSite=Lax beperkt wanneer de cookie
+    # meegestuurd wordt bij een request vanaf een andere site (CSRF-defense
+    # in depth, naast Flask-WTF's eigen CSRF-tokens). SESSION_COOKIE_SECURE
+    # staat pas op True in productie (zie ProductionConfig) - lokaal draait
+    # de site over gewone http, waar een secure cookie nooit verstuurd zou worden.
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = "Lax"
+
+    # Mail (contactformulier)
+    GMAIL_USER = os.environ.get("GMAIL_USER")
+    GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD")
+
+    # Upload-map voor geüploade afbeeldingen: pagina-hero-afbeeldingen en
+    # inline afbeeldingen in de pagina-editor (relatief aan static/)
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "images")
+    MAX_CONTENT_LENGTH = 8 * 1024 * 1024   # 8 MB, voorkomt te grote uploads
+
+
+class DevelopmentConfig(Config):
+    """Instellingen voor lokaal ontwikkelen."""
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        "DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'flanders_trophy.db')}"
+    )
+
+
+def _normalize_database_url(url):
+    """Sommige hosts (bv. oudere Heroku-achtige styleconventies) geven 'postgres://'
+    terug, maar SQLAlchemy 1.4+ vereist het volledige 'postgresql://'-schema."""
+    if url and url.startswith("postgres://"):
+        return url.replace("postgres://", "postgresql://", 1)
+    return url
+
+
+class ProductionConfig(Config):
+    """Instellingen voor de live-omgeving (bv. PythonAnywhere, Render, Hetzner)."""
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = _normalize_database_url(os.environ.get("DATABASE_URL"))
+    SESSION_COOKIE_SECURE = True
+
+
+# Maak het eenvoudig om per omgeving de juiste config te kiezen
+config_by_name = {
+    "development": DevelopmentConfig,
+    "production": ProductionConfig,
+}

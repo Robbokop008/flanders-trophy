@@ -1,0 +1,14 @@
+{% set columns = block.data.columns or [] %}
+{% if columns %}
+<div class="values-grid block-columns">
+    {% for col in columns %}
+    <div class="value-card">
+        {% if col.image %}
+        <img class="block-columns-img" src="{{ url_for('static', filename='images/' + col.image) }}" alt="{{ col.heading or '' }}">
+        {% endif %}
+        {% if col.heading %}<h3>{{ col.heading }}</h3>{% endif %}
+        {% if col.text %}<p>{{ col.text }}</p>{% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

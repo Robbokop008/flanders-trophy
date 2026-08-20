@@ -1,0 +1,62 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - Pagina's{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>Pagina's beheren</h1>
+    <p>Alle bewerkbare pagina's van de site. Bouw elke pagina zelf op uit blokken (tekst, afbeeldingen, video, ...).</p>
+</div>
+
+<section class="section">
+    {% if error %}
+    <p class="alert alert-error" style="margin-bottom:20px;">{{ error }}</p>
+    {% endif %}
+
+    <a href="{{ url_for('admin.add_page') }}" class="admin-button" style="display:inline-block;margin-bottom:24px;">Nieuwe pagina toevoegen</a>
+
+    {% if pages %}
+    <div class="table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Pagina</th>
+                    <th>Status</th>
+                    <th>Acties</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for page in pages %}
+                <tr>
+                    <td>{{ page.title }}<br><code style="font-size:12px;color:var(--muted);">/pagina/{{ page.slug }}</code></td>
+                    <td><span class="order-status-badge">{{ 'Gepubliceerd' if page.is_published else 'Concept' }}</span></td>
+                    <td>
+                        <a href="{{ url_for('admin.edit_page', page_id=page.id) }}" class="admin-button btn-sm">Bewerken</a>
+                        {% if page.is_published %}
+                        <a href="{{ url_for('pages.view', slug=page.slug) }}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Bekijken</a>
+                        {% else %}
+                        <a href="{{ url_for('admin.preview_page', page_id=page.id) }}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Voorbeeld</a>
+                        {% endif %}
+                        <form action="{{ url_for('admin.toggle_page_published', page_id=page.id) }}" method="post" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            {% if page.is_published %}
+                            <button type="submit" class="btn btn-secondary btn-sm">Depubliceren</button>
+                            {% else %}
+                            <button type="submit" class="admin-button btn-sm">Publiceren</button>
+                            {% endif %}
+                        </form>
+                        <form action="{{ url_for('admin.delete_page', page_id=page.id) }}" method="post" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deze pagina definitief verwijderen?');">Verwijderen</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>Er zijn nog geen pagina's aangemaakt.</p>
+    {% endif %}
+</section>
+{% endblock %}

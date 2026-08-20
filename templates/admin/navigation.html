@@ -1,0 +1,149 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - Navigatie{% endblock %}
+
+{% block extra_head %}
+<style>
+  .nav-tree { display: flex; flex-direction: column; gap: 8px; }
+  .nav-tree-children { margin: 10px 0 0 32px; padding-left: 16px; border-left: 2px solid var(--border); }
+  .nav-item-block { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; scroll-margin-top: 20px; }
+  .nav-item-block:target { outline: 2px solid var(--yellow); }
+  .nav-item-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .nav-drag-handle { cursor: grab; color: var(--muted); font-size: 18px; user-select: none; }
+  .nav-type-badge { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); background: var(--blue-light); padding: 2px 8px; border-radius: 20px; }
+  .nav-item-edit-form { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1; }
+  .nav-item-edit-form input[type=text], .nav-item-edit-form select { padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; }
+  .nav-item-edit-form input[name=label] { min-width: 160px; font-weight: 600; }
+  .nav-item-actions { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+  .nav-item-actions form { display: inline-flex; }
+  .nav-move-form select { padding: 4px 6px; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .checkbox-inline { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; white-space: nowrap; }
+  .nav-add-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; align-items: end; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 28px; }
+  .nav-add-form label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .nav-target-field { display: none; }
+  .nav-target-field.active { display: block; }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>Navigatie beheren</h1>
+    <p>Sleep items om ze te herordenen of naar een andere categorie te verplaatsen (of gebruik de pijltjes/select als alternatief). Categorieën kunnen enkel op het hoofdniveau staan.</p>
+</div>
+
+<section class="section">
+    {% if error %}
+    <p class="alert alert-error" style="margin-bottom:20px;">{{ error }}</p>
+    {% endif %}
+
+    <h2 class="section-title" style="margin-bottom:12px;">Nieuw navigatie-item</h2>
+    <form action="{{ url_for('admin.add_nav_item') }}" method="post" class="nav-add-form" id="add-nav-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div>
+            <label for="add-label">Label</label>
+            <input type="text" id="add-label" name="label" required>
+        </div>
+        <div>
+            <label for="add-type">Type</label>
+            <select id="add-type" name="item_type">
+                <option value="category">Categorie (dropdown)</option>
+                <option value="divider">Groepslabel (binnen een categorie)</option>
+                <option value="page" selected>Pagina</option>
+                <option value="route">Vaste route</option>
+                <option value="external">Externe URL</option>
+            </select>
+        </div>
+        <div>
+            <label for="add-parent">Plaats onder</label>
+            <select id="add-parent" name="parent_id">
+                <option value="">Hoofdniveau</option>
+                {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="nav-target-field" data-for="page">
+            <label for="add-page">Pagina</label>
+            <select id="add-page" name="page_id">
+                {% for p in all_pages %}
+                <option value="{{ p.id }}">{{ p.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="nav-target-field" data-for="route">
+            <label for="add-route">Route-eindpunt</label>
+            <input type="text" id="add-route" name="route_endpoint" placeholder="bv. main.contact">
+        </div>
+        <div class="nav-target-field" data-for="external">
+            <label for="add-external">URL</label>
+            <input type="text" id="add-external" name="external_url" placeholder="https://...">
+        </div>
+        <div>
+            <label class="checkbox-inline"><input type="checkbox" name="open_in_new_tab"> Nieuw tabblad</label>
+        </div>
+        <div>
+            <button type="submit" class="admin-button">Toevoegen</button>
+        </div>
+    </form>
+
+    <h2 class="section-title" style="margin-bottom:12px;">Huidige navigatie</h2>
+    <div class="nav-tree" id="nav-toplevel" data-parent-id="">
+        {% for item in top_items %}
+        {% include "admin/_nav_item.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='vendor/sortablejs/Sortable.min.js') }}"></script>
+<script>
+(function () {
+    // Type-select in het toevoegformulier: enkel het relevante doelveld tonen.
+    var typeSelect = document.getElementById('add-type');
+    function syncTargetFields() {
+        document.querySelectorAll('.nav-target-field').forEach(function (el) {
+            el.classList.toggle('active', el.dataset.for === typeSelect.value);
+        });
+    }
+    typeSelect.addEventListener('change', syncTargetFields);
+    syncTargetFields();
+
+    // Drag-and-drop herordenen/verplaatsen (verrijking bovenop de knoppen/select hierboven).
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    var lists = document.querySelectorAll('.nav-tree');
+
+    function collectAndSend() {
+        var items = [];
+        document.querySelectorAll('.nav-tree').forEach(function (list) {
+            var parentId = list.dataset.parentId ? parseInt(list.dataset.parentId, 10) : null;
+            Array.from(list.children).forEach(function (block, index) {
+                if (!block.classList.contains('nav-item-block')) return;
+                items.push({ id: parseInt(block.dataset.id, 10), parent_id: parentId, position: index + 1 });
+            });
+        });
+        fetch("{{ url_for('admin.reorder_nav_items') }}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+            body: JSON.stringify({ items: items }),
+        });
+    }
+
+    lists.forEach(function (list) {
+        new Sortable(list, {
+            group: 'nav-items',
+            handle: '.nav-drag-handle',
+            animation: 150,
+            onMove: function (evt) {
+                var draggedType = evt.dragged.dataset.type;
+                var targetIsTopLevel = evt.to.id === 'nav-toplevel';
+                if (draggedType === 'category' && !targetIsTopLevel) return false;
+                if (draggedType === 'divider' && targetIsTopLevel) return false;
+                return true;
+            },
+            onEnd: collectAndSend,
+        });
+    });
+})();
+</script>
+{% endblock %}

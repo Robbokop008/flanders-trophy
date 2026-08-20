@@ -1,0 +1,41 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - Nieuwe pagina{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>Nieuwe pagina toevoegen</h1>
+    <p>Titel, slug, afbeelding en publicatiestatus. Zodra de pagina is aangemaakt, bouw je de inhoud op via blokken.</p>
+</div>
+
+<section class="section">
+    {% if error %}
+    <p class="alert alert-error" style="margin-bottom:20px;">{{ error }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('admin.add_page') }}" method="post" class="admin-form" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div>
+            <label for="title">Titel</label>
+            <input type="text" id="title" name="title" value="{{ form_title if form_title is defined else '' }}" required>
+        </div>
+        <div>
+            <label for="slug">Slug (URL: /pagina/&lt;slug&gt;)</label>
+            <input type="text" id="slug" name="slug" value="{{ form_slug if form_slug is defined else '' }}" placeholder="wordt automatisch afgeleid van de titel als je dit leeg laat">
+        </div>
+        <div>
+            <label for="hero_image">Afbeelding bovenaan (optioneel)</label>
+            <input type="file" id="hero_image" name="hero_image" accept="image/*">
+        </div>
+        <div class="checkbox-field">
+            <label for="is_published"><input type="checkbox" id="is_published" name="is_published" {{ 'checked' if form_is_published else '' }}> Gepubliceerd (zichtbaar voor bezoekers)</label>
+        </div>
+
+        <div class="form-actions" style="grid-column:1/-1;">
+            <button type="submit" class="admin-button">Aanmaken en verdergaan</button>
+            <a href="{{ url_for('admin.pages') }}" class="btn btn-secondary">Annuleren</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Even geduld - Flanders Trophy{% endblock %}
+
+{% block content %}
+<section class="hero hero-short">
+    <div class="hero-content">
+        <h1>Even geduld...</h1>
+        <p>Er werden te veel aanvragen na elkaar verstuurd vanaf dit toestel. Wacht enkele minuten en probeer het opnieuw.</p>
+        <a href="{{ url_for('main.home') }}" class="cta-button">Terug naar de homepage</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,2320 @@
+/* =========================================================
+   FLANDERS TROPHY — STYLESHEET (scaffold)
+   Overgenomen van de hoofdclubsite (Handbal Sint-Truiden) als
+   startpunt: de admin-shell/pagina-blokken/navigatie-CSS werkt
+   zo meteen, maar de kleuren/huisstijl hieronder zijn nog de
+   clubkleuren. TODO: eigen Flanders Trophy-branding/kleuren/
+   lettertype toepassen in de variabelen in :root en verderop.
+   ========================================================= */
+
+:root {
+  /* Club colors - officiële HBST-kleurcodes */
+  --blue: #05316b;
+  --blue-dark: #032349;
+  --blue-light: #eaeff6;
+  --yellow: #e8cb18;
+
+  /* Text */
+  --ink: #12203c;
+  --muted: #64748b;
+
+  /* Surfaces */
+  --bg: #f4f6fa;
+  --white: #ffffff;
+  --border: #e2e8f0;
+
+  /* Feedback */
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --success: #16a34a;
+  --success-bg: #f0fdf4;
+
+  /* Layout */
+  --max-width: 1200px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-hover: 0 12px 28px rgba(15, 23, 42, 0.12);
+
+  --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* =========================================================
+   RESET & BASE
+   ========================================================= */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Op de homepage is de achtergrond overal hetzelfde blauw als de navbar
+   (var(--blue), niet het donkerder var(--blue-dark)) i.p.v. de standaard
+   lichte paginakleur - enkel de herofoto, de gele kaarten en ingebedde
+   widgets steken daar nog tegen af. */
+body.home-page { background: var(--blue); }
+
+a { color: inherit; }
+
+h1, h2, h3 { line-height: 1.2; }
+
+main { display: block; flex: 1 0 auto; }
+
+/* =========================================================
+   HEADER & NAVIGATION
+   ========================================================= */
+.site-header {
+  background: var(--blue);
+  padding: 0 40px;
+}
+
+.navbar {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 112px;
+  position: relative;
+}
+
+/* De navigatie zelf is nu altijd een dichtgeklapt hamburgermenu (zie
+   .menu-toggle / nav#nav-menu hieronder) - de resterende koppen (brand,
+   sponsors, winkelmandje, hamburger) staan gewoon op volgorde in de
+   flex-rij, met .cart-icon expliciet vóór de hamburger dankzij order. */
+.brand { order: 1; }
+.header-sponsors { order: 2; margin-left: auto; }
+.cart-icon { order: 3; }
+.menu-toggle { order: 4; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  overflow: visible;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
+  animation: brand-text-reveal 0.9s 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.brand-text-line1 {
+  color: var(--yellow);
+  font-weight: 800;
+  font-style: italic;
+  font-size: 28px;
+}
+
+.brand-text-line2 {
+  color: var(--yellow);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.brand-badge {
+  height: 76px;
+  width: auto;
+  transform: translateX(-200px);
+  opacity: 0;
+  animation: brand-badge-fly-in 0.9s 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes brand-badge-fly-in {
+  0% { transform: translateX(-200px); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes brand-text-reveal {
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-badge, .brand-text {
+    animation: none;
+    transform: none;
+    opacity: 1;
+    clip-path: none;
+  }
+}
+
+.header-sponsors {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-sponsor-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+}
+
+.header-sponsor-logo img {
+  max-height: 60px;
+  max-width: 130px;
+  object-fit: contain;
+}
+
+.header-sponsor-placeholder {
+  height: 60px;
+  min-width: 110px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 11px;
+  text-align: center;
+}
+
+nav#nav-menu a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.15s ease;
+}
+
+nav#nav-menu a:hover { color: var(--white); }
+
+.cart-icon {
+  font-size: 22px;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  width: 26px;
+  height: 20px;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-toggle.active span:nth-child(2) { opacity: 0; }
+.menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+  padding: 64px 40px;
+  text-align: center;
+}
+
+.hero.hero-short { padding: 48px 40px; }
+
+.hero-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--blue);
+  margin: 0 0 12px;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 17px;
+  margin: 0 0 24px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn, .cta-button, .admin-button, .profile-action-button, .add-to-cart {
+  display: inline-block;
+  border: 0;
+  border-radius: var(--radius-sm);
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.btn-primary, .cta-button, .admin-button, .profile-action-button, .add-to-cart {
+  background: var(--yellow);
+  color: var(--blue-dark);
+}
+
+.btn-primary:hover, .cta-button:hover, .admin-button:hover,
+.profile-action-button:hover, .add-to-cart:hover {
+  filter: brightness(0.96);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover { background: var(--blue-light); }
+
+.btn-danger {
+  background: var(--danger);
+  color: var(--white);
+}
+
+.btn-danger:hover { filter: brightness(0.95); }
+
+.btn-sm { padding: 8px 14px; font-size: 13px; }
+
+/* =========================================================
+   LAYOUT HELPERS
+   ========================================================= */
+.section {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 48px 40px;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--blue);
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 700px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* =========================================================
+   ALERTS / MESSAGES
+   ========================================================= */
+.alert {
+  max-width: var(--max-width);
+  margin: 0 auto 24px;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.alert-info {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  border: 1px solid rgba(11, 58, 130, 0.15);
+}
+
+.alert-error, .error {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  display: block;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin: 16px 0 0;
+}
+
+.alert-success { background: var(--success-bg); color: var(--success); border: 1px solid rgba(22, 163, 74, 0.2); }
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+form label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 16px 0 6px;
+  color: var(--ink);
+}
+
+form label:first-child { margin-top: 0; }
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form input[type="file"],
+form select,
+form textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-family);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(11, 58, 130, 0.12);
+}
+
+form textarea { min-height: 120px; resize: vertical; }
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* Auth cards (login / register) - de kaart zelf is .auth-card (zie de
+   CONTENT- & AUTH-PAGINA'S-sectie verderop); deze klassen zijn voor de
+   velden/knop/voetnoot erin. */
+.login-input { width: 100%; }
+
+.login-button { width: 100%; margin-top: 22px; text-align: center; }
+
+.login-note {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.login-note a { color: var(--blue); font-weight: 600; text-decoration: none; }
+
+/* =========================================================
+   PRODUCT DETAIL
+   (naam/prijs-klassen ook hergebruikt in shop/checkout_success.html
+   voor de orderregels - vandaar niet product_detail-specifiek genoemd)
+   ========================================================= */
+.product-name { margin: 0; font-size: 17px; color: var(--ink); }
+
+.product-description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  flex-grow: 1;
+}
+
+.product-price { font-weight: 700; color: var(--blue); font-size: 18px; }
+
+.add-to-cart { margin-top: 8px; align-self: flex-start; }
+
+/* Zelfde "papieren kaart op navy" motief als .content-card, maar met de
+   eigen 2-koloms indeling (foto naast varianten/bedrukking/bestellen)
+   i.p.v. .content-card los eromheen te wikkelen. */
+.product-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.main-image img {
+  width: 100%;
+  border-radius: var(--radius);
+  background: var(--blue-light);
+}
+
+.details .product-name { font-size: 30px; font-weight: 800; color: var(--blue); margin-bottom: 12px; }
+.details .product-description { color: var(--muted); font-size: 16px; margin-bottom: 20px; }
+
+.variant-price {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+
+.stock-note {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--danger);
+  min-height: 16px;
+}
+
+.printing-options {
+  background: var(--blue-light);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px 4px;
+  margin: 12px 0;
+}
+
+.printing-options label { margin-top: 0; }
+
+.item-printing {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.purchase { display: flex; align-items: center; gap: 14px; }
+
+.qty {
+  width: 80px !important;
+}
+
+.qty:disabled,
+.add-to-cart:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 760px) {
+  .product-detail { grid-template-columns: 1fr; padding: 32px 20px; }
+}
+
+/* =========================================================
+   ABOUT PAGE
+   ========================================================= */
+/* .values-grid/.value-card zijn nog in gebruik door de generieke
+   pagina-blokken (pages/_blocks/columns.html en image_gallery.html) -
+   de rest van deze sectie (about-*, .value-card.groot/.nieuws-card, ...)
+   hoorde bij de oude, inmiddels vervangen Over-ons/nieuws-opmaak. */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.value-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  text-align: center;
+}
+
+.value-card h3 { margin: 0 0 8px; color: var(--blue); }
+.value-card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+/* =========================================================
+   HOMEPAGE-HERO (fotobanner met zwevende kalender- en nieuwskaart)
+   ========================================================= */
+/* De herofoto loopt edge-to-edge, direct onder de header (geen wit/lichte
+   rand eromheen zoals in een eerdere versie) - de kaarten erbovenop blijven
+   wel uitgelijnd op de normale site-inhoudsbreedte via .home-hero-inner. */
+.home-hero {
+  position: relative;
+  height: 640px;
+  margin-bottom: 96px;
+}
+
+.home-hero-photo-placeholder {
+  position: absolute;
+  inset: 0;
+  background-color: var(--blue-dark);
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+}
+
+/* De foto is bewust vervaagd (zoals in de mockup) via een navy overlay
+   erbovenop, zodat de zwevende kaarten leesbaar blijven ongeacht de foto. */
+.home-hero-photo-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(5, 49, 107, 0.55) 0%, rgba(3, 35, 73, 0.8) 100%);
+}
+
+.home-hero-inner {
+  position: absolute;
+  inset: 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.home-hero-card {
+  position: absolute;
+  width: 360px;
+  max-width: calc(100% - 80px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  padding: 28px;
+}
+
+.home-hero-kalender {
+  left: 40px;
+  bottom: -48px;
+  background: var(--blue-dark);
+  color: var(--white);
+}
+
+.home-hero-kalender .section-title,
+.home-hero-nieuws .section-title {
+  text-align: left;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.home-hero-kalender .section-title { color: var(--white); }
+.home-hero-kalender a { color: var(--yellow); text-decoration: none; }
+
+.home-hero-nieuws {
+  right: 40px;
+  top: 40px;
+  width: 720px;
+  background: var(--yellow);
+  color: var(--blue-dark);
+}
+
+.home-hero-nieuws .section-title { color: var(--blue-dark); }
+
+/* "Laatste nieuws" en "Volgende event" naast elkaar in dezelfde kaart -
+   elke kolom heeft zijn eigen onafhankelijke .nieuws-slider-instantie
+   (zie static/js/home_slider.js, dat toch al elke [data-nieuws-slider]
+   apart aanstuurt). */
+.home-hero-nieuws-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.home-hero-nieuws-col-divider {
+  border-left: 1px solid rgba(3, 35, 73, 0.15);
+  padding-left: 24px;
+}
+
+/* Beide kolommen worden door de grid-standaard (align-items:stretch) al
+   even hoog gemaakt - deze kolom zelf moet dan ook een flex-kolom zijn
+   zodat .nieuws-slider die volledige hoogte kan doorgeven aan de puntjes
+   hieronder (zie .nieuws-slider-dots: margin-top:auto), ongeacht hoeveel
+   tekst een bericht/event heeft. */
+.home-hero-nieuws-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.nieuws-slide-datum {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+@media (max-width: 640px) {
+  .home-hero-nieuws-split { grid-template-columns: 1fr; }
+  .home-hero-nieuws-col-divider {
+    border-left: none;
+    border-top: 1px solid rgba(3, 35, 73, 0.15);
+    padding-left: 0;
+    padding-top: 20px;
+  }
+}
+
+/* De brede .home-hero-nieuws-kaart (640px) zou onder ~1100px in de weg
+   zitten van .home-hero-kalender bij absolute positionering - daarom ligt
+   dit breekpunt hoger dan de rest van de site (normaal 900px). */
+@media (max-width: 1100px) {
+  .home-hero { height: auto; margin-bottom: 32px; }
+  .home-hero-photo-placeholder { display: none; }
+  .home-hero-inner {
+    position: static;
+    padding: 20px;
+  }
+  .home-hero-card {
+    position: static;
+    width: auto;
+    max-width: none;
+    margin-bottom: 20px;
+  }
+}
+
+/* =========================================================
+   NIEUWS-SLIDER (homepage)
+   ========================================================= */
+.nieuws-slider {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.nieuws-slider-viewport { overflow: hidden; border-radius: var(--radius-sm); }
+
+.nieuws-slider-track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.nieuws-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.nieuws-slide h3 { margin: 0 0 8px; }
+
+.nieuws-slide p.nieuws-tekst {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+}
+
+.nieuws-slide .nieuws-lees-meer { margin: 12px 0 0; }
+.nieuws-slide .nieuws-lees-meer a { color: var(--blue-dark); font-weight: 700; text-decoration: none; }
+
+.nieuws-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.nieuws-slider-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(3, 35, 73, 0.25);
+  cursor: pointer;
+  transition: width 0.2s ease, background 0.2s ease, border-radius 0.2s ease;
+}
+
+.nieuws-slider-dot.active {
+  width: 22px;
+  border-radius: 4px;
+  background: var(--blue-dark);
+}
+
+/* =========================================================
+   PROMO-KAARTEN (sporten op maat)
+   ========================================================= */
+/* Twee gestapelde kolommen (elk .promo-cards-stack): links Ballenbaasjes +
+   Flanders Trophy + Jeugdhandbal, rechts FIT-Handbal + G-Handbal -
+   align-items:stretch (grid-standaard) laat beide stapels de volledige
+   hoogte van de hoogste kolom volgen, net als in de mockup. */
+.promo-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  gap: 24px;
+}
+
+.promo-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* De kortere stapel (2 kaarten) moet even hoog eindigen als de langere
+   (3 kaarten) - .promo-cards rekt beide stapels al even hoog uit
+   (align-items:stretch), maar zonder dit zouden de kaarten daarbinnen op
+   hun eigen inhoudshoogte blijven staan en onderaan gewoon lege
+   navy-ruimte overlaten. flex:1 verdeelt die overschot gelijk over de
+   kaarten van de kortste stapel. */
+.promo-cards-stack > .promo-card {
+  flex: 1;
+}
+
+.promo-card {
+  position: relative;
+  background: var(--yellow);
+  color: var(--blue-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* Onder de "lees meer"-kaart (Ballenbaasjes) is wat extra ruimte onderaan
+   voorzien voor de social-knoppen linksonderaan (zie .promo-card-social).
+   Geen min-height meer: de kaarthoogte volgt gewoon .promo-card-image
+   (zie hieronder), dat voorkomt onnodig lege ruimte in de tekstkolom. */
+.promo-card-has-social { padding-bottom: 56px; }
+
+/* FIT-Handbal-kaart: logo onder de tekst i.p.v. ernaast. */
+.promo-card-stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.promo-card h2 { margin: 0 0 8px; font-size: 22px; }
+.promo-card-subtitle { margin: 0; font-size: 14px; opacity: 0.85; }
+.promo-card-lees-meer { margin: 16px 0 0; }
+.promo-card-lees-meer a { color: var(--blue-dark); font-weight: 700; text-decoration: none; }
+
+/* Linksonderaan de volledige kaart, uitgelijnd met de linker padding van
+   .promo-card - niet mee in de tekstkolom, vandaar absolute positionering
+   t.o.v. .promo-card in plaats van gewoon in de flow van .promo-card-text. */
+.promo-card-social {
+  position: absolute;
+  left: 32px;
+  bottom: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.promo-card-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(3, 35, 73, 0.35);
+  color: var(--blue-dark);
+  text-decoration: none;
+}
+
+.promo-card-social a:hover { background: rgba(3, 35, 73, 0.1); }
+
+/* De flyer moet volledig zichtbaar en prominent zijn, maar een vaste
+   hoogte (i.p.v. align-self:stretch tot de volledige kaart) voorkomt dat
+   de kaart onnodig hoog wordt en er lege ruimte ontstaat in de tekstkolom
+   ernaast - de kaart volgt nu gewoon de hoogte van deze afbeelding.
+   width:auto laat de breedte meeschalen volgens de eigen beeldverhouding,
+   object-fit:contain voorkomt bijsnijden of vervorming. */
+.promo-card-image {
+  flex-shrink: 0;
+  height: 200px;
+  width: auto;
+  max-width: 220px;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+  box-shadow: var(--shadow);
+}
+
+/* Het clubembleem heeft een transparante achtergrond en een brede,
+   onregelmatige vorm - geen box-shadow/border-radius zoals de andere
+   kaartafbeeldingen (dat zou een storend rechthoekig schaduwvlak rond de
+   transparante ruimte geven). */
+.promo-card-jeugd-logo {
+  flex-shrink: 0;
+  width: auto;
+  height: 140px;
+  max-width: 220px;
+  object-fit: contain;
+}
+
+.promo-card-flanders-image {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  box-shadow: var(--shadow);
+}
+
+/* Neemt ongeveer de volledige breedte van de kaart in (met de kaart-padding
+   als marge), i.p.v. ernaast op een vaste, kleinere breedte te staan -
+   gebruikt door zowel de FIT-Handbal- als de G-Handbal-kaart. */
+.promo-card-full-logo {
+  flex-shrink: 0;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 640px) {
+  .promo-cards { grid-template-columns: 1fr; }
+  .promo-card { flex-direction: column; text-align: center; }
+  .promo-card-stacked { align-items: center; }
+  .promo-card-has-social { padding-bottom: 88px; }
+}
+
+/* =========================================================
+   HOMEPAGE-AFSLUITER (Sport Vlaanderen + social, boven de footer)
+   ========================================================= */
+.home-closing {
+  background: var(--blue);
+  padding: 48px 40px;
+}
+
+/* Uitgelijnd op dezelfde inhoudsbreedte als de rest van de homepage, zodat
+   "linksonderaan" (zie .home-closing-social) overeenkomt met de linkerkant
+   van de andere secties i.p.v. de volledige, edge-to-edge navy achtergrond. */
+.home-closing-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.home-closing-sport-vlaanderen-logo {
+  max-height: 260px;
+  max-width: 600px;
+  width: 100%;
+  object-fit: contain;
+}
+
+.home-closing-social {
+  align-self: flex-start;
+  display: flex;
+  gap: 16px;
+}
+
+.home-closing-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: var(--white);
+  text-decoration: none;
+}
+
+.home-closing-social a:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* =========================================================
+   CLUB-PAGINA (/club/)
+   ========================================================= */
+/* Zelfde "overal navy" aanpak als de homepage (zie body.home-page) - ook
+   voor de kalenderpagina, die dezelfde accordion-stijl hergebruikt. */
+body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd-page, body.ghandbal-page, body.fithandbal-page { background: var(--blue); }
+
+.club-hero {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 56px 40px 8px;
+}
+
+.club-hero h1 {
+  margin: 0;
+  color: var(--yellow);
+  font-weight: 800;
+  font-style: italic;
+  font-size: 42px;
+}
+
+.club-intro {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 24px;
+}
+
+.club-card {
+  position: relative;
+  background: var(--yellow);
+  color: var(--blue-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+}
+
+.club-card h2 { margin: 0 0 12px; font-size: 22px; }
+.club-card p { margin: 0 0 12px; line-height: 1.6; }
+.club-card p:last-child { margin-bottom: 0; }
+
+/* Zelfde motief als de zwevende kaarten op de homepage-hero: het
+   clubembleem hangt vast aan de missie-kaart, in de rechteronderhoek.
+   Bewust een groot, opvallend embleem dat met net iets minder dan de
+   helft van zijn breedte over de rechterrand hangt (en gerust een
+   stukje over de visie-kaart ernaast mag steken). */
+.club-intro-badge {
+  position: absolute;
+  right: -110px;
+  bottom: -105px;
+  width: 300px;
+  /* Beide kaarten zijn position:relative; zonder dit zou de visie-kaart
+     (later in de DOM) over het overhangende deel van het logo tekenen. */
+  z-index: 2;
+}
+
+.club-accordion {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 8px 40px 64px;
+  display: flex;
+  flex-direction: column;
+}
+
+.club-accordion-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 22px 0;
+}
+
+.club-accordion-item summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--yellow);
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.club-accordion-item summary::-webkit-details-marker { display: none; }
+
+.club-accordion-item summary::after {
+  content: "";
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-left: 16px;
+  transition: transform 0.15s ease;
+}
+
+.club-accordion-item[open] > summary::after { transform: rotate(-135deg); }
+
+.club-accordion-body {
+  padding-top: 18px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.club-accordion-body p { margin: 0 0 14px; line-height: 1.6; }
+.club-accordion-body p:last-child { margin-bottom: 0; }
+.club-accordion-body ul { margin: 0 0 14px; padding-left: 22px; }
+.club-accordion-body li { margin-bottom: 6px; line-height: 1.6; }
+.club-accordion-body a { color: var(--yellow); }
+
+/* Genest binnen een top-level accordion-item (bv. Trainingen > G-Handbal) -
+   zelfde openklap-mechaniek, kleinere/hoofdletterloze summary. */
+.club-subaccordion-item {
+  margin: 4px 0;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.club-subaccordion-item summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--yellow);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.club-subaccordion-item summary::-webkit-details-marker { display: none; }
+
+.club-subaccordion-item summary::after {
+  content: "";
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-left: 16px;
+  transition: transform 0.15s ease;
+}
+
+.club-subaccordion-item[open] > summary::after { transform: rotate(-135deg); }
+
+/* Hoofdinhoud + een gele CTA-kaart ernaast (Trainingen/Evenementen) - op
+   smallere schermen valt de kaart gewoon onder de hoofdinhoud. */
+.club-accordion-body-split {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  align-items: start;
+  gap: 32px;
+}
+
+.club-cta-card h3 { margin: 0 0 12px; font-size: 18px; }
+.club-cta-card p { margin: 0 0 10px; line-height: 1.6; }
+.club-cta-card p:last-child { margin-bottom: 0; }
+.club-cta-card a { color: var(--blue-dark); font-weight: 700; }
+
+.club-cta-card-social {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.club-cta-card-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(3, 35, 73, 0.35);
+  color: var(--blue-dark);
+  text-decoration: none;
+}
+
+.club-cta-card-social a:hover { background: rgba(3, 35, 73, 0.1); }
+
+@media (max-width: 760px) {
+  .club-accordion-body-split { grid-template-columns: 1fr; }
+}
+
+.club-verzekering-infographic {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 4px 0 18px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+
+.club-verzekering-download a { font-weight: 700; }
+
+.club-team-photo {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.club-team-photo-placeholder {
+  max-width: 640px;
+  height: 320px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.club-team-omschrijving {
+  white-space: pre-line;
+  margin: 0 0 20px;
+  max-width: 640px;
+}
+
+.club-team-trainer {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: -12px 0 20px;
+}
+
+/* Vaste rooster (beker linksboven, Europees rechtsboven, landskampioen
+   linksonder) i.p.v. gewoon volgorde-op-volgorde, zodat een ploeg zonder
+   Europese wedstrijden gewoon die cel leeg laat i.p.v. alles op te
+   schuiven - zie de expliciete grid-column/grid-row hieronder. */
+.club-achievements {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 48px;
+  row-gap: 16px;
+  max-width: 640px;
+}
+
+.club-achievement {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--yellow);
+  font-weight: 600;
+}
+
+.club-achievement svg { flex-shrink: 0; }
+
+.club-achievement-beker { grid-column: 1; grid-row: 1; }
+.club-achievement-europees { grid-column: 2; grid-row: 1; }
+.club-achievement-lands { grid-column: 1; grid-row: 2; }
+
+@media (max-width: 760px) {
+  .club-hero { padding: 40px 20px 8px; }
+  .club-hero h1 { font-size: 30px; }
+  .club-intro { grid-template-columns: 1fr; padding: 0 20px 24px; }
+  .club-accordion { padding: 8px 20px 48px; }
+  .club-achievements { grid-template-columns: 1fr; }
+  .club-achievement-beker, .club-achievement-europees, .club-achievement-lands {
+    grid-column: 1;
+  }
+  .club-achievement-europees { grid-row: 2; }
+  .club-achievement-lands { grid-row: 3; }
+}
+
+/* =========================================================
+   JEUGD-PAGINA (/jeugd/)
+   ========================================================= */
+/* Zelfde fotobanner-motief als .home-hero, maar met 3 zwevende kaarten
+   i.p.v. 2 (Beleidsplan, Interesse, De Ballenbaasjes - de laatste
+   hergebruikt de .promo-card-opmaak 1-op-1, zie templates/jeugd/overzicht.html). */
+.jeugd-hero {
+  position: relative;
+  height: 800px;
+  margin-bottom: 96px;
+}
+
+.jeugd-hero-photo-placeholder {
+  position: absolute;
+  inset: 0;
+  background-color: var(--blue-dark);
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+}
+
+.jeugd-hero-photo-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(5, 49, 107, 0.55) 0%, rgba(3, 35, 73, 0.8) 100%);
+}
+
+.jeugd-hero-inner {
+  position: absolute;
+  inset: 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.jeugd-hero-card {
+  position: absolute;
+  width: 380px;
+  max-width: calc(100% - 80px);
+  background: var(--yellow);
+  color: var(--blue-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  padding: 28px;
+}
+
+.jeugd-hero-card h2 { margin: 0 0 12px; font-size: 22px; }
+.jeugd-hero-card p { margin: 0 0 12px; line-height: 1.6; }
+.jeugd-hero-card p:last-child { margin-bottom: 0; }
+.jeugd-hero-card a { color: var(--blue-dark); font-weight: 700; }
+
+.jeugd-hero-beleidsplan { left: 40px; top: 48px; }
+.jeugd-hero-interesse { right: 40px; top: 260px; }
+
+/* Hergebruikt .promo-card(-has-social) voor de opmaak (tekst/afbeelding/
+   social-rij) - hier enkel absoluut gepositioneerd binnen de hero, net
+   onder de "Interesse?"-kaart, en hangt bewust over de onderrand van de
+   foto (net als .home-hero-kalender). */
+.jeugd-hero-ballenbaasjes {
+  position: absolute;
+  right: 40px;
+  top: 580px;
+  width: 380px;
+  max-width: calc(100% - 80px);
+}
+
+@media (max-width: 1100px) {
+  .jeugd-hero { height: auto; margin-bottom: 32px; }
+  .jeugd-hero-photo-placeholder { display: none; }
+  .jeugd-hero-inner { position: static; padding: 20px; }
+  .jeugd-hero-card, .jeugd-hero-ballenbaasjes {
+    position: static;
+    width: auto;
+    max-width: none;
+    margin-bottom: 20px;
+  }
+}
+
+/* =========================================================
+   1-TEAM-INFOPAGINA'S (/g-handbal/, /fit-handbal/)
+   ========================================================= */
+/* Eén kaart (i.p.v. de missie/visie-tweeling op de Club-pagina), met het
+   embleem van het team dat over de rechterbovenhoek hangt - zelfde motief
+   als .club-intro-badge, maar dan bovenaan i.p.v. onderaan. Gedeeld door
+   G-Handbal en FIT-Handbal, die allebei dezelfde opmaak gebruiken (zie
+   templates/ghandbal/overzicht.html en templates/fithandbal/overzicht.html). */
+.team-intro-card { max-width: 760px; }
+
+.team-intro-logo {
+  position: absolute;
+  right: -60px;
+  top: -90px;
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  z-index: 2;
+}
+
+.team-training { padding-top: 8px; }
+
+.team-subheading {
+  margin: 0 0 14px;
+  color: var(--yellow);
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.team-training > p { color: rgba(255, 255, 255, 0.9); line-height: 1.6; margin: 0 0 14px; }
+.team-training ul, .team-training ol { margin: 0 0 14px; padding-left: 22px; }
+.team-training li { color: rgba(255, 255, 255, 0.9); line-height: 1.6; margin-bottom: 6px; }
+
+.team-inschrijving-link a { color: var(--blue-dark); font-weight: 700; text-decoration: none; }
+
+@media (max-width: 760px) {
+  .team-intro-card { max-width: none; }
+  .team-intro-logo { position: static; width: 140px; height: 140px; margin: 0 0 16px; }
+}
+
+/* =========================================================
+   CONTENT- & AUTH-PAGINA'S
+   (contact, nieuws, generieke pagina's, teams, login/registreren/
+   profiel/account - alle andere publieke pagina's in dezelfde navy/gele
+   stijl als Club/Kalender/Dames/Heren/Jeugd/G-Handbal/FIT-Handbal)
+   ========================================================= */
+body.content-page, body.auth-page { background: var(--blue); }
+
+/* Ondertitel onder de .club-hero-titel (contact-intro, login/profiel-
+   subtitel, nieuws-detail datum/categorie, ...) - .club-hero stylede tot
+   nu toe enkel de h1. */
+.club-hero p {
+  margin: 12px 0 0;
+  max-width: 640px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* "Papieren" kaart voor vrije/rijke inhoud (nieuws-detail, generieke
+   pagina's via de blokken-CMS): i.p.v. de kaart zelf ook geel te maken
+   (wat elk bestaand bloktype - tabellen, kolommen, FAQ, ... - opnieuw
+   zou moeten stylen) blijft dit een lichte "pagina" op de navy
+   achtergrond, zoals de kaften van een brochure. */
+.content-card {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px;
+}
+
+.content-card > img { max-width: 100%; border-radius: var(--radius-sm); }
+
+/* Overzicht-grids (nieuws, teams): gele kaarten i.p.v. de witte
+   .value-card, zelfde motief als .club-card/.promo-card elders. */
+.content-grid {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.content-preview-card {
+  background: var(--yellow);
+  color: var(--blue-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.content-preview-card.groot { grid-column: span 2; }
+@media (max-width: 640px) { .content-preview-card.groot { grid-column: span 1; } }
+
+.content-preview-card img { width: 100%; border-radius: var(--radius-sm); margin-bottom: 14px; }
+.content-preview-card h3 { margin: 0 0 6px; font-size: 19px; }
+.content-preview-meta { margin: 0 0 10px; font-size: 13px; opacity: 0.75; }
+
+.content-preview-tekst {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+.content-preview-card.groot .content-preview-tekst { -webkit-line-clamp: 10; }
+
+.content-preview-lees-meer { margin-top: auto; padding-top: 14px; }
+.content-preview-lees-meer a, .content-preview-lees-meer span { color: var(--blue-dark); font-weight: 700; text-decoration: none; }
+
+/* Auth-kaart (login/registreren) - zelfde motief als .club-card, maar
+   smaller en gecentreerd. */
+.auth-card {
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--yellow);
+  color: var(--blue-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  padding: 32px;
+}
+
+.auth-card h2 { margin: 0 0 4px; font-size: 22px; }
+.auth-card .login-note { text-align: center; margin-top: 18px; font-size: 14px; color: rgba(3, 35, 73, 0.7); }
+.auth-card .login-note a { color: var(--blue-dark); font-weight: 700; text-decoration: none; }
+
+/* Donkere knop-variant, voor gebruik binnen een gele kaart (waar de
+   standaard gele .btn-primary/.cta-button niet zou opvallen). */
+.btn-dark {
+  background: var(--blue-dark);
+  color: var(--white);
+}
+
+.btn-dark:hover { filter: brightness(1.15); }
+
+/* Accountinstellingen: zelfde gele kaart als .profile-card (zie de
+   PROFILE-sectie verderop), maar dat blok bestond nog niet voor
+   account_settings - vandaar een eigen klasse. */
+.account-card {
+  background: var(--yellow);
+  color: var(--blue-dark);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+
+/* =========================================================
+   CART
+   ========================================================= */
+.cart-panel {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 8px 24px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cart-item:last-of-type { border-bottom: none; }
+
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--blue-light);
+  flex-shrink: 0;
+}
+
+.item-details { flex-grow: 1; }
+
+.item-name { font-weight: 700; color: var(--ink); }
+.item-variant { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.item-price { color: var(--blue); font-weight: 600; margin-top: 2px; }
+.item-price .vat-note { font-size: 11px; color: var(--muted); font-weight: 400; margin: 2px 0 0; }
+
+.item-quantity { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+
+.item-quantity form { display: inline; }
+
+.quantity-btn {
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.quantity-btn:hover { background: var(--border); }
+
+.quantity-value { min-width: 20px; text-align: center; font-weight: 600; }
+
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cart-total { font-weight: 800; font-size: 18px; color: var(--blue); }
+
+.cart-actions { display: flex; gap: 10px; }
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.profile-card {
+  background: var(--yellow);
+  color: var(--blue-dark);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+
+.profile-card h2 { margin: 0 0 8px; color: var(--blue-dark); font-size: 20px; }
+.profile-card > p { color: rgba(3, 35, 73, 0.75); font-size: 14px; margin: 0 0 16px; }
+
+.profile-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(3, 35, 73, 0.15);
+}
+
+.profile-item:last-child { border-bottom: none; }
+
+.profile-item span { display: block; font-size: 12px; color: rgba(3, 35, 73, 0.7); text-transform: uppercase; letter-spacing: 0.4px; }
+.profile-item p { margin: 4px 0 0; font-weight: 600; }
+
+.profile-actions { display: flex; flex-direction: column; gap: 10px; }
+
+/* De standaard gele .profile-action-button valt weg op de nu ook gele
+   .profile-card - donkere variant, zelfde motief als .btn-dark. */
+.profile-actions .profile-action-button {
+  background: var(--blue-dark);
+  color: var(--white);
+  text-align: center;
+}
+
+.order-list { display: flex; flex-direction: column; gap: 12px; }
+
+.order-item {
+  background: var(--blue-light);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+
+.order-item h3 { margin: 0 0 4px; font-size: 15px; color: var(--blue); }
+.order-item span { font-size: 13px; color: var(--muted); }
+
+.order-status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.order-status-badge {
+  display: inline-block;
+  background: var(--white);
+  border: 1px solid var(--border);
+  color: var(--blue-dark);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.order-status-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.order-status-form select {
+  width: auto;
+}
+
+.printing-badge {
+  display: inline-block;
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.muted { color: var(--muted); font-size: 14px; }
+
+/* =========================================================
+   ADMIN SHELL (topbar + sidebar, eigen layout los van de
+   publieke site-header/footer)
+   ========================================================= */
+.admin-body {
+  /* Losstaand van de publieke 'body { display:flex; flex-direction:column }'-regel
+     (zelfde <body>-tag, andere shell) - zonder deze regel erft .admin-layout die
+     flex-context, waardoor de auto-marges van .admin-layout niet de rij vullen maar
+     krimpen naar de inhoud, en de admin-content per pagina van breedte verspringt. */
+  display: block;
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.admin-topbar {
+  background: var(--blue);
+  color: var(--white);
+  height: 60px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-topbar-brand {
+  color: var(--white);
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.admin-topbar-links { display: flex; gap: 20px; }
+
+.admin-topbar-links a {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.admin-topbar-links a:hover { color: var(--white); }
+
+.admin-layout {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.admin-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+}
+
+.admin-sidebar-link {
+  display: block;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.admin-sidebar-link:hover { background: var(--blue-light); }
+.admin-sidebar-link.active { background: var(--blue); color: var(--white); }
+
+.admin-content {
+  flex: 1;
+  min-width: 0;
+  padding: 32px 24px;
+}
+
+.admin-page-header { margin-bottom: 24px; }
+.admin-page-header h1 { color: var(--blue); font-size: 26px; margin: 0 0 6px; }
+.admin-page-header p { color: var(--muted); font-size: 15px; margin: 0; }
+
+/* De bestaande .section-wrapper binnen .admin-content hergebruikt zonder
+   de publieke centrerings-/padding-regels (de sidebar begrenst de breedte
+   al) en linksuitgelijnd i.p.v. gecentreerd zoals op de publieke site. */
+.admin-content .section { max-width: none; margin: 0; padding: 0; }
+.admin-content .section-title { text-align: left; }
+
+/* Dashboard: actiepunt-tegels (aantal + label, doorklikbaar) en een lijst
+   met health-check-waarschuwingen (zie routes/admin.py:_dashboard_acties/
+   _dashboard_waarschuwingen). Geen alarmerende kleuren voor de tegels -
+   dit zijn dingen die een admin routinematig bijhoudt, geen storingen. */
+.dashboard-acties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.dashboard-actie-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--blue-light);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dashboard-actie-tile:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+
+.dashboard-actie-tile-leeg { background: var(--white); border: 1px solid var(--border); }
+
+.dashboard-actie-aantal { font-size: 32px; font-weight: 800; color: var(--blue); }
+.dashboard-actie-tile-leeg .dashboard-actie-aantal { color: var(--muted); }
+
+.dashboard-actie-label { font-size: 14px; color: var(--ink); }
+
+.dashboard-waarschuwingen-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dashboard-waarschuwingen-list li { border-top: 1px solid var(--border); }
+.dashboard-waarschuwingen-list li:last-child { border-bottom: 1px solid var(--border); }
+
+.dashboard-waarschuwingen-list a {
+  display: block;
+  padding: 12px 4px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.dashboard-waarschuwingen-list a:hover { color: var(--blue); }
+
+@media (max-width: 860px) {
+  .admin-layout { flex-direction: column; }
+  .admin-sidebar {
+    position: static;
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .admin-sidebar-link { white-space: nowrap; }
+  .admin-content { padding: 24px 16px; }
+}
+
+/* =========================================================
+   ADMIN (oude content-stijlen, hergebruikt binnen .admin-content)
+   ========================================================= */
+.admin-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 20px;
+  align-items: start;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.admin-form h3 { grid-column: 1 / -1; margin: 0 0 4px; color: var(--blue); }
+.admin-form textarea { grid-column: 1 / -1; }
+.admin-form .btn, .admin-form .admin-button { grid-column: 1 / -1; justify-self: start; margin-top: 20px; }
+
+.checkbox-field { grid-column: 1 / -1; margin: 6px 0; }
+.checkbox-field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 500;
+  cursor: pointer;
+}
+.checkbox-field input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--blue);
+}
+
+@media (max-width: 700px) {
+  .admin-form { grid-template-columns: 1fr; }
+}
+
+.table-wrap { overflow-x: auto; }
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.admin-table th, .admin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.admin-table thead th {
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  font-weight: 700;
+}
+
+.admin-table tbody tr:hover { background: var(--blue-light); }
+.admin-table tbody tr:last-child td { border-bottom: none; }
+.admin-table form { display: inline; }
+
+.variant-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  flex-wrap: wrap;
+}
+
+/* de children van deze forms mee laten meedraaien in de flex-rij van .variant-row,
+   zonder dat het <form>-element zelf een eigen doos in de layout vormt */
+.variant-edit-form, .variant-delete-form {
+  display: contents;
+}
+
+.variant-edit-form input[type="text"],
+.variant-edit-form input[type="number"] {
+  width: auto;
+  min-width: 80px;
+  flex: 1 1 100px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.variant-active-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.variant-active-toggle input[type="checkbox"] {
+  width: auto;
+  flex: none;
+  accent-color: var(--blue);
+}
+
+.variant-row .admin-button, .variant-row .btn-danger {
+  flex-shrink: 0;
+}
+
+.order-summary {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.order-summary p { margin: 6px 0; }
+
+.order-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.order-line:last-child { border-bottom: none; }
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.site-footer {
+  flex-shrink: 0;
+  background: var(--blue);
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 48px;
+}
+
+/* Op de homepage sluit de footer direct aan op de navy .home-closing-sectie
+   erboven - zonder deze override zou de standaard margin-top een storende
+   lichte streep tussen die twee (allebei navy) vlakken tonen. */
+body.home-page .site-footer { margin-top: 0; }
+
+.footer-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 48px 40px 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+}
+
+.footer-section h3 {
+  color: var(--white);
+  font-size: 15px;
+  margin: 0 0 12px;
+}
+
+.footer-section p {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.footer-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-section a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footer-section a:hover { color: var(--white); }
+
+.footer-bottom {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 16px 40px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+
+.footer-sponsors {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 40px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 24px;
+}
+
+.footer-sponsors h3 {
+  color: var(--white);
+  font-size: 15px;
+  margin: 0 0 16px;
+}
+
+.footer-sponsors-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-sponsor-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+}
+
+.footer-sponsor-logo img {
+  max-height: 38px;
+  max-width: 120px;
+  object-fit: contain;
+}
+
+@media (max-width: 860px) {
+  .footer-content { padding: 36px 20px 20px; }
+  .footer-sponsors { padding: 24px 20px 24px; }
+  .footer-bottom { padding: 16px 20px 20px; }
+}
+
+/* =========================================================
+   NAV-PANEEL (hamburger-only op elke schermbreedte)
+   ========================================================= */
+/* De navigatie staat niet meer standaard open: nav#nav-menu is een
+   uitklappaneel onder de hamburger, dicht bij page load, ongeacht
+   schermbreedte - .active (via de hamburger-JS in base.html) toont het. */
+nav#nav-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  width: min(320px, 100%);
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  background: var(--blue-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  padding: 18px 20px;
+  z-index: 30;
+}
+
+nav#nav-menu.active { display: block; }
+
+nav#nav-menu > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.has-dropdown { position: relative; }
+
+.dropdown-toggle {
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  margin: 0;
+  width: 100%;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  font-family: var(--font-family);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.dropdown-toggle::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-top: -3px;
+}
+
+.dropdown-toggle:hover,
+.has-dropdown.open .dropdown-toggle { color: var(--white); }
+
+.has-dropdown.open .dropdown-toggle::after {
+  transform: rotate(225deg);
+  margin-top: 3px;
+}
+
+/* Zichtbare focus-ring voor toetsenbordgebruikers, los van het open/dicht-gedrag */
+.dropdown-toggle:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+.dropdown {
+  list-style: none;
+  margin: 4px 0 4px 12px;
+  padding: 4px;
+  position: static;
+  background: rgba(255, 255, 255, 0.04);
+  border: none;
+  box-shadow: none;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Bewust GEEN :hover-trigger: bij dicht bijeenstaande menu-items kon de muis
+   per ongeluk over een gesloten dropdown-vak van de buur bewegen, waardoor
+   die ook openging. Openen/sluiten gebeurt nu uitsluitend via klik (JS,
+   klasse .open) - voorspelbaar en identiek op muis, toetsenbord en touch. */
+.has-dropdown.open .dropdown {
+  display: flex;
+}
+
+.dropdown-group-label {
+  padding: 8px 12px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.dropdown li a {
+  display: block;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.dropdown li a:hover { background: rgba(255, 255, 255, 0.08); color: var(--white) !important; }
+
+/* =========================================================
+   RESPONSIVE NAV
+   ========================================================= */
+@media (max-width: 860px) {
+  .site-header { padding: 0 20px; }
+  .navbar { height: auto; padding: 16px 0; }
+  nav#nav-menu { left: 0; right: 0; width: auto; }
+
+  .hero, .hero.hero-short { padding: 40px 20px; }
+  .hero h1 { font-size: 30px; }
+  .section { padding: 36px 20px; }
+}
+
+/* Op erg smalle schermen past de kop (brand + sponsors + hamburger +
+   winkelmandje) niet op één rij naast elkaar - de hoofdsponsor-logo's
+   vallen dan naar een eigen, gecentreerde tweede rij i.p.v. te verdwijnen
+   (ze staan nergens anders meer op de site sinds de sponsorstrook op de
+   homepage weg is). */
+@media (max-width: 480px) {
+  .site-header { padding: 0 16px; }
+  .navbar { gap: 12px; flex-wrap: wrap; row-gap: 10px; }
+  .header-sponsors { order: 5; width: 100%; justify-content: center; margin-left: 0; }
+  .brand-badge { height: 38px; }
+  .brand-text-line1 { font-size: 16px; }
+  .brand-text-line2 { font-size: 12px; }
+}
+
+/* =========================================================
+   RICH-TEXT INHOUD (pagina's / nieuwsberichten via de admin-editor)
+   ========================================================= */
+.page-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  table-layout: fixed;
+}
+
+.page-body th,
+.page-body td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+  word-wrap: break-word;
+}
+
+.page-body th {
+  background: var(--blue-light);
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .page-body table { display: block; overflow-x: auto; }
+}
+
+/* Video-embed (YouTube/Vimeo via de editor se video-knop): Quill zet vaste
+   width/height-attributen op de iframe, max-width laat 'm meeschalen op
+   smallere schermen terwijl de hoogte automatisch verhoudingsgewijs meegaat. */
+.page-body iframe {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  margin: 12px 0;
+}
+
+/* =========================================================
+   PAGINABLOKKEN (page-builder, zie templates/pages/_blocks/)
+   ========================================================= */
+.page-block { margin-top: 28px; }
+.page-block:first-child { margin-top: 0; }
+
+/* Weergave-varianten, gekozen per blok in de admin (zie utils/page_blocks.
+   resolve_style + het "Weergave"-formulierstukje in page_block_form.html). */
+.block-width-smal { max-width: 600px; margin-left: auto; margin-right: auto; }
+.block-width-normaal { max-width: 800px; margin-left: auto; margin-right: auto; }
+.block-width-breed { max-width: 1100px; margin-left: auto; margin-right: auto; }
+
+.block-align-left { text-align: left; }
+.block-align-center { text-align: center; }
+.block-align-right { text-align: right; }
+
+.block-bg-licht, .block-bg-blauw, .block-bg-donker { border-radius: var(--radius); padding: 28px; }
+.block-bg-licht { background: var(--blue-light); }
+.block-bg-blauw { background: var(--blue); color: var(--white); }
+.block-bg-blauw h2, .block-bg-blauw h3, .block-bg-blauw h4, .block-bg-blauw a { color: var(--white); }
+.block-bg-donker { background: var(--blue-dark); color: var(--white); }
+.block-bg-donker h2, .block-bg-donker h3, .block-bg-donker h4, .block-bg-donker a { color: var(--white); }
+
+.page-block.block-spacing-compact { margin-top: 12px; }
+.page-block.block-spacing-ruim { margin-top: 48px; }
+.page-block.block-spacing-compact:first-child,
+.page-block.block-spacing-ruim:first-child { margin-top: 0; }
+
+.block-gallery-single {
+  width: 100%;
+  border-radius: var(--radius);
+}
+
+.block-gallery-tile {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.block-columns-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+
+.block-video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.block-video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Uitlijning van de knop komt van de block-align-* wrapperklasse hierboven. */
+
+.block-quote {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.block-quote p {
+  font-size: 22px;
+  font-style: italic;
+  color: inherit;
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.block-quote cite {
+  display: block;
+  font-style: normal;
+  font-weight: 700;
+  color: inherit;
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+.block-faq { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+
+.block-faq-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+}
+
+.block-faq-item summary {
+  font-weight: 700;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.block-faq-item p { margin: 10px 0 0; color: var(--muted); }
+
+.block-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+}
+
+.block-stat { text-align: center; }
+
+.block-stat-getal {
+  display: block;
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.block-bg-blauw .block-stat-getal, .block-bg-donker .block-stat-getal { color: var(--yellow); }
+
+.block-stat-label {
+  display: block;
+  color: inherit;
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+/* =========================================================
+   SPOND-KALENDER EMBED
+   ========================================================= */
+.spond-embed-wrap {
+  width: 100%;
+  height: 800px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--white);
+}
+
+.spond-embed-wrap iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+@media (max-width: 600px) {
+  .spond-embed-wrap { height: 600px; }
+}
+
+.spond-embed-wrap-card { height: 300px; }
+
+@media (max-width: 600px) {
+  .spond-embed-wrap-card { height: 320px; }
+}

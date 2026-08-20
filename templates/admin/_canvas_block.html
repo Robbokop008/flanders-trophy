@@ -1,0 +1,18 @@
+{% set edit_mode = True %}
+{% set weergave = resolve_style(block.data) %}
+<div class="canvas-block" data-block-id="{{ block.id }}" data-block-type="{{ block.block_type }}">
+    <div class="canvas-block-toolbar">
+        <span class="canvas-drag-handle" title="Sleep om te herordenen">&#9776;</span>
+        <span class="canvas-block-type-badge">{{ block_type_labels[block.block_type] }}</span>
+        <div class="canvas-block-toolbar-actions">
+            <a href="{{ url_for('admin.edit_page_block', page_id=page.id, block_id=block.id) }}" class="canvas-toolbar-btn">Bewerken</a>
+            <form action="{{ url_for('admin.delete_page_block', page_id=page.id, block_id=block.id) }}" method="post" class="canvas-delete-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="canvas-toolbar-btn canvas-toolbar-btn-danger" onclick="return confirm('Dit blok definitief verwijderen?');">Verwijderen</button>
+            </form>
+        </div>
+    </div>
+    <div class="page-block block-align-{{ weergave.align }} block-bg-{{ weergave.background }} block-width-{{ weergave.width }} block-spacing-{{ weergave.spacing }}">
+        {% include "pages/_blocks/" + block.block_type + ".html" %}
+    </div>
+</div>

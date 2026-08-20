@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Pagina niet gevonden - Flanders Trophy{% endblock %}
+
+{% block content %}
+<section class="hero hero-short">
+    <div class="hero-content">
+        <h1>404 - Pagina niet gevonden</h1>
+        <p>Deze pagina bestaat niet (meer), of het adres klopt niet helemaal.</p>
+        <a href="{{ url_for('main.home') }}" class="cta-button">Terug naar de homepage</a>
+    </div>
+</section>
+{% endblock %}

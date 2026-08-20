@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}Admin - Flanders Trophy{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="admin-body">
+    {% set ep = request.endpoint or '' %}
+    <header class="admin-topbar">
+        <a class="admin-topbar-brand" href="{{ url_for('admin.dashboard') }}">Flanders Trophy — Admin</a>
+        <div class="admin-topbar-links">
+            <a href="{{ url_for('main.home') }}">Terug naar site</a>
+            <a href="{{ url_for('auth.logout') }}">Uitloggen</a>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        <nav class="admin-sidebar">
+            <a class="admin-sidebar-link{{ ' active' if ep == 'admin.dashboard' else '' }}" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+            <a class="admin-sidebar-link{{ ' active' if 'page' in ep else '' }}" href="{{ url_for('admin.pages') }}">Pagina's</a>
+            <a class="admin-sidebar-link{{ ' active' if 'nav' in ep else '' }}" href="{{ url_for('admin.navigation') }}">Navigatie</a>
+            <a class="admin-sidebar-link{{ ' active' if ep == 'admin.users' else '' }}" href="{{ url_for('admin.users') }}">Gebruikers</a>
+        </nav>
+
+        <main class="admin-content">
+            {% block admin_content %}{% endblock %}
+        </main>
+    </div>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

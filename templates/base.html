@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Flanders Trophy{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body{% if body_page_class %} class="{{ body_page_class }}"{% endif %}>
+    <header class="site-header">
+        <div class="navbar">
+
+            <a href="{{ url_for('main.home') }}" class="brand">
+                <span class="brand-text">
+                    <span class="brand-text-line1">Flanders</span>
+                    <span class="brand-text-line2">Trophy</span>
+                </span>
+            </a>
+
+            <div class="menu-toggle" id="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <nav id="nav-menu">
+                <ul>
+                    {% for item in nav_tree %}
+                        {% if item.item_type == 'category' %}
+                        <li class="has-dropdown">
+                            <button type="button" class="dropdown-toggle" aria-expanded="false">{{ item.label }}</button>
+                            <ul class="dropdown">
+                                {% for child in item.children %}
+                                    {% if child.item_type == 'divider' %}
+                                    <li class="dropdown-group-label">{{ child.label }}</li>
+                                    {% else %}
+                                    <li><a href="{{ child.url }}"{% if child.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li><a href="{{ item.url }}"{% if item.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {# Admin-blok: enkel Inloggen/Admin-link, geen publieke
+                       profiel/winkelmandje-flow zoals bij de hoofdclubsite -
+                       deze site heeft geen zelfregistratie. #}
+                    {% if session.get('user_id') %}
+                        <li><a href="{{ url_for('admin.dashboard') }}">Admin</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">Uitloggen</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('auth.login') }}">Admin</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Flanders Trophy</h3>
+                <p>Handbaltoernooi in Vlaanderen.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul>
+                    <li><a href="{{ url_for('main.contact') }}">Contacteer ons</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ huidig_jaar }} Flanders Trophy. Alle rechten voorbehouden.</p>
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Dropdowns volledig via JS gestuurd (klasse .open): de CSS heeft
+        // bewust GEEN :focus-within-fallback meer, want die hield het menu
+        // open zodra de knop na een klik focus behield.
+        function closeAllDropdowns() {
+            document.querySelectorAll('.has-dropdown.open').forEach((li) => {
+                li.classList.remove('open');
+                li.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
+            });
+        }
+
+        document.querySelectorAll('.has-dropdown > .dropdown-toggle').forEach((toggle) => {
+            toggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const parentLi = toggle.closest('.has-dropdown');
+                const isOpen = parentLi.classList.contains('open');
+
+                closeAllDropdowns();
+
+                if (!isOpen) {
+                    parentLi.classList.add('open');
+                    toggle.setAttribute('aria-expanded', 'true');
+                }
+                toggle.blur();
+            });
+        });
+
+        // Klik buiten een dropdown -> alles sluiten
+        document.addEventListener('click', closeAllDropdowns);
+
+        // Escape -> alles sluiten
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') { closeAllDropdowns(); }
+        });
+
+        // Klikken op een link binnen een dropdown -> dropdown ook sluiten
+        document.querySelectorAll('.dropdown a').forEach((link) => {
+            link.addEventListener('click', closeAllDropdowns);
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

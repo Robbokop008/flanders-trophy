@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Flanders Trophy{% endblock %}
+
+{% block content %}
+<section class="club-hero">
+    <h1>Contact</h1>
+    <p>Vragen over het toernooi? Stuur ons een bericht.</p>
+</section>
+
+<section class="section">
+    {% if success %}
+        <p class="alert alert-success" style="max-width:600px;">{{ success }}</p>
+    {% endif %}
+
+    <div class="auth-card" style="max-width:600px;">
+        <form action="{{ url_for('main.contact') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label for="name">Naam</label>
+            <input type="text" id="name" name="name" value="{{ name or '' }}" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ email or '' }}" required>
+
+            <label for="message">Bericht</label>
+            <textarea id="message" name="message" required>{{ message or '' }}</textarea>
+
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+
+            <button type="submit" class="btn-dark btn" style="margin-top:20px;">Verzend uw bericht</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

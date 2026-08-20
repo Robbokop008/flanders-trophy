@@ -1,0 +1,6 @@
+{% if block.data.text or (edit_mode is defined and edit_mode) %}
+<blockquote class="block-quote">
+    <p>&ldquo;{{ block.data.text or 'Klik om een citaat toe te voegen…' }}&rdquo;</p>
+    {% if block.data.auteur or (edit_mode is defined and edit_mode) %}<cite>&mdash; {{ block.data.auteur or 'Auteur' }}</cite>{% endif %}
+</blockquote>
+{% endif %}

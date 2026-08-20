@@ -1,0 +1,20 @@
+{% set items = block.data.get('items') or [] %}
+{% if items %}
+<div class="block-faq">
+    {% for item in items %}
+    {% if edit_mode is defined and edit_mode %}
+    <div class="block-faq-item block-faq-item-editable">
+        <p class="block-faq-vraag">{{ item.vraag or 'Vraag…' }}</p>
+        <p>{{ item.antwoord or 'Antwoord…' }}</p>
+    </div>
+    {% else %}
+    <details class="block-faq-item">
+        <summary>{{ item.vraag }}</summary>
+        <p>{{ item.antwoord }}</p>
+    </details>
+    {% endif %}
+    {% endfor %}
+</div>
+{% elif edit_mode is defined and edit_mode %}
+<div class="canvas-placeholder-box">Nog geen vragen toegevoegd</div>
+{% endif %}

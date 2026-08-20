@@ -1,0 +1,5 @@
+{% if block.data.url or (edit_mode is defined and edit_mode) %}
+<p class="block-button-wrap">
+    <a href="{{ block.data.url or '#' }}" class="btn btn-{{ 'primary' if block.data.style == 'primary' else 'secondary' }}">{{ block.data.label or 'Meer info' }}</a>
+</p>
+{% endif %}

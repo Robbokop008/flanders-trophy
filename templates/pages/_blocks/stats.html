@@ -1,0 +1,13 @@
+{% set items = block.data.get('items') or [] %}
+{% if items %}
+<div class="block-stats">
+    {% for item in items %}
+    <div class="block-stat">
+        <span class="block-stat-getal">{{ item.getal }}</span>
+        <span class="block-stat-label">{{ item.label }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% elif edit_mode is defined and edit_mode %}
+<div class="canvas-placeholder-box">Nog geen statistieken toegevoegd</div>
+{% endif %}

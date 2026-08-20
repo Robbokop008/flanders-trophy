@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Flanders Trophy | Login{% endblock %}
+
+{% block content %}
+<section class="club-hero">
+    <h1>Admin-login</h1>
+    <p>Log in om de inhoud van de site te beheren.</p>
+</section>
+
+<section class="section" style="padding-top:0;">
+    <div class="auth-card">
+        <h2>Welkom terug</h2>
+        <form action="{{ url_for('auth.login') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label for="username">Gebruikersnaam</label>
+            <input id="username" type="text" name="username" class="login-input" placeholder="Voer uw gebruikersnaam in" required>
+
+            <label for="password">Wachtwoord</label>
+            <input id="password" type="password" name="password" class="login-input" placeholder="••••••••" required>
+
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+
+            <button type="submit" class="btn-dark btn login-button">Inloggen</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

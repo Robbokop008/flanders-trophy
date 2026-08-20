@@ -1,0 +1,32 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - Dashboard{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>Dashboard</h1>
+    <p>Welkom in het adminpaneel van de Flanders Trophy-site.</p>
+</div>
+
+<section class="section">
+    <div class="dashboard-acties-grid">
+        <a href="{{ url_for('admin.pages') }}" class="dashboard-actie-tile">
+            <span class="dashboard-actie-aantal">{{ page_count }}</span>
+            <span class="dashboard-actie-label">Pagina's ({{ published_page_count }} gepubliceerd)</span>
+        </a>
+        <a href="{{ url_for('admin.navigation') }}" class="dashboard-actie-tile">
+            <span class="dashboard-actie-label">Navigatie beheren</span>
+        </a>
+        <a href="{{ url_for('admin.users') }}" class="dashboard-actie-tile">
+            <span class="dashboard-actie-aantal">{{ user_count }}</span>
+            <span class="dashboard-actie-label">Gebruikers</span>
+        </a>
+    </div>
+
+    <p class="muted" style="margin-top:24px;">
+        Deze site is een scaffold: de CMS (pagina's + navigatie) werkt volledig, maar er is nog geen
+        echte toernooi-inhoud ingevuld. Begin bij <a href="{{ url_for('admin.pages') }}">Pagina's</a>
+        om je eerste pagina's aan te maken, en koppel ze daarna in <a href="{{ url_for('admin.navigation') }}">Navigatie</a>.
+    </p>
+</section>
+{% endblock %}

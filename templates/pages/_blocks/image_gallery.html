@@ -1,0 +1,12 @@
+{% set images = block.data.images or [] %}
+{% if images|length == 1 %}
+<img class="block-gallery-single" src="{{ url_for('static', filename='images/' + images[0].filename) }}" alt="{{ images[0].alt or '' }}">
+{% elif images|length > 1 %}
+<div class="values-grid block-gallery-grid">
+    {% for img in images %}
+    <img class="block-gallery-tile" src="{{ url_for('static', filename='images/' + img.filename) }}" alt="{{ img.alt or '' }}">
+    {% endfor %}
+</div>
+{% elif edit_mode is defined and edit_mode %}
+<div class="canvas-placeholder-box">+ Afbeelding toevoegen</div>
+{% endif %}

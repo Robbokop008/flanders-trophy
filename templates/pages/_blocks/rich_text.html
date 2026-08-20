@@ -1,0 +1,5 @@
+{% if block.data.html and (block.data.html | platte_tekst) %}
+{{ block.data.html | safe }}
+{% elif edit_mode is defined and edit_mode %}
+<p class="canvas-placeholder-text">Klik om tekst toe te voegen…</p>
+{% endif %}

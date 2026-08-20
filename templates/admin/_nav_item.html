@@ -1,0 +1,70 @@
+<div class="nav-item-block" id="nav-item-{{ item.id }}" data-id="{{ item.id }}" data-type="{{ item.item_type }}">
+    <div class="nav-item-row">
+        <span class="nav-drag-handle" title="Sleep om te herordenen/verplaatsen">&#10021;</span>
+        <span class="nav-type-badge">{{ item.item_type }}</span>
+
+        <form action="{{ url_for('admin.edit_nav_item', item_id=item.id) }}" method="post" class="nav-item-edit-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="text" name="label" value="{{ item.label }}" required>
+
+            {% if item.item_type == 'page' %}
+            <select name="page_id">
+                {% for p in all_pages %}
+                <option value="{{ p.id }}" {{ 'selected' if item.page_id == p.id else '' }}>{{ p.title }}</option>
+                {% endfor %}
+            </select>
+            {% elif item.item_type == 'route' %}
+            <input type="text" name="route_endpoint" value="{{ item.route_endpoint or '' }}" placeholder="bv. main.contact">
+            {% elif item.item_type == 'external' %}
+            <input type="text" name="external_url" value="{{ item.external_url or '' }}" placeholder="https://...">
+            {% endif %}
+
+            {% if item.item_type not in ('category', 'divider') %}
+            <label class="checkbox-inline"><input type="checkbox" name="open_in_new_tab" {{ 'checked' if item.open_in_new_tab else '' }}> Nieuw tabblad</label>
+            {% endif %}
+            <label class="checkbox-inline"><input type="checkbox" name="is_visible" {{ 'checked' if item.is_visible else '' }}> Zichtbaar</label>
+
+            <button type="submit" class="admin-button btn-sm">Opslaan</button>
+        </form>
+
+        <div class="nav-item-actions">
+            <form action="{{ url_for('admin.move_nav_item', item_id=item.id) }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="direction" value="up">
+                <button type="submit" class="btn btn-secondary btn-sm" title="Omhoog">&uarr;</button>
+            </form>
+            <form action="{{ url_for('admin.move_nav_item', item_id=item.id) }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="direction" value="down">
+                <button type="submit" class="btn btn-secondary btn-sm" title="Omlaag">&darr;</button>
+            </form>
+
+            {% if item.item_type != 'category' %}
+            <form action="{{ url_for('admin.move_nav_item_to_parent', item_id=item.id) }}" method="post" class="nav-move-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <select name="parent_id" onchange="this.form.submit()">
+                    <option value="" {{ 'selected' if item.parent_id is none else '' }}>Hoofdniveau</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {{ 'selected' if item.parent_id == cat.id else '' }}>{{ cat.label }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            {% endif %}
+
+            <form action="{{ url_for('admin.delete_nav_item', item_id=item.id) }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ "Dit item en al zijn onderliggende items verwijderen?" if item.item_type == "category" else "Dit item verwijderen?" }}');">Verwijderen</button>
+            </form>
+        </div>
+    </div>
+
+    {% if item.item_type == 'category' %}
+    <div class="nav-tree nav-tree-children" data-parent-id="{{ item.id }}">
+        {% for child in item.children %}
+        {% with item = child %}
+            {% include "admin/_nav_item.html" %}
+        {% endwith %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
