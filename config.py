@@ -20,6 +20,17 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 # genegeerd in plaats van een fout te geven.
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
+# instance/ staat niet in git (enkel *.db is genegeerd, maar de map zelf
+# wordt door git niet getrackt als ze leeg is) - zonder deze regel bestaat de
+# map niet na een verse git clone, en faalt SQLite met "unable to open
+# database file" zodra db.create_all() de db probeert aan te maken.
+os.makedirs(os.path.join(BASE_DIR, "instance"), exist_ok=True)
+
+# Standaard SQLite-pad, gedeeld door Development- en ProductionConfig zodat
+# je zonder DATABASE_URL (bv. op een host zonder losse databaseservice, zoals
+# PythonAnywhere's gratis plan) ook in productie gewoon met SQLite draait.
+_DEFAULT_SQLITE_URI = f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'flanders_trophy.db')}"
+
 
 # Enkel bedoeld als snelle fallback voor lokaal ontwikkelen. create_app()
 # (app.py) weigert op te starten met config_name="production" zolang
@@ -62,9 +73,7 @@ class Config:
 class DevelopmentConfig(Config):
     """Instellingen voor lokaal ontwikkelen."""
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'flanders_trophy.db')}"
-    )
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", _DEFAULT_SQLITE_URI)
 
 
 def _normalize_database_url(url):
@@ -78,7 +87,7 @@ def _normalize_database_url(url):
 class ProductionConfig(Config):
     """Instellingen voor de live-omgeving (bv. PythonAnywhere, Render, Hetzner)."""
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = _normalize_database_url(os.environ.get("DATABASE_URL"))
+    SQLALCHEMY_DATABASE_URI = _normalize_database_url(os.environ.get("DATABASE_URL")) or _DEFAULT_SQLITE_URI
     SESSION_COOKIE_SECURE = True
 
 
