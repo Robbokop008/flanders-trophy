@@ -1,6 +1,8 @@
-{% if block.data.text or (edit_mode is defined and edit_mode) %}
+{% set text = i18n_value(block.data.text, current_lang) %}
+{% set auteur = i18n_value(block.data.auteur, current_lang) %}
+{% if text or (edit_mode is defined and edit_mode) %}
 <blockquote class="block-quote">
-    <p>&ldquo;{{ block.data.text or 'Klik om een citaat toe te voegen…' }}&rdquo;</p>
-    {% if block.data.auteur or (edit_mode is defined and edit_mode) %}<cite>&mdash; {{ block.data.auteur or 'Auteur' }}</cite>{% endif %}
+    <p>&ldquo;{{ text or 'Klik om een citaat toe te voegen…' }}&rdquo;</p>
+    {% if auteur or (edit_mode is defined and edit_mode) %}<cite>&mdash; {{ auteur or 'Auteur' }}</cite>{% endif %}
 </blockquote>
 {% endif %}

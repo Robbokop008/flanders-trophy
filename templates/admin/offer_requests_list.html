@@ -1,0 +1,82 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - Offerteaanvragen{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>Offerteaanvragen</h1>
+    <p>Aanvragen binnengekomen via <code>/request-offer</code>. Vink "Verwerkt" aan zodra je een offerte hebt opgestuurd.</p>
+</div>
+
+<section class="section">
+    <p style="margin-bottom:16px;">
+        {% if show_handled %}
+            <a href="{{ url_for('admin.offer_requests') }}">Toon enkel nieuwe aanvragen</a>
+        {% else %}
+            <a href="{{ url_for('admin.offer_requests', show_handled=1) }}">Toon ook verwerkte aanvragen</a>
+        {% endif %}
+        &mdash; {{ new_count }} nieuw{{ 'e' if new_count != 1 }}
+    </p>
+
+    {% if offer_requests %}
+    <div class="table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Club</th>
+                    <th>Land</th>
+                    <th>Contactpersoon</th>
+                    <th>Teams</th>
+                    <th>Aankomst</th>
+                    <th>Vertrek</th>
+                    <th>Verwerkt</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in offer_requests %}
+                <tr>
+                    <td>{{ o.created_at.strftime('%d/%m/%Y %H:%M') if o.created_at else '-' }}</td>
+                    <td>{{ o.club_name }}</td>
+                    <td>{{ o.country }}</td>
+                    <td>
+                        {{ o.contact_person }}<br>
+                        <a href="mailto:{{ o.email }}">{{ o.email }}</a>
+                        {% if o.phone %}<br>{{ o.phone }}{% endif %}
+                    </td>
+                    <td>
+                        {{ o.total_teams }} team{{ 's' if o.total_teams != 1 }}
+                        <details>
+                            <summary class="muted" style="cursor:pointer;font-size:13px;">Detail</summary>
+                            <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;">
+                                {% for veld, label in o.TEAM_FIELDS %}
+                                {% set aantal = o|attr(veld) %}
+                                {% if aantal %}<li>{{ label }}: {{ aantal }}</li>{% endif %}
+                                {% endfor %}
+                            </ul>
+                        </details>
+                        {% if o.preferred_package %}<div class="muted" style="font-size:13px;">Pakket: {{ o.preferred_package }}</div>{% endif %}
+                        {% if o.expected_participants %}<div class="muted" style="font-size:13px;">{{ o.expected_participants }} deelnemers verwacht</div>{% endif %}
+                        {% if o.transport %}<div class="muted" style="font-size:13px;">Vervoer: {{ o.transport }}</div>{% endif %}
+                        {% if o.comments %}<div class="muted" style="font-size:13px;">"{{ o.comments }}"</div>{% endif %}
+                    </td>
+                    <td>{{ o.arrival_date.strftime('%d/%m/%Y') if o.arrival_date else '-' }}</td>
+                    <td>{{ o.departure_date.strftime('%d/%m/%Y') if o.departure_date else '-' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin.toggle_offer_request_handled', offer_request_id=o.id, show_handled=1 if show_handled else 0) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn {{ 'btn-secondary' if o.is_handled else 'btn-primary' }}" style="padding:6px 12px;font-size:13px;">
+                                {{ 'Verwerkt ✓' if o.is_handled else 'Markeer verwerkt' }}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>{{ 'Nog geen offerteaanvragen binnengekomen.' if not show_handled else 'Geen aanvragen gevonden.' }}</p>
+    {% endif %}
+</section>
+{% endblock %}

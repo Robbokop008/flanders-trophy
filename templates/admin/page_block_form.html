@@ -6,7 +6,7 @@
 {% if block_type == 'rich_text' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/quill/quill.snow.min.css') }}">
 <style>
-  #quill-editor { background: var(--white); min-height: 220px; }
+  .rich-text-lang-editor { background: var(--white); min-height: 220px; }
   .ql-toolbar.ql-snow { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
   .ql-container.ql-snow { border-radius: 0 0 var(--radius-sm) var(--radius-sm); font-size: 15px; }
 </style>
@@ -23,6 +23,8 @@
   .item-fieldset { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px; }
   .item-fieldset legend { font-weight: 700; padding: 0 6px; }
   .item-fieldset img { max-height: 70px; border-radius: var(--radius-sm); display: block; margin-bottom: 8px; }
+  .lang-field { border-left: 3px solid var(--border); padding-left: 12px; }
+  .lang-field.lang-field-primary { border-left-color: var(--blue); }
   .weergave-fieldset { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin: 24px 0; }
   .weergave-fieldset legend { font-weight: 700; padding: 0 6px; }
   .weergave-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
@@ -47,11 +49,17 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         {% if block_type == 'rich_text' %}
-        <div class="block-form-field">
-            <label for="quill-editor">Inhoud</label>
-            <div id="quill-editor" data-textarea-id="html" data-image-upload-url="{{ url_for('admin.upload_page_image') }}"></div>
-            <textarea id="html" name="html" style="display:none;">{{ d.html or '' }}</textarea>
+        {# Eén Quill-editor per taal, gestapeld i.p.v. tabs: eenvoudiger en
+           robuuster (geen "Quill in een verborgen tab init't verkeerd"-gedoe)
+           - zie utils/i18n.resolve_i18n_field() voor hoe dit bij het
+           weergeven weer met terugval naar Engels samengevoegd wordt. #}
+        {% for code, name in languages.items() %}
+        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+            <label for="quill-editor-{{ code }}">Inhoud ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+            <div id="quill-editor-{{ code }}" class="rich-text-lang-editor" data-textarea-id="html_{{ code }}" data-image-upload-url="{{ url_for('admin.upload_page_image') }}"></div>
+            <textarea id="html_{{ code }}" name="html_{{ code }}" style="display:none;">{{ i18n_raw(d.html, code) }}</textarea>
         </div>
+        {% endfor %}
 
         {% elif block_type == 'image_gallery' %}
         {% if d.images %}
@@ -86,14 +94,16 @@
         {% set col = d.columns[i] if d.columns and i < d.columns|length else {} %}
         <fieldset class="item-fieldset column-fieldset" data-col-index="{{ i }}">
             <legend>Kolom {{ i + 1 }}</legend>
-            <div class="block-form-field">
-                <label for="heading_{{ i }}">Titel (optioneel)</label>
-                <input type="text" id="heading_{{ i }}" name="heading_{{ i }}" value="{{ col.heading or '' }}">
+            {% for code, name in languages.items() %}
+            <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+                <label for="heading_{{ i }}_{{ code }}">Titel ({{ name }}, optioneel)</label>
+                <input type="text" id="heading_{{ i }}_{{ code }}" name="heading_{{ i }}_{{ code }}" value="{{ i18n_raw(col.heading, code) }}">
             </div>
-            <div class="block-form-field">
-                <label for="text_{{ i }}">Tekst (optioneel)</label>
-                <textarea id="text_{{ i }}" name="text_{{ i }}" rows="3">{{ col.text or '' }}</textarea>
+            <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+                <label for="text_{{ i }}_{{ code }}">Tekst ({{ name }}, optioneel)</label>
+                <textarea id="text_{{ i }}_{{ code }}" name="text_{{ i }}_{{ code }}" rows="3">{{ i18n_raw(col.text, code) }}</textarea>
             </div>
+            {% endfor %}
             {% if col.image %}
             <img src="{{ url_for('static', filename='images/' + col.image) }}" alt="">
             <label style="font-weight:400;"><input type="checkbox" name="remove_image_{{ i }}"> Afbeelding verwijderen</label>
@@ -112,12 +122,14 @@
         </div>
 
         {% elif block_type == 'button' %}
-        <div class="block-form-field">
-            <label for="label">Tekst op de knop</label>
-            <input type="text" id="label" name="label" value="{{ d.label or '' }}" placeholder="Bv. Lees meer">
+        {% for code, name in languages.items() %}
+        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+            <label for="label_{{ code }}">Tekst op de knop ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+            <input type="text" id="label_{{ code }}" name="label_{{ code }}" value="{{ i18n_raw(d.label, code) }}" placeholder="Bv. Lees meer">
         </div>
+        {% endfor %}
         <div class="block-form-field">
-            <label for="url">Link (bv. /pagina/over-ons, of een volledige https://-URL)</label>
+            <label for="url">Link (bv. /pagina/over-ons, of een volledige https://-URL) - zelfde link voor elke taal</label>
             <input type="text" id="url" name="url" value="{{ d.url or '' }}">
         </div>
         <div class="block-form-field">
@@ -129,64 +141,66 @@
         </div>
 
         {% elif block_type == 'quote' %}
-        <div class="block-form-field">
-            <label for="text">Citaat</label>
-            <textarea id="text" name="text" rows="3">{{ d.text or '' }}</textarea>
+        {% for code, name in languages.items() %}
+        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+            <label for="text_{{ code }}">Citaat ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+            <textarea id="text_{{ code }}" name="text_{{ code }}" rows="3">{{ i18n_raw(d.text, code) }}</textarea>
         </div>
-        <div class="block-form-field">
-            <label for="auteur">Auteur/functie (optioneel)</label>
-            <input type="text" id="auteur" name="auteur" value="{{ d.auteur or '' }}" placeholder="Bv. Jan Janssens, voorzitter">
+        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+            <label for="auteur_{{ code }}">Auteur/functie ({{ name }}, optioneel)</label>
+            <input type="text" id="auteur_{{ code }}" name="auteur_{{ code }}" value="{{ i18n_raw(d.auteur, code) }}" placeholder="Bv. Jan Janssens, voorzitter">
         </div>
+        {% endfor %}
 
         {% elif block_type == 'faq' %}
-        {% set aantal_items = d.get('items')|length if d.get('items') else 3 %}
-        <div class="block-form-field">
-            <label for="item_count">Aantal vragen</label>
-            <select id="item_count" name="item_count">
-                {% for n in range(1, 7) %}
-                <option value="{{ n }}" {{ 'selected' if aantal_items == n else '' }}>{{ n }}</option>
+        {# Geen vast maximum aantal vragen: "+ Vraag toevoegen" voegt hieronder
+           dynamisch nieuwe velden toe (zie extra_scripts), en elke vraag heeft
+           een eigen "Verwijderen"-knop i.p.v. een aantal-dropdown die het
+           aantal zichtbare/verstuurde velden capt - zie routes/admin.py
+           (_parse_block_form) voor hoe dit server-side gelezen wordt. #}
+        <div id="faq-items">
+            {% for item in d.get('items') or [] %}
+            {% set item_index = loop.index0 %}
+            <fieldset class="item-fieldset faq-item-fieldset">
+                <legend>Vraag {{ loop.index }}</legend>
+                {% for code, name in languages.items() %}
+                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+                    <label for="vraag_{{ item_index }}_{{ code }}">Vraag ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+                    <input type="text" id="vraag_{{ item_index }}_{{ code }}" name="vraag_{{ item_index }}_{{ code }}" value="{{ i18n_raw(item.vraag, code) }}">
+                </div>
+                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+                    <label for="antwoord_{{ item_index }}_{{ code }}">Antwoord ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+                    <textarea id="antwoord_{{ item_index }}_{{ code }}" name="antwoord_{{ item_index }}_{{ code }}" rows="3">{{ i18n_raw(item.antwoord, code) }}</textarea>
+                </div>
                 {% endfor %}
-            </select>
+                <button type="button" class="btn btn-secondary faq-remove-btn">Verwijder vraag</button>
+            </fieldset>
+            {% endfor %}
         </div>
-        {% for i in range(6) %}
-        {% set item = d.get('items')[i] if d.get('items') and i < d.get('items')|length else {} %}
-        <fieldset class="item-fieldset faq-item-fieldset" data-item-index="{{ i }}">
-            <legend>Vraag {{ i + 1 }}</legend>
-            <div class="block-form-field">
-                <label for="vraag_{{ i }}">Vraag</label>
-                <input type="text" id="vraag_{{ i }}" name="vraag_{{ i }}" value="{{ item.vraag or '' }}">
-            </div>
-            <div class="block-form-field">
-                <label for="antwoord_{{ i }}">Antwoord</label>
-                <textarea id="antwoord_{{ i }}" name="antwoord_{{ i }}" rows="3">{{ item.antwoord or '' }}</textarea>
-            </div>
-        </fieldset>
-        {% endfor %}
+        <button type="button" id="faq-add-btn" class="admin-button" style="margin-bottom:16px;">+ Vraag toevoegen</button>
 
         {% elif block_type == 'stats' %}
-        {% set aantal_items = d.get('items')|length if d.get('items') else 3 %}
-        <div class="block-form-field">
-            <label for="item_count">Aantal statistieken</label>
-            <select id="item_count" name="item_count">
-                {% for n in range(1, 5) %}
-                <option value="{{ n }}" {{ 'selected' if aantal_items == n else '' }}>{{ n }}</option>
+        {# Geen vast maximum - zelfde dynamische aanpak als FAQ hierboven. #}
+        <div id="stats-items">
+            {% for item in d.get('items') or [] %}
+            {% set item_index = loop.index0 %}
+            <fieldset class="item-fieldset stats-item-fieldset">
+                <legend>Statistiek {{ loop.index }}</legend>
+                <div class="block-form-field">
+                    <label for="getal_{{ item_index }}">Getal (bv. 500+) - zelfde voor elke taal</label>
+                    <input type="text" id="getal_{{ item_index }}" name="getal_{{ item_index }}" value="{{ item.getal or '' }}">
+                </div>
+                {% for code, name in languages.items() %}
+                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+                    <label for="stat_label_{{ item_index }}_{{ code }}">Label ({{ name }}, bv. leden){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+                    <input type="text" id="stat_label_{{ item_index }}_{{ code }}" name="stat_label_{{ item_index }}_{{ code }}" value="{{ i18n_raw(item.label, code) }}">
+                </div>
                 {% endfor %}
-            </select>
+                <button type="button" class="btn btn-secondary stats-remove-btn">Verwijder statistiek</button>
+            </fieldset>
+            {% endfor %}
         </div>
-        {% for i in range(4) %}
-        {% set item = d.get('items')[i] if d.get('items') and i < d.get('items')|length else {} %}
-        <fieldset class="item-fieldset stats-item-fieldset" data-item-index="{{ i }}">
-            <legend>Statistiek {{ i + 1 }}</legend>
-            <div class="block-form-field">
-                <label for="getal_{{ i }}">Getal (bv. 500+)</label>
-                <input type="text" id="getal_{{ i }}" name="getal_{{ i }}" value="{{ item.getal or '' }}">
-            </div>
-            <div class="block-form-field">
-                <label for="stat_label_{{ i }}">Label (bv. leden)</label>
-                <input type="text" id="stat_label_{{ i }}" name="stat_label_{{ i }}" value="{{ item.label or '' }}">
-            </div>
-        </fieldset>
-        {% endfor %}
+        <button type="button" id="stats-add-btn" class="admin-button" style="margin-bottom:16px;">+ Statistiek toevoegen</button>
 
         {% elif block_type == 'embed_html' %}
         <div class="block-form-field">
@@ -245,11 +259,18 @@
 {% endblock %}
 
 {% block extra_scripts %}
+{% if block_type in ('rich_text', 'faq', 'stats') %}
+<script>
+    var LANGUAGES = [{% for code, name in languages.items() %}{code: {{ code|tojson }}, name: {{ name|tojson }}}{% if not loop.last %}, {% endif %}{% endfor %}];
+</script>
+{% endif %}
 {% if block_type == 'rich_text' %}
 <script src="{{ url_for('static', filename='vendor/quill/quill.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/admin_rich_editor.js') }}"></script>
 <script>
-    initAdminRichEditor(document.getElementById('quill-editor'));
+    LANGUAGES.forEach(function (lang) {
+        initAdminRichEditor(document.getElementById('quill-editor-' + lang.code));
+    });
 </script>
 {% elif block_type == 'columns' %}
 <script>
@@ -269,31 +290,83 @@
 {% elif block_type == 'faq' %}
 <script>
 (function () {
-    var select = document.getElementById('item_count');
-    var fieldsets = document.querySelectorAll('.faq-item-fieldset');
-    function sync() {
-        var aantal = parseInt(select.value, 10);
-        fieldsets.forEach(function (fs) {
-            fs.style.display = (parseInt(fs.dataset.itemIndex, 10) < aantal) ? '' : 'none';
+    var container = document.getElementById('faq-items');
+    var addBtn = document.getElementById('faq-add-btn');
+    var nextIndex = container.querySelectorAll('.faq-item-fieldset').length;
+
+    function langFieldsHtml(prefix, index, tag) {
+        return LANGUAGES.map(function (lang) {
+            var fieldId = prefix + '_' + index + '_' + lang.code;
+            var hint = lang.code === 'en' ? '' : ' <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>';
+            var control = tag === 'textarea'
+                ? '<textarea id="' + fieldId + '" name="' + fieldId + '" rows="3"></textarea>'
+                : '<input type="text" id="' + fieldId + '" name="' + fieldId + '">';
+            var labelText = (prefix === 'vraag' ? 'Vraag' : 'Antwoord') + ' (' + lang.name + ')' + hint;
+            return '<div class="block-form-field lang-field' + (lang.code === 'en' ? ' lang-field-primary' : '') + '">' +
+                '<label for="' + fieldId + '">' + labelText + '</label>' + control + '</div>';
+        }).join('');
+    }
+
+    function wireRemoveButton(fieldset) {
+        fieldset.querySelector('.faq-remove-btn').addEventListener('click', function () {
+            fieldset.remove();
         });
     }
-    select.addEventListener('change', sync);
-    sync();
+
+    container.querySelectorAll('.faq-item-fieldset').forEach(wireRemoveButton);
+
+    addBtn.addEventListener('click', function () {
+        var index = nextIndex++;
+        var fieldset = document.createElement('fieldset');
+        fieldset.className = 'item-fieldset faq-item-fieldset';
+        fieldset.innerHTML =
+            '<legend>Nieuwe vraag</legend>' +
+            langFieldsHtml('vraag', index, 'input') +
+            langFieldsHtml('antwoord', index, 'textarea') +
+            '<button type="button" class="btn btn-secondary faq-remove-btn">Verwijder vraag</button>';
+        container.appendChild(fieldset);
+        wireRemoveButton(fieldset);
+    });
 })();
 </script>
 {% elif block_type == 'stats' %}
 <script>
 (function () {
-    var select = document.getElementById('item_count');
-    var fieldsets = document.querySelectorAll('.stats-item-fieldset');
-    function sync() {
-        var aantal = parseInt(select.value, 10);
-        fieldsets.forEach(function (fs) {
-            fs.style.display = (parseInt(fs.dataset.itemIndex, 10) < aantal) ? '' : 'none';
+    var container = document.getElementById('stats-items');
+    var addBtn = document.getElementById('stats-add-btn');
+    var nextIndex = container.querySelectorAll('.stats-item-fieldset').length;
+
+    function labelFieldsHtml(index) {
+        return LANGUAGES.map(function (lang) {
+            var fieldId = 'stat_label_' + index + '_' + lang.code;
+            var hint = lang.code === 'en' ? '' : ' <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>';
+            return '<div class="block-form-field lang-field' + (lang.code === 'en' ? ' lang-field-primary' : '') + '">' +
+                '<label for="' + fieldId + '">Label (' + lang.name + ', bv. leden)' + hint + '</label>' +
+                '<input type="text" id="' + fieldId + '" name="' + fieldId + '"></div>';
+        }).join('');
+    }
+
+    function wireRemoveButton(fieldset) {
+        fieldset.querySelector('.stats-remove-btn').addEventListener('click', function () {
+            fieldset.remove();
         });
     }
-    select.addEventListener('change', sync);
-    sync();
+
+    container.querySelectorAll('.stats-item-fieldset').forEach(wireRemoveButton);
+
+    addBtn.addEventListener('click', function () {
+        var index = nextIndex++;
+        var fieldset = document.createElement('fieldset');
+        fieldset.className = 'item-fieldset stats-item-fieldset';
+        fieldset.innerHTML =
+            '<legend>Nieuwe statistiek</legend>' +
+            '<div class="block-form-field"><label for="getal_' + index + '">Getal (bv. 500+) - zelfde voor elke taal</label>' +
+            '<input type="text" id="getal_' + index + '" name="getal_' + index + '"></div>' +
+            labelFieldsHtml(index) +
+            '<button type="button" class="btn btn-secondary stats-remove-btn">Verwijder statistiek</button>';
+        container.appendChild(fieldset);
+        wireRemoveButton(fieldset);
+    });
 })();
 </script>
 {% endif %}

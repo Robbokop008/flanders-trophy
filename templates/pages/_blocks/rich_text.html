@@ -1,5 +1,6 @@
-{% if block.data.html and (block.data.html | platte_tekst) %}
-{{ block.data.html | safe }}
+{% set html = i18n_value(block.data.html, current_lang) %}
+{% if html and (html | platte_tekst) %}
+{{ html | safe }}
 {% elif edit_mode is defined and edit_mode %}
 <p class="canvas-placeholder-text">Klik om tekst toe te voegen…</p>
 {% endif %}

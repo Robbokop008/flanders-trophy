@@ -23,6 +23,7 @@
             <a class="admin-sidebar-link{{ ' active' if ep == 'admin.dashboard' else '' }}" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
             <a class="admin-sidebar-link{{ ' active' if 'page' in ep else '' }}" href="{{ url_for('admin.pages') }}">Pagina's</a>
             <a class="admin-sidebar-link{{ ' active' if 'nav' in ep else '' }}" href="{{ url_for('admin.navigation') }}">Navigatie</a>
+            <a class="admin-sidebar-link{{ ' active' if 'offer_request' in ep else '' }}" href="{{ url_for('admin.offer_requests') }}">Offerteaanvragen</a>
             <a class="admin-sidebar-link{{ ' active' if ep == 'admin.users' else '' }}" href="{{ url_for('admin.users') }}">Gebruikers</a>
         </nav>
 

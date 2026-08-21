@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}{{ page.title }} - Flanders Trophy{% endblock %}
+{% block title %}{{ _(page.title) }} - Flanders Trophy{% endblock %}
 
 {% block content %}
 <section class="club-hero">
-    <h1>{{ page.title }}</h1>
+    <h1>{{ _(page.title) }}</h1>
 </section>
 
 <section class="section">
     <div class="content-card">
         {% if page.hero_image %}
-            <img class="block-width-normaal" src="{{ url_for('static', filename='images/' + page.hero_image) }}" alt="{{ page.title }}" style="width:100%;border-radius:var(--radius);margin-bottom:24px;display:block;">
+            <img class="block-width-normaal" src="{{ url_for('static', filename='images/' + page.hero_image) }}" alt="{{ _(page.title) }}" style="width:100%;border-radius:var(--radius);margin-bottom:24px;display:block;">
         {% endif %}
 
         <div class="page-body">

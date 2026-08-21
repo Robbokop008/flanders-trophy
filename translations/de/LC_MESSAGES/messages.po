@@ -1,0 +1,376 @@
+# German translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-21 11:46+0200\n"
+"PO-Revision-Date: 2026-08-21 11:47+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: routes/main.py:50
+msgid "Please fill in all fields correctly (with a valid email address)."
+msgstr "Bitte füllen Sie alle Felder korrekt aus (mit einer gültigen E-Mail-Adresse)."
+
+#: routes/main.py:60
+msgid "Your message has been sent successfully."
+msgstr "Ihre Nachricht wurde erfolgreich gesendet."
+
+#: routes/offers.py:77
+msgid "Please fill in club, country, contact person and email address."
+msgstr "Bitte geben Sie Verein, Land, Ansprechpartner und E-Mail-Adresse an."
+
+#: routes/offers.py:79
+msgid "Please enter a valid email address."
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+#: routes/offers.py:81
+msgid "Please fill in at least one team in at least one category."
+msgstr "Bitte geben Sie mindestens ein Team in mindestens einer Kategorie an."
+
+#: templates/base.html:79
+msgid "International Easter handball tournament in Sint-Truiden."
+msgstr "Internationales Osterhandballturnier in Sint-Truiden."
+
+#: templates/base.html:83 templates/contact.html:7
+msgid "Contact"
+msgstr "Kontakt"
+
+#: templates/base.html:85
+msgid "Contact us"
+msgstr "Kontaktieren Sie uns"
+
+#: templates/base.html:90
+msgid "All rights reserved."
+msgstr "Alle Rechte vorbehalten."
+
+#: templates/contact.html:8
+msgid "Questions about the tournament? Send us a message and select the topic that fits best, so it reaches the right person."
+msgstr "Fragen zum Turnier? Senden Sie uns eine Nachricht und wählen Sie das passende Thema, damit sie die richtige Person erreicht."
+
+#: templates/contact.html:20
+msgid "Topic"
+msgstr "Thema"
+
+#: templates/contact.html:27
+msgid "Name"
+msgstr "Name"
+
+#: templates/contact.html:30 templates/request_offer.html:33
+msgid "Email"
+msgstr "E-Mail"
+
+#: templates/contact.html:33
+msgid "Message"
+msgstr "Nachricht"
+
+#: templates/contact.html:40
+msgid "Send message"
+msgstr "Nachricht senden"
+
+#: templates/index.html:8
+msgid "Pure Fun & Handball"
+msgstr "Pure Fun & Handball"
+
+#: templates/index.html:9
+msgid "The largest international handball tournament in the Benelux."
+msgstr "Das größte internationale Handballturnier der Beneluxstaaten."
+
+#: templates/index.html:11
+msgid "Request Your Offer for 2027"
+msgstr "Angebot für 2027 anfordern"
+
+#: templates/index.html:18 templates/index.html:21
+msgid "teams"
+msgstr "Teams"
+
+#: templates/index.html:19
+msgid "participants"
+msgstr "Teilnehmer"
+
+#: templates/index.html:20
+msgid "matches"
+msgstr "Spiele"
+
+#: templates/index.html:21
+msgid "International"
+msgstr "Internationale"
+
+#: templates/index.html:24
+msgid "Why Flanders Trophy?"
+msgstr "Warum Flanders Trophy?"
+
+#: templates/index.html:26
+msgid "International Handball"
+msgstr "Internationaler Handball"
+
+#: templates/index.html:26
+msgid "Teams from all over Europe"
+msgstr "Teams aus ganz Europa"
+
+#: templates/index.html:27
+msgid "Accommodation included"
+msgstr "Unterkunft inklusive"
+
+#: templates/index.html:27
+msgid "Group accommodation is part of your package."
+msgstr "Gruppenunterkunft ist Teil Ihres Pakets."
+
+#: templates/index.html:28
+msgid "Meals included"
+msgstr "Verpflegung inklusive"
+
+#: templates/index.html:28
+msgid "Dinner and breakfast, all weekend."
+msgstr "Abendessen und Frühstück, das ganze Wochenende."
+
+#: templates/index.html:29
+msgid "Pure Fun"
+msgstr "Pure Fun"
+
+#: templates/index.html:29
+msgid "Affordable packages, a full weekend program, and the Flag Parade."
+msgstr "Günstige Pakete, ein vollständiges Wochenendprogramm und die Flaggenparade."
+
+#: templates/index.html:32
+msgid "Categories 2027"
+msgstr "Kategorien 2027"
+
+#: templates/index.html:33
+msgid "Women | Men — U15 | U17 | U20 | Seniors"
+msgstr "Frauen | Männer — U15 | U17 | U20 | Senioren"
+
+#: templates/index.html:34
+msgid "See all categories →"
+msgstr "Alle Kategorien ansehen →"
+
+#: templates/index.html:36
+msgid "The Flag Parade"
+msgstr "Die Flaggenparade"
+
+#: templates/index.html:37
+msgid "900 handballers walking through the city centre — the opening moment of the tournament weekend, and a Flanders Trophy tradition."
+msgstr "900 Handballer, die durch die Innenstadt ziehen — der Eröffnungsmoment des Turnierwochenendes und eine Tradition von Flanders Trophy."
+
+#: templates/request_offer.html:7
+msgid "Request Your Offer"
+msgstr "Angebot anfordern"
+
+#: templates/request_offer.html:8
+msgid "The first step for foreign clubs joining Flanders Trophy 2027. Requesting an offer is <strong>not</strong> the same as a final registration — once we receive your request, our team prepares a personalised offer based on your teams and preferred package."
+msgstr "Der erste Schritt für ausländische Vereine, die an der Flanders Trophy 2027 teilnehmen. Ein Angebot anzufordern ist <strong>nicht</strong> dasselbe wie eine endgültige Anmeldung — sobald wir Ihre Anfrage erhalten, erstellt unser Team ein persönliches Angebot basierend auf Ihren Teams und Ihrem bevorzugten Paket."
+
+#: templates/request_offer.html:14
+msgid "Thank you! Your request has been received. Our Flanders Trophy team will prepare your personalised offer and get back to you by email."
+msgstr "Vielen Dank! Ihre Anfrage ist eingegangen. Unser Flanders-Trophy-Team erstellt Ihr persönliches Angebot und meldet sich per E-Mail bei Ihnen."
+
+#: templates/request_offer.html:23
+msgid "Club details"
+msgstr "Vereinsdaten"
+
+#: templates/request_offer.html:24
+msgid "Club name"
+msgstr "Vereinsname"
+
+#: templates/request_offer.html:27
+msgid "Country"
+msgstr "Land"
+
+#: templates/request_offer.html:30
+msgid "Contact person"
+msgstr "Ansprechpartner"
+
+#: templates/request_offer.html:36
+msgid "Phone"
+msgstr "Telefon"
+
+#: templates/request_offer.html:39
+msgid "Teams"
+msgstr "Teams"
+
+#: templates/request_offer.html:40
+msgid "Number of teams per category."
+msgstr "Anzahl der Teams pro Kategorie."
+
+#: templates/request_offer.html:55
+msgid "Stay"
+msgstr "Aufenthalt"
+
+#: templates/request_offer.html:56
+msgid "Expected number of participants"
+msgstr "Erwartete Teilnehmerzahl"
+
+#: templates/request_offer.html:59
+msgid "Preferred tariff / accommodation"
+msgstr "Bevorzugter Tarif / Unterkunft"
+
+#: templates/request_offer.html:62
+msgid "Arrival"
+msgstr "Ankunft"
+
+#: templates/request_offer.html:65
+msgid "Departure"
+msgstr "Abreise"
+
+#: templates/request_offer.html:68
+msgid "Transport"
+msgstr "Transport"
+
+#: templates/request_offer.html:76
+msgid "Additional comments"
+msgstr "Zusätzliche Bemerkungen"
+
+#: templates/request_offer.html:79
+msgid "Request My Offer"
+msgstr "Mein Angebot anfordern"
+
+#: templates/pages/view.html:14
+msgid "This page is currently only available in English. The translation will follow soon."
+msgstr "Diese Seite ist derzeit nur auf Englisch verfügbar. Die Übersetzung folgt in Kürze."
+
+#. -----------------------------------------------------------------
+#. Onderstaande msgid's komen niet uit statische template-strings, maar
+#. uit databasewaarden (NavItem.label / Page.title, seed_navigation.py;
+#. CONTACT_TOPICS, routes/main.py; team-categorielabels en vervoerskeuzes,
+#. templates/request_offer.html) die via _() vertaald worden. pybabel
+#. extract kan die niet automatisch vinden (dynamische expressie, geen
+#. letterlijke string) - manueel toegevoegd zodat ze toch vertaald worden.
+msgid "Home"
+msgstr "Startseite"
+
+msgid "Tournament"
+msgstr "Turnier"
+
+msgid "About Flanders Trophy"
+msgstr "Über Flanders Trophy"
+
+msgid "Categories"
+msgstr "Kategorien"
+
+msgid "Accommodation"
+msgstr "Unterkunft"
+
+msgid "Meals"
+msgstr "Mahlzeiten"
+
+msgid "Weekend Program"
+msgstr "Wochenendprogramm"
+
+msgid "Flag Parade"
+msgstr "Flaggenparade"
+
+msgid "Tournament Format"
+msgstr "Turnierformat"
+
+msgid "Tournament Rules"
+msgstr "Turnierregeln"
+
+msgid "Fair Play"
+msgstr "Fair Play"
+
+msgid "Prices & Stay"
+msgstr "Preise & Aufenthalt"
+
+msgid "Packages & Tariffs"
+msgstr "Pakete & Tarife"
+
+msgid "Shuttle"
+msgstr "Shuttle"
+
+msgid "Program"
+msgstr "Programm"
+
+msgid "Teams & Groups"
+msgstr "Teams & Gruppen"
+
+msgid "Match Schedule"
+msgstr "Spielplan"
+
+msgid "Locations"
+msgstr "Standorte"
+
+msgid "Results"
+msgstr "Ergebnisse"
+
+msgid "Live Results"
+msgstr "Live-Ergebnisse"
+
+msgid "Rankings"
+msgstr "Ranglisten"
+
+msgid "Previous Editions"
+msgstr "Frühere Ausgaben"
+
+msgid "Practical Info"
+msgstr "Praktische Infos"
+
+msgid "Check-in"
+msgstr "Check-in"
+
+msgid "Travel & Parking"
+msgstr "Anreise & Parken"
+
+msgid "FAQ"
+msgstr "Häufige Fragen"
+
+msgid "Downloads"
+msgstr "Downloads"
+
+msgid "General questions"
+msgstr "Allgemeine Fragen"
+
+msgid "Registration / Offers"
+msgstr "Anmeldung / Angebote"
+
+msgid "Referees"
+msgstr "Schiedsrichter"
+
+msgid "Parade"
+msgstr "Parade"
+
+msgid "During tournament"
+msgstr "Während des Turniers"
+
+msgid "Women U15"
+msgstr "Frauen U15"
+
+msgid "Women U17"
+msgstr "Frauen U17"
+
+msgid "Women U20"
+msgstr "Frauen U20"
+
+msgid "Women Seniors"
+msgstr "Frauen Senioren"
+
+msgid "Men U15"
+msgstr "Männer U15"
+
+msgid "Men U17"
+msgstr "Männer U17"
+
+msgid "Men U20"
+msgstr "Männer U20"
+
+msgid "Men Seniors"
+msgstr "Männer Senioren"
+
+msgid "Bus"
+msgstr "Bus"
+
+msgid "Car"
+msgstr "Auto"
+
+msgid "Not yet known"
+msgstr "Noch nicht bekannt"
+

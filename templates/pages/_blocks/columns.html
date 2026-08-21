@@ -2,12 +2,14 @@
 {% if columns %}
 <div class="values-grid block-columns">
     {% for col in columns %}
+    {% set heading = i18n_value(col.heading, current_lang) %}
+    {% set text = i18n_value(col.text, current_lang) %}
     <div class="value-card">
         {% if col.image %}
-        <img class="block-columns-img" src="{{ url_for('static', filename='images/' + col.image) }}" alt="{{ col.heading or '' }}">
+        <img class="block-columns-img" src="{{ url_for('static', filename='images/' + col.image) }}" alt="{{ heading }}">
         {% endif %}
-        {% if col.heading %}<h3>{{ col.heading }}</h3>{% endif %}
-        {% if col.text %}<p>{{ col.text }}</p>{% endif %}
+        {% if heading %}<h3>{{ heading }}</h3>{% endif %}
+        {% if text %}<p>{{ text }}</p>{% endif %}
     </div>
     {% endfor %}
 </div>

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Request Your Offer - Flanders Trophy{% endblock %}
+
+{% block content %}
+<section class="club-hero">
+    <h1>{{ _('Request Your Offer') }}</h1>
+    <p>{{ _('The first step for foreign clubs joining Flanders Trophy 2027. Requesting an offer is <strong>not</strong> the same as a final registration — once we receive your request, our team prepares a personalised offer based on your teams and preferred package.') | safe }}</p>
+</section>
+
+<section class="section">
+    <div class="content-card">
+    {% if success %}
+        <p class="alert alert-success">{{ _('Thank you! Your request has been received. Our Flanders Trophy team will prepare your personalised offer and get back to you by email.') }}</p>
+    {% else %}
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form action="{{ url_for('offers.request_offer') }}" method="POST" class="offer-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <h2>{{ _('Club details') }}</h2>
+            <label for="club_name">{{ _('Club name') }}</label>
+            <input type="text" id="club_name" name="club_name" value="{{ form.club_name }}" required>
+
+            <label for="country">{{ _('Country') }}</label>
+            <input type="text" id="country" name="country" value="{{ form.country }}" required>
+
+            <label for="contact_person">{{ _('Contact person') }}</label>
+            <input type="text" id="contact_person" name="contact_person" value="{{ form.contact_person }}" required>
+
+            <label for="email">{{ _('Email') }}</label>
+            <input type="email" id="email" name="email" value="{{ form.email }}" required>
+
+            <label for="phone">{{ _('Phone') }}</label>
+            <input type="tel" id="phone" name="phone" value="{{ form.phone }}">
+
+            <h2>{{ _('Teams') }}</h2>
+            <p class="muted">{{ _('Number of teams per category.') }}</p>
+            <div class="offer-form-teams-grid">
+                {% for veld, label in [
+                    ('women_u15', 'Women U15'), ('women_u17', 'Women U17'),
+                    ('women_u20', 'Women U20'), ('women_seniors', 'Women Seniors'),
+                    ('men_u15', 'Men U15'), ('men_u17', 'Men U17'),
+                    ('men_u20', 'Men U20'), ('men_seniors', 'Men Seniors'),
+                ] %}
+                <div>
+                    <label for="{{ veld }}">{{ _(label) }}</label>
+                    <input type="number" min="0" id="{{ veld }}" name="{{ veld }}" value="{{ form[veld] or 0 }}">
+                </div>
+                {% endfor %}
+            </div>
+
+            <h2>{{ _('Stay') }}</h2>
+            <label for="expected_participants">{{ _('Expected number of participants') }}</label>
+            <input type="number" min="0" id="expected_participants" name="expected_participants" value="{{ form.expected_participants_raw }}">
+
+            <label for="preferred_package">{{ _('Preferred tariff / accommodation') }}</label>
+            <input type="text" id="preferred_package" name="preferred_package" value="{{ form.preferred_package }}">
+
+            <label for="arrival">{{ _('Arrival') }}</label>
+            <input type="date" id="arrival" name="arrival" value="{{ form.arrival_raw }}">
+
+            <label for="departure">{{ _('Departure') }}</label>
+            <input type="date" id="departure" name="departure" value="{{ form.departure_raw }}">
+
+            <label for="transport">{{ _('Transport') }}</label>
+            <select id="transport" name="transport">
+                <option value="">-</option>
+                {% for choice in transport_choices %}
+                <option value="{{ choice }}" {% if form.transport == choice %}selected{% endif %}>{{ _(choice|capitalize) }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="comments">{{ _('Additional comments') }}</label>
+            <textarea id="comments" name="comments">{{ form.comments }}</textarea>
+
+            <button type="submit" class="btn-dark btn" style="margin-top:20px;">{{ _('Request My Offer') }}</button>
+        </form>
+    {% endif %}
+    </div>
+</section>
+{% endblock %}

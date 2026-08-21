@@ -4,7 +4,7 @@
     {% for item in items %}
     <div class="block-stat">
         <span class="block-stat-getal">{{ item.getal }}</span>
-        <span class="block-stat-label">{{ item.label }}</span>
+        <span class="block-stat-label">{{ i18n_value(item.label, current_lang) }}</span>
     </div>
     {% endfor %}
 </div>

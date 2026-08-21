@@ -2,15 +2,17 @@
 {% if items %}
 <div class="block-faq">
     {% for item in items %}
+    {% set vraag = i18n_value(item.vraag, current_lang) %}
+    {% set antwoord = i18n_value(item.antwoord, current_lang) %}
     {% if edit_mode is defined and edit_mode %}
     <div class="block-faq-item block-faq-item-editable">
-        <p class="block-faq-vraag">{{ item.vraag or 'Vraag…' }}</p>
-        <p>{{ item.antwoord or 'Antwoord…' }}</p>
+        <p class="block-faq-vraag">{{ vraag or 'Vraag…' }}</p>
+        <p>{{ antwoord or 'Antwoord…' }}</p>
     </div>
     {% else %}
     <details class="block-faq-item">
-        <summary>{{ item.vraag }}</summary>
-        <p>{{ item.antwoord }}</p>
+        <summary>{{ vraag }}</summary>
+        <p>{{ antwoord }}</p>
     </details>
     {% endif %}
     {% endfor %}

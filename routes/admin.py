@@ -20,7 +20,7 @@ from werkzeug.routing import BuildError
 from datetime import datetime
 
 from extensions import db
-from models import Page, PageBlock, PAGE_BLOCK_TYPES, NavItem, NAV_ITEM_TYPES, User
+from models import Page, PageBlock, PAGE_BLOCK_TYPES, NavItem, NAV_ITEM_TYPES, User, OfferRequest
 from utils.auth import admin_required
 from utils.sanitize import sanitize_html
 from utils.page_blocks import block_afbeeldingsbestanden
@@ -153,6 +153,19 @@ def _parse_weergave_fields():
     }
 
 
+def _parse_i18n_field(field_prefix):
+    """Leest een per-taal veld uit request.form: {"en": ..., "nl": ..., ...},
+    één invoerveld per taal met naam '<field_prefix>_<taalcode>'. Gebruikt
+    door elk bloktype met vertaalbare tekst (rich_text, button, quote, faq,
+    stats) - zie templates/admin/page_block_form.html voor de bijhorende
+    velden, en utils/i18n.resolve_i18n_field() voor hoe zo'n dict bij het
+    weergeven weer met terugval naar Engels wordt uitgelezen."""
+    return {
+        lang: (request.form.get(f"{field_prefix}_{lang}") or "").strip()
+        for lang in current_app.config["LANGUAGES"]
+    }
+
+
 def _parse_block_form(block_type, existing_data):
     """Leest request.form/request.files uit voor het gegeven bloktype en
     geeft (data, error) terug. existing_data is de huidige block.data bij
@@ -166,7 +179,10 @@ def _parse_block_form(block_type, existing_data):
     error = None
 
     if block_type == "rich_text":
-        html = sanitize_html(request.form.get("html") or "")
+        html = {
+            lang: sanitize_html(request.form.get(f"html_{lang}") or "")
+            for lang in current_app.config["LANGUAGES"]
+        }
         data = {"html": html}
 
     elif block_type == "image_gallery":
@@ -194,8 +210,8 @@ def _parse_block_form(block_type, existing_data):
         bestaande = existing_data.get("columns", [])
         columns = []
         for i in range(aantal):
-            heading = (request.form.get(f"heading_{i}") or "").strip()
-            text = (request.form.get(f"text_{i}") or "").strip()
+            heading = _parse_i18n_field(f"heading_{i}")
+            text = _parse_i18n_field(f"text_{i}")
             oude_afbeelding = bestaande[i].get("image") if i < len(bestaande) else None
             nieuwe_afbeelding = _save_uploaded_image(request.files.get(f"image_{i}"))
             if nieuwe_afbeelding:
@@ -225,45 +241,53 @@ def _parse_block_form(block_type, existing_data):
             data = {"provider": provider, "embed_id": embed_id, "source_url": url}
 
     elif block_type == "button":
-        label = (request.form.get("label") or "").strip()
+        label = _parse_i18n_field("label")
         url = (request.form.get("url") or "").strip()
         stijl = request.form.get("style") if request.form.get("style") in ("primary", "secondary") else "primary"
         data = {"label": label, "url": url, "style": stijl}
-        if not label:
-            error = "Tekst voor de knop is verplicht."
+        if not label.get("en"):
+            error = "Engelse tekst voor de knop is verplicht (de andere talen zijn optioneel en vallen anders terug op Engels)."
         elif not is_safe_target_url(url):
             error = "Ongeldige URL. Gebruik een pad dat begint met '/', of een volledige http(s)-URL."
 
     elif block_type == "quote":
-        text = (request.form.get("text") or "").strip()
-        auteur = (request.form.get("auteur") or "").strip()
+        text = _parse_i18n_field("text")
+        auteur = _parse_i18n_field("auteur")
         data = {"text": text, "auteur": auteur}
 
     elif block_type == "faq":
-        try:
-            aantal = int(request.form.get("item_count") or 3)
-        except ValueError:
-            aantal = 3
-        aantal = min(max(aantal, 1), 6)
+        # Geen vast maximum: de admin-UI voegt vraag/antwoord-velden dynamisch
+        # toe (zie de "+ Vraag toevoegen"-knop in page_block_form.html) i.p.v.
+        # een vaste reeks van 1 t.e.m. N velden te tonen, dus lezen we hier
+        # gewoon alle vraag_<i>_<taal>/antwoord_<i>_<taal>-velden die
+        # effectief meegestuurd zijn, ongeacht hun indexen (die hoeven niet
+        # aaneensluitend te zijn).
+        indices = set()
+        for key in request.form:
+            match = re.match(r"^(?:vraag|antwoord)_(\d+)_\w+$", key)
+            if match:
+                indices.add(int(match.group(1)))
         items = []
-        for i in range(aantal):
-            vraag = (request.form.get(f"vraag_{i}") or "").strip()
-            antwoord = (request.form.get(f"antwoord_{i}") or "").strip()
-            if vraag or antwoord:
+        for i in sorted(indices):
+            vraag = _parse_i18n_field(f"vraag_{i}")
+            antwoord = _parse_i18n_field(f"antwoord_{i}")
+            if any(vraag.values()) or any(antwoord.values()):
                 items.append({"vraag": vraag, "antwoord": antwoord})
         data = {"items": items}
 
     elif block_type == "stats":
-        try:
-            aantal = int(request.form.get("item_count") or 3)
-        except ValueError:
-            aantal = 3
-        aantal = min(max(aantal, 1), 4)
+        # Zelfde aanpak als faq hierboven: geen vast maximum, gewoon alle
+        # ingediende getal_<i>/stat_label_<i>_<taal>-indexen inlezen.
+        indices = set()
+        for key in request.form:
+            match = re.match(r"^(?:getal|stat_label)_(\d+)(?:_\w+)?$", key)
+            if match:
+                indices.add(int(match.group(1)))
         items = []
-        for i in range(aantal):
+        for i in sorted(indices):
             getal = (request.form.get(f"getal_{i}") or "").strip()
-            label = (request.form.get(f"stat_label_{i}") or "").strip()
-            if getal or label:
+            label = _parse_i18n_field(f"stat_label_{i}")
+            if getal or any(label.values()):
                 items.append({"getal": getal, "label": label})
         data = {"items": items}
 
@@ -285,6 +309,8 @@ def dashboard():
         "admin/dashboard.html", user=g.user,
         page_count=Page.query.count(), published_page_count=Page.query.filter_by(is_published=True).count(),
         user_count=User.query.count(),
+        offer_request_count=OfferRequest.query.count(),
+        new_offer_request_count=OfferRequest.query.filter_by(is_handled=False).count(),
     )
 
 
@@ -761,3 +787,31 @@ def reorder_nav_items():
 
     db.session.commit()
     return jsonify({"ok": True})
+
+
+# ---------------------------------------------------------------------------
+# Offerteaanvragen
+# ---------------------------------------------------------------------------
+
+@admin_bp.route("/offer-requests")
+@admin_required
+def offer_requests():
+    show_handled = request.args.get("show_handled") == "1"
+    query = OfferRequest.query.order_by(OfferRequest.created_at.desc())
+    if not show_handled:
+        query = query.filter_by(is_handled=False)
+    return render_template(
+        "admin/offer_requests_list.html", user=g.user,
+        offer_requests=query.all(), show_handled=show_handled,
+        new_count=OfferRequest.query.filter_by(is_handled=False).count(),
+    )
+
+
+@admin_bp.route("/offer-requests/<int:offer_request_id>/toggle_handled", methods=["POST"])
+@admin_required
+def toggle_offer_request_handled(offer_request_id):
+    offer_request = OfferRequest.query.get(offer_request_id)
+    if offer_request is not None:
+        offer_request.is_handled = not offer_request.is_handled
+        db.session.commit()
+    return redirect(url_for("admin.offer_requests", show_handled=request.args.get("show_handled")))

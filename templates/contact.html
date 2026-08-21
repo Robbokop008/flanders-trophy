@@ -4,8 +4,8 @@
 
 {% block content %}
 <section class="club-hero">
-    <h1>Contact</h1>
-    <p>Vragen over het toernooi? Stuur ons een bericht.</p>
+    <h1>{{ _('Contact') }}</h1>
+    <p>{{ _('Questions about the tournament? Send us a message and select the topic that fits best, so it reaches the right person.') }}</p>
 </section>
 
 <section class="section">
@@ -17,20 +17,27 @@
         <form action="{{ url_for('main.contact') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-            <label for="name">Naam</label>
+            <label for="topic">{{ _('Topic') }}</label>
+            <select id="topic" name="topic">
+                {% for t in topics %}
+                <option value="{{ t }}" {% if topic == t %}selected{% endif %}>{{ _(t) }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="name">{{ _('Name') }}</label>
             <input type="text" id="name" name="name" value="{{ name or '' }}" required>
 
-            <label for="email">Email</label>
+            <label for="email">{{ _('Email') }}</label>
             <input type="email" id="email" name="email" value="{{ email or '' }}" required>
 
-            <label for="message">Bericht</label>
+            <label for="message">{{ _('Message') }}</label>
             <textarea id="message" name="message" required>{{ message or '' }}</textarea>
 
             {% if error %}
                 <p class="error">{{ error }}</p>
             {% endif %}
 
-            <button type="submit" class="btn-dark btn" style="margin-top:20px;">Verzend uw bericht</button>
+            <button type="submit" class="btn-dark btn" style="margin-top:20px;">{{ _('Send message') }}</button>
         </form>
     </div>
 </section>

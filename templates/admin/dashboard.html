@@ -17,6 +17,10 @@
         <a href="{{ url_for('admin.navigation') }}" class="dashboard-actie-tile">
             <span class="dashboard-actie-label">Navigatie beheren</span>
         </a>
+        <a href="{{ url_for('admin.offer_requests') }}" class="dashboard-actie-tile">
+            <span class="dashboard-actie-aantal">{{ new_offer_request_count }}</span>
+            <span class="dashboard-actie-label">Nieuwe offerteaanvragen ({{ offer_request_count }} totaal)</span>
+        </a>
         <a href="{{ url_for('admin.users') }}" class="dashboard-actie-tile">
             <span class="dashboard-actie-aantal">{{ user_count }}</span>
             <span class="dashboard-actie-label">Gebruikers</span>

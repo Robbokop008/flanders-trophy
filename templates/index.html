@@ -1,15 +1,40 @@
 {% extends "base.html" %}
 
-{% block title %}Flanders Trophy{% endblock %}
+{% block title %}Flanders Handball Trophy 2027{% endblock %}
 
 {% block content %}
-<section class="home-hero">
-    <div class="home-hero-inner">
-        <div class="home-hero-card">
-            <h1>Flanders Trophy</h1>
-            <p>Welkom op de website van de Flanders Trophy, een handbaltoernooi in Vlaanderen.</p>
-            <p class="muted">Deze site is nog in opbouw - de echte inhoud (toernooi-informatie, kalender, ploegen, ...) volgt binnenkort. Beheer je pagina's ondertussen via <a href="{{ url_for('admin.dashboard') }}">het adminpaneel</a>.</p>
+<section class="club-hero">
+    <h1>Flanders Handball Trophy 2027</h1>
+    <p style="font-style:italic;">{{ _('Pure Fun & Handball') }}</p>
+    <p>{{ _('The largest international handball tournament in the Benelux.') }}</p>
+    <p class="block-button-wrap" style="margin-top:20px;">
+        <a href="{{ url_for('offers.request_offer') }}" class="btn btn-primary">{{ _('Request Your Offer for 2027') }}</a>
+    </p>
+</section>
+
+<section class="section">
+    <div class="content-card">
+        <div class="block-stats" style="margin-bottom:12px;">
+            <div class="block-stat"><span class="block-stat-getal">100+</span><span class="block-stat-label">{{ _('teams') }}</span></div>
+            <div class="block-stat"><span class="block-stat-getal">1,200+</span><span class="block-stat-label">{{ _('participants') }}</span></div>
+            <div class="block-stat"><span class="block-stat-getal">300+</span><span class="block-stat-label">{{ _('matches') }}</span></div>
+            <div class="block-stat"><span class="block-stat-getal">{{ _('International') }}</span><span class="block-stat-label">{{ _('teams') }}</span></div>
         </div>
+
+        <h2>{{ _('Why Flanders Trophy?') }}</h2>
+        <div class="values-grid block-columns">
+            <div class="value-card"><h3>{{ _('International Handball') }}</h3><p>{{ _('Teams from all over Europe') }}</p></div>
+            <div class="value-card"><h3>{{ _('Accommodation included') }}</h3><p>{{ _('Group accommodation is part of your package.') }}</p></div>
+            <div class="value-card"><h3>{{ _('Meals included') }}</h3><p>{{ _('Dinner and breakfast, all weekend.') }}</p></div>
+            <div class="value-card"><h3>{{ _('Pure Fun') }}</h3><p>{{ _('Affordable packages, a full weekend program, and the Flag Parade.') }}</p></div>
+        </div>
+
+        <h2 style="margin-top:36px;">{{ _('Categories 2027') }}</h2>
+        <p>{{ _('Women | Men — U15 | U17 | U20 | Seniors') }}</p>
+        <p><a href="{{ url_for('pages.view', slug='categories') }}">{{ _('See all categories →') }}</a></p>
+
+        <h2 style="margin-top:36px;">{{ _('The Flag Parade') }}</h2>
+        <p>{{ _('900 handballers walking through the city centre — the opening moment of the tournament weekend, and a Flanders Trophy tradition.') }}</p>
     </div>
 </section>
 {% endblock %}

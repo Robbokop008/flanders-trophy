@@ -78,6 +78,33 @@ Admins (gebruikers met `is_admin=True`) beheren de site vanuit `/admin`:
   gegroepeerd worden in dropdown-categorieën. Herordenen/verplaatsen kan
   via slepen (SortableJS) of de pijltjes/select-alternatieven.
 
+## Meertalige publieke site (EN/NL/FR/DE)
+
+De publieke site ondersteunt 4 talen via Flask-Babel, **sessie-gebaseerd**
+(een `lang`-cookie, geen taalprefix in de URL - zie `utils/i18n.py` voor de
+afweging). De taalwisselaar in de navbar linkt naar
+`/set-language/<code>?next=<pad>`.
+
+- **Site-chrome** (navigatie, knoppen, formulieren, foutmeldingen) is
+  vertaald: statische template-strings staan als `{{ _('...') }}` in de
+  templates, en databasewaarden die niet door `pybabel extract` gevonden
+  worden (`NavItem.label`/`Page.title`, `CONTACT_TOPICS`,
+  team-categorielabels, vervoerskeuzes) zijn manueel toegevoegd aan
+  `translations/messages.pot` (zie de commentaar daar) en dus ook
+  vertaalbaar via diezelfde `_()`.
+- **CMS-pagina-inhoud** (de content-blokken zelf: rich text, FAQ-antwoorden,
+  ...) is enkel Engels - dat vertalen is een aparte, grotere taak (zou een
+  taal/vertaalgroep-veld op `Page` vereisen). Bij het bekijken van een
+  pagina in een andere taal toont `templates/pages/view.html` een duidelijke
+  melding dat de inhoud nog Engelstalig is.
+- **Vertalingen bijwerken/uitbreiden**: pas de `{{ _('...') }}`-strings aan
+  of voeg toe, draai dan
+  `pybabel extract -F babel.cfg -o translations/messages.pot .`,
+  update de 3 `translations/<taal>/LC_MESSAGES/messages.po`-bestanden met de
+  nieuwe/gewijzigde `msgid`'s (denk ook aan de manueel toegevoegde
+  DB-string-`msgid`'s als je daar iets aan wijzigt), en compileer met
+  `pybabel compile -d translations`.
+
 ## Lokaal opstarten
 
 ```bash
@@ -112,12 +139,12 @@ Dit is een scaffold, geen afgewerkte site. Voor je dit live zet:
 - **Echte inhoud**: alle pagina's, tekst en navigatie zijn leeg/placeholder.
   Bouw de eigenlijke toernooi-informatie op via `/admin/pages` en
   `/admin/navigation`.
-- **Eigen huisstijl**: `static/style.css` is 1-op-1 overgenomen van de
-  hoofdclubsite als werkend startpunt (de admin-CMS-styling werkt meteen),
-  maar de kleuren/lettertype/logo zijn nog de clubkleuren - zie de TODO-
-  comment bovenaan dat bestand.
-- **Favicon en eigen afbeeldingen**: `static/images/` is leeg (enkel een
-  `.gitkeep`); er is nog geen favicon of hero-afbeelding voor de homepage.
+- **Logo en favicon**: `static/style.css` is overgenomen van de hoofdclubsite
+  als werkend startpunt; de blauw/gele kleuren zijn bewust behouden
+  (beslissing 2026-08-21), maar er is nog geen Flanders Trophy-logo of
+  favicon. `static/images/` is leeg (enkel een `.gitkeep`). Zodra die er
+  zijn: favicon toevoegen en de kleurvariabelen in `:root`
+  (`static/style.css`) vervangen als het logo een ander kleurenschema vraagt.
 - **SECRET_KEY**: genereer een echte, geheime waarde voor `.env` voor je
   in productie draait - `create_app()` weigert anders op te starten met
   `config_name="production"`.

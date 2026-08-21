@@ -1,14 +1,13 @@
 /* =========================================================
-   FLANDERS TROPHY — STYLESHEET (scaffold)
+   FLANDERS TROPHY — STYLESHEET
    Overgenomen van de hoofdclubsite (Handbal Sint-Truiden) als
-   startpunt: de admin-shell/pagina-blokken/navigatie-CSS werkt
-   zo meteen, maar de kleuren/huisstijl hieronder zijn nog de
-   clubkleuren. TODO: eigen Flanders Trophy-branding/kleuren/
-   lettertype toepassen in de variabelen in :root en verderop.
+   startpunt. De kleuren hieronder zijn bewust behouden (beslissing
+   2026-08-21) - het logo/eigen huisstijl volgt later, dan worden
+   enkel de variabelen in :root vervangen.
    ========================================================= */
 
 :root {
-  /* Club colors - officiële HBST-kleurcodes */
+  /* Blauw/geel - bewust behouden i.a.w. HBST-kleurcodes, logo volgt later */
   --blue: #05316b;
   --blue-dark: #032349;
   --blue-light: #eaeff6;
@@ -92,7 +91,33 @@ main { display: block; flex: 1 0 auto; }
 .brand { order: 1; }
 .header-sponsors { order: 2; margin-left: auto; }
 .cart-icon { order: 3; }
+.lang-switcher-bar { order: 3; margin-left: auto; }
 .menu-toggle { order: 4; }
+
+/* Taalwisselaar (EN/NL/FR/DE) rechtstreeks in de navbar, los van het
+   hamburger-klapmenu - enkel op erg smalle schermen wijkt dit uit naar de
+   .lang-switcher-mobile-kopie binnenin #nav-menu (zie de media query bij
+   RESPONSIVE NAV verderop, en templates/base.html). */
+.lang-switcher-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lang-switcher-bar a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.lang-switcher-bar a:hover,
+.lang-switcher-bar a.active { color: var(--yellow); }
+
+.lang-switcher-bar .lang-sep { color: rgba(255, 255, 255, 0.3); font-size: 13px; }
+
+#nav-menu .lang-switcher-mobile { display: none; }
 
 .brand {
   display: flex;
@@ -365,6 +390,8 @@ form input[type="text"],
 form input[type="email"],
 form input[type="password"],
 form input[type="number"],
+form input[type="tel"],
+form input[type="date"],
 form input[type="file"],
 form select,
 form textarea {
@@ -393,6 +420,17 @@ form textarea { min-height: 120px; resize: vertical; }
   margin-top: 20px;
   flex-wrap: wrap;
 }
+
+/* Offerteformulier (routes/offers.py, templates/request_offer.html):
+   team-aantallen per categorie naast elkaar i.p.v. één lange kolom. */
+.offer-form-teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 4px 16px;
+}
+.offer-form-teams-grid label { margin: 16px 0 6px; }
+.offer-form h2 { margin: 28px 0 4px; font-size: 18px; color: var(--blue-dark); }
+.offer-form h2:first-of-type { margin-top: 0; }
 
 /* Auth cards (login / register) - de kaart zelf is .auth-card (zie de
    CONTENT- & AUTH-PAGINA'S-sectie verderop); deze klassen zijn voor de
@@ -2106,6 +2144,14 @@ nav#nav-menu > ul {
   .hero, .hero.hero-short { padding: 40px 20px; }
   .hero h1 { font-size: 30px; }
   .section { padding: 36px 20px; }
+}
+
+/* Op erg smalle schermen is er geen plaats meer voor logo + "EN | NL | FR |
+   DE" + hamburger naast elkaar - de taalwisselaar wijkt dan uit naar een
+   kopie binnenin het klapmenu (zie templates/base.html). */
+@media (max-width: 480px) {
+  .lang-switcher-bar { display: none; }
+  #nav-menu .lang-switcher-mobile { display: block; }
 }
 
 /* Op erg smalle schermen past de kop (brand + sponsors + hamburger +

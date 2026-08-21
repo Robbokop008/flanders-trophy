@@ -12,7 +12,7 @@ Starten voor development doe je via run.py, niet via dit bestand direct.
 from flask import Flask, render_template, request
 
 from config import config_by_name, ONVEILIGE_STANDAARD_SECRET_KEY
-from extensions import db, csrf, limiter
+from extensions import db, csrf, limiter, babel
 
 
 def create_app(config_name="development"):
@@ -39,17 +39,35 @@ def create_app(config_name="development"):
     csrf.init_app(app)
     limiter.init_app(app)
 
+    from utils.i18n import get_locale, resolve_i18n_field, raw_i18n_field
+    babel.init_app(app, locale_selector=get_locale)
+
+    # Taalwisselaar + vertaalde CMS-paginatitels (zie utils/i18n.py en
+    # templates/pages/view.html) beschikbaar in elke template.
+    @app.context_processor
+    def inject_i18n():
+        return {"current_lang": get_locale(), "languages": app.config["LANGUAGES"]}
+
+    # Haalt de juiste taalwaarde uit een per-taal blok-veld op: i18n_value
+    # (met terugval naar Engels) voor de publieke blok-templates, i18n_raw
+    # (zonder terugval) om het admin-blokformulier per taal correct leeg/
+    # gevuld te tonen bij bewerken - zie utils/i18n.py.
+    app.add_template_global(resolve_i18n_field, name="i18n_value")
+    app.add_template_global(raw_i18n_field, name="i18n_raw")
+
     # Blueprints registreren: dit "plakt" de routes uit routes/*.py
     # aan de app vast.
     from routes.main import main_bp
     from routes.auth import auth_bp
     from routes.admin import admin_bp
     from routes.pages import pages_bp
+    from routes.offers import offers_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(pages_bp)
+    app.register_blueprint(offers_bp)
 
     # Zorgt dat de database-tabellen bestaan (handig in development;
     # voor productie gebruik je later beter Flask-Migrate).
@@ -80,6 +98,7 @@ def create_app(config_name="development"):
         "main.home": "home-page",
         "main.contact": "content-page",
         "pages.view": "content-page",
+        "offers.request_offer": "content-page",
         "auth.login": "auth-page",
     }
 

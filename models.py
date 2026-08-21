@@ -131,6 +131,59 @@ PAGE_BLOCK_TYPES = [
 ]
 
 
+class OfferRequest(db.Model):
+    """Een offerteaanvraag van een buitenlandse club voor een editie, ingevuld
+    via de publieke "Request Your Offer"-pagina (routes/offers.py). Bewust
+    los van registratie/inschrijving: een aanvraag hier betekent niet dat de
+    club al definitief ingeschreven is - de organisatie stuurt op basis
+    hiervan een offerte, en volgt dat verder handmatig op (zie is_handled)."""
+    __tablename__ = "offer_requests"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    club_name = db.Column(db.String(200), nullable=False)
+    country = db.Column(db.String(100), nullable=False)
+    contact_person = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(150), nullable=False)
+    phone = db.Column(db.String(50))
+
+    women_u15 = db.Column(db.Integer, nullable=False, default=0)
+    women_u17 = db.Column(db.Integer, nullable=False, default=0)
+    women_u20 = db.Column(db.Integer, nullable=False, default=0)
+    women_seniors = db.Column(db.Integer, nullable=False, default=0)
+    men_u15 = db.Column(db.Integer, nullable=False, default=0)
+    men_u17 = db.Column(db.Integer, nullable=False, default=0)
+    men_u20 = db.Column(db.Integer, nullable=False, default=0)
+    men_seniors = db.Column(db.Integer, nullable=False, default=0)
+
+    expected_participants = db.Column(db.Integer)
+    preferred_package = db.Column(db.String(200))
+    arrival_date = db.Column(db.Date)
+    departure_date = db.Column(db.Date)
+    transport = db.Column(db.String(30))
+    comments = db.Column(db.Text)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_handled = db.Column(db.Boolean, nullable=False, default=False)
+
+    TEAM_FIELDS = [
+        ("women_u15", "Women U15"), ("women_u17", "Women U17"),
+        ("women_u20", "Women U20"), ("women_seniors", "Women Seniors"),
+        ("men_u15", "Men U15"), ("men_u17", "Men U17"),
+        ("men_u20", "Men U20"), ("men_seniors", "Men Seniors"),
+    ]
+
+    @property
+    def total_teams(self):
+        return sum(getattr(self, field) or 0 for field, _ in self.TEAM_FIELDS)
+
+    def __repr__(self):
+        return f"<OfferRequest {self.club_name} ({self.country})>"
+
+
+TRANSPORT_CHOICES = ["bus", "car", "not yet known"]
+
+
 class PageBlock(db.Model):
     """Eén content-blok binnen een Page, getoond in volgorde van position.
     De vorm van 'data' hangt af van block_type - zie utils/page_blocks.py

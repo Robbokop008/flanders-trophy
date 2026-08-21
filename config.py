@@ -32,6 +32,14 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", ONVEILIGE_STANDAARD_SECRET_KEY)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # Publieke site in 4 talen (zie utils/i18n.py voor taalkeuze-logica):
+    # Engels is de brontaal/standaard - CMS-paginatitels en -inhoud bestaan
+    # nog enkel in het Engels, enkel de vaste site-chrome (navigatie, knoppen,
+    # formulieren) is al vertaald via translations/<taal>/LC_MESSAGES.
+    LANGUAGES = {"en": "English", "nl": "Nederlands", "fr": "Français", "de": "Deutsch"}
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_TRANSLATION_DIRECTORIES = os.path.join(BASE_DIR, "translations")
+
     # Sessiecookie hardening: HttpOnly voorkomt uitlezen via JavaScript (bv.
     # bij een XSS-lek elders), SameSite=Lax beperkt wanneer de cookie
     # meegestuurd wordt bij een request vanaf een andere site (CSRF-defense

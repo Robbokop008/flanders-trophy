@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="nl">
+<html lang="{{ current_lang }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,16 @@
                 </span>
             </a>
 
+            {# Altijd bovenaan zichtbaar in de navbar zelf (niet weggestopt in
+               het klapmenu) - enkel op erg smalle schermen wijkt dit uit naar
+               de kopie in #nav-menu hieronder, zie de media queries voor
+               .lang-switcher-bar / #nav-menu .lang-switcher-mobile. #}
+            <div class="lang-switcher-bar">
+                {% for code, name in languages.items() %}
+                <a href="{{ url_for('main.set_language', lang_code=code, next=request.path) }}"{% if code == current_lang %} class="active"{% endif %}>{{ code|upper }}</a>{% if not loop.last %}<span class="lang-sep">|</span>{% endif %}
+                {% endfor %}
+            </div>
+
             <div class="menu-toggle" id="menu-toggle">
                 <span></span>
                 <span></span>
@@ -28,31 +38,33 @@
                     {% for item in nav_tree %}
                         {% if item.item_type == 'category' %}
                         <li class="has-dropdown">
-                            <button type="button" class="dropdown-toggle" aria-expanded="false">{{ item.label }}</button>
+                            <button type="button" class="dropdown-toggle" aria-expanded="false">{{ _(item.label) }}</button>
                             <ul class="dropdown">
                                 {% for child in item.children %}
                                     {% if child.item_type == 'divider' %}
-                                    <li class="dropdown-group-label">{{ child.label }}</li>
+                                    <li class="dropdown-group-label">{{ _(child.label) }}</li>
                                     {% else %}
-                                    <li><a href="{{ child.url }}"{% if child.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ child.label }}</a></li>
+                                    <li><a href="{{ child.url }}"{% if child.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ _(child.label) }}</a></li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
                         </li>
                         {% else %}
-                        <li><a href="{{ item.url }}"{% if item.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a></li>
+                        <li><a href="{{ item.url }}"{% if item.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ _(item.label) }}</a></li>
                         {% endif %}
                     {% endfor %}
 
-                    {# Admin-blok: enkel Inloggen/Admin-link, geen publieke
-                       profiel/winkelmandje-flow zoals bij de hoofdclubsite -
-                       deze site heeft geen zelfregistratie. #}
-                    {% if session.get('user_id') %}
-                        <li><a href="{{ url_for('admin.dashboard') }}">Admin</a></li>
-                        <li><a href="{{ url_for('auth.logout') }}">Uitloggen</a></li>
-                    {% else %}
-                        <li><a href="{{ url_for('auth.login') }}">Admin</a></li>
-                    {% endif %}
+                    {# Fallback voor erg smalle schermen, waar .lang-switcher-bar
+                       geen plaats meer heeft naast het logo/de hamburger - zie
+                       de media query hieronder in static/style.css. #}
+                    <li class="has-dropdown lang-switcher-mobile">
+                        <button type="button" class="dropdown-toggle" aria-expanded="false">{{ current_lang|upper }}</button>
+                        <ul class="dropdown">
+                            {% for code, name in languages.items() %}
+                            <li><a href="{{ url_for('main.set_language', lang_code=code, next=request.path) }}"{% if code == current_lang %} class="active"{% endif %}>{{ name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -66,18 +78,18 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>Flanders Trophy</h3>
-                <p>Handbaltoernooi in Vlaanderen.</p>
+                <p>{{ _('International Easter handball tournament in Sint-Truiden.') }}</p>
             </div>
 
             <div class="footer-section">
-                <h3>Contact</h3>
+                <h3>{{ _('Contact') }}</h3>
                 <ul>
-                    <li><a href="{{ url_for('main.contact') }}">Contacteer ons</a></li>
+                    <li><a href="{{ url_for('main.contact') }}">{{ _('Contact us') }}</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; {{ huidig_jaar }} Flanders Trophy. Alle rechten voorbehouden.</p>
+            <p>&copy; {{ huidig_jaar }} Flanders Trophy. {{ _('All rights reserved.') }}</p>
         </div>
     </footer>
 
