@@ -4,5 +4,8 @@ __pycache__/
 venv/
 .env
 instance/*.db
+instance/*.db-shm
+instance/*.db-wal
+instance/*.db-journal
 .DS_Store
 .claude/settings.local.json
