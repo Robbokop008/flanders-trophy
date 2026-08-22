@@ -24,6 +24,12 @@ ALLOWED_ATTRIBUTES = {
     "a": ["href", "target", "rel"],
     "img": ["src", "alt"],
     "td": ["data-row"],
+    # Quill rendert zowel bullet- als genummerde lijsten als <ol><li
+    # data-list="bullet|ordered">...</li></ol> (geen <ul>, zie
+    # static/js/admin_rich_editor.js) - zonder dit attribuut te bewaren zou
+    # een bullet-lijst na het opslaan als genummerde lijst tonen (zie
+    # static/style.css voor de bijhorende li[data-list="bullet"]-stijl).
+    "li": ["data-list"],
     # Quill's video-embed (YouTube/Vimeo) rendert als <iframe class="ql-video" ...>
     "iframe": ["src", "class", "frameborder", "allowfullscreen", "width", "height"],
 }

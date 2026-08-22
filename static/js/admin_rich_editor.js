@@ -177,7 +177,15 @@
             menuBtn.classList.add('ql-table-menu-btn');
         }
 
-        quill.root.innerHTML = textarea.value;
+        // Niet quill.root.innerHTML rechtstreeks zetten: Quill herkent dan
+        // enkel tags waar het zelf een blot voor geregistreerd heeft onder
+        // hun letterlijke tagName (bv. lijsten enkel als <ol>, niet <ul>,
+        // zie Quill's List-blot), waardoor bv. een <ul>-lijst uit oudere/
+        // extern aangemaakte content stilletjes verdwijnt bij het laden.
+        // dangerouslyPasteHTML loopt via Quill's eigen HTML-naar-Delta-
+        // conversie (dezelfde die gebruikt wordt bij plakken), die zowel
+        // <ul> als <ol> correct naar een lijst omzet.
+        quill.clipboard.dangerouslyPasteHTML(textarea.value);
 
         textarea.closest('form').addEventListener('submit', function () {
             textarea.value = quill.root.innerHTML;

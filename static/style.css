@@ -2196,6 +2196,12 @@ nav#nav-menu > ul {
   .page-body table { display: block; overflow-x: auto; }
 }
 
+/* Quill rendert zowel bullet- als genummerde lijsten als <ol><li
+   data-list="...">, nooit als <ul> (zie utils/sanitize.py) - zonder deze
+   regel zou een bullet-lijst hier tonen met het browser-standaardgedrag
+   voor <ol> (genummerd i.p.v. bolletjes). */
+.page-body li[data-list="bullet"] { list-style-type: disc; }
+
 /* Video-embed (YouTube/Vimeo via de editor se video-knop): Quill zet vaste
    width/height-attributen op de iframe, max-width laat 'm meeschalen op
    smallere schermen terwijl de hoogte automatisch verhoudingsgewijs meegaat. */
