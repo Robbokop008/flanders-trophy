@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-21 11:46+0200\n"
+"POT-Creation-Date: 2026-08-22 15:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,31 +25,31 @@ msgstr ""
 msgid "Your message has been sent successfully."
 msgstr ""
 
-#: routes/offers.py:77
+#: routes/offers.py:74
 msgid "Please fill in club, country, contact person and email address."
 msgstr ""
 
-#: routes/offers.py:79
+#: routes/offers.py:76
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: routes/offers.py:81
+#: routes/offers.py:78
 msgid "Please fill in at least one team in at least one category."
 msgstr ""
 
-#: templates/base.html:79
+#: templates/base.html:81
 msgid "International Easter handball tournament in Sint-Truiden."
 msgstr ""
 
-#: templates/base.html:83 templates/contact.html:7
+#: templates/base.html:85 templates/contact.html:7
 msgid "Contact"
 msgstr ""
 
-#: templates/base.html:85
+#: templates/base.html:87
 msgid "Contact us"
 msgstr ""
 
-#: templates/base.html:90
+#: templates/base.html:92
 msgid "All rights reserved."
 msgstr ""
 
@@ -220,42 +220,29 @@ msgid "Expected number of participants"
 msgstr ""
 
 #: templates/request_offer.html:59
-msgid "Preferred tariff / accommodation"
+msgid "Tariff"
 msgstr ""
 
-#: templates/request_offer.html:62
-msgid "Arrival"
+#: templates/request_offer.html:67
+msgid "Number of nights"
 msgstr ""
 
-#: templates/request_offer.html:65
-msgid "Departure"
-msgstr ""
-
-#: templates/request_offer.html:68
-msgid "Transport"
-msgstr ""
-
-#: templates/request_offer.html:76
+#: templates/request_offer.html:75
 msgid "Additional comments"
 msgstr ""
 
-#: templates/request_offer.html:79
+#: templates/request_offer.html:78
 msgid "Request My Offer"
-msgstr ""
-
-#: templates/pages/view.html:14
-msgid ""
-"This page is currently only available in English. The translation will "
-"follow soon."
 msgstr ""
 
 #. -----------------------------------------------------------------
 #. Onderstaande msgid's komen niet uit statische template-strings, maar
 #. uit databasewaarden (NavItem.label / Page.title, seed_navigation.py;
-#. CONTACT_TOPICS, routes/main.py; team-categorielabels en vervoerskeuzes,
-#. templates/request_offer.html) die via _() vertaald worden. pybabel
-#. extract kan die niet automatisch vinden (dynamische expressie, geen
-#. letterlijke string) - manueel toegevoegd zodat ze toch vertaald worden.
+#. CONTACT_TOPICS, routes/main.py; team-categorielabels, tariefkeuzes en
+#. overnachtingskeuzes, templates/request_offer.html) die via _() vertaald
+#. worden. pybabel extract kan die niet automatisch vinden (dynamische
+#. expressie, geen letterlijke string) - manueel toegevoegd zodat ze toch
+#. vertaald worden.
 #. -----------------------------------------------------------------
 msgid "Home"
 msgstr ""
@@ -377,12 +364,21 @@ msgstr ""
 msgid "Men Seniors"
 msgstr ""
 
-msgid "Bus"
+msgid "Classroom"
 msgstr ""
 
-msgid "Car"
+msgid "Classroom with camp beds"
 msgstr ""
 
-msgid "Not yet known"
+msgid "Dormitory with beds"
+msgstr ""
+
+msgid "Hotel offer"
+msgstr ""
+
+msgid "Leave on Sunday"
+msgstr ""
+
+msgid "Leave on Monday"
 msgstr ""
 

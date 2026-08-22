@@ -222,7 +222,10 @@ def _parse_block_form(block_type, existing_data):
         # sanitize_html ook op de door DeepL aangevulde talen: die zouden
         # geen onveilige tags mogen bevatten (DeepL bewaart enkel de tags uit
         # de brontekst), maar dit is defense-in-depth, geen vertrouwen op DeepL.
-        html = {lang: sanitize_html(v) for lang, v in auto_translate_i18n_field(html, html=True).items()}
+        html = {
+            lang: sanitize_html(v)
+            for lang, v in auto_translate_i18n_field(html, html=True, existing=existing_data.get("html")).items()
+        }
         data = {"html": html}
 
     elif block_type == "image_gallery":
@@ -250,8 +253,9 @@ def _parse_block_form(block_type, existing_data):
         bestaande = existing_data.get("columns", [])
         columns = []
         for i in range(aantal):
-            heading = auto_translate_i18n_field(_parse_i18n_field(f"heading_{i}"))
-            text = auto_translate_i18n_field(_parse_i18n_field(f"text_{i}"))
+            oude_kolom = bestaande[i] if i < len(bestaande) else {}
+            heading = auto_translate_i18n_field(_parse_i18n_field(f"heading_{i}"), existing=oude_kolom.get("heading"))
+            text = auto_translate_i18n_field(_parse_i18n_field(f"text_{i}"), existing=oude_kolom.get("text"))
             oude_afbeelding = bestaande[i].get("image") if i < len(bestaande) else None
             nieuwe_afbeelding = _save_uploaded_image(request.files.get(f"image_{i}"))
             if nieuwe_afbeelding:
@@ -288,12 +292,12 @@ def _parse_block_form(block_type, existing_data):
             error = "Vul de knoptekst in voor minstens één taal (de andere talen worden automatisch vertaald)."
         elif not is_safe_target_url(url):
             error = "Ongeldige URL. Gebruik een pad dat begint met '/', of een volledige http(s)-URL."
-        label = auto_translate_i18n_field(label)
+        label = auto_translate_i18n_field(label, existing=existing_data.get("label"))
         data = {"label": label, "url": url, "style": stijl}
 
     elif block_type == "quote":
-        text = auto_translate_i18n_field(_parse_i18n_field("text"))
-        auteur = auto_translate_i18n_field(_parse_i18n_field("auteur"))
+        text = auto_translate_i18n_field(_parse_i18n_field("text"), existing=existing_data.get("text"))
+        auteur = auto_translate_i18n_field(_parse_i18n_field("auteur"), existing=existing_data.get("auteur"))
         data = {"text": text, "auteur": auteur}
 
     elif block_type == "faq":
@@ -308,12 +312,17 @@ def _parse_block_form(block_type, existing_data):
             match = re.match(r"^(?:vraag|antwoord)_(\d+)_\w+$", key)
             if match:
                 indices.add(int(match.group(1)))
+        bestaande = existing_data.get("items", [])
         items = []
         for i in sorted(indices):
+            oud_item = bestaande[i] if i < len(bestaande) else {}
             vraag = _parse_i18n_field(f"vraag_{i}")
             antwoord = _parse_i18n_field(f"antwoord_{i}")
             if any(vraag.values()) or any(antwoord.values()):
-                items.append({"vraag": auto_translate_i18n_field(vraag), "antwoord": auto_translate_i18n_field(antwoord)})
+                items.append({
+                    "vraag": auto_translate_i18n_field(vraag, existing=oud_item.get("vraag")),
+                    "antwoord": auto_translate_i18n_field(antwoord, existing=oud_item.get("antwoord")),
+                })
         data = {"items": items}
 
     elif block_type == "stats":
@@ -324,12 +333,14 @@ def _parse_block_form(block_type, existing_data):
             match = re.match(r"^(?:getal|stat_label)_(\d+)(?:_\w+)?$", key)
             if match:
                 indices.add(int(match.group(1)))
+        bestaande = existing_data.get("items", [])
         items = []
         for i in sorted(indices):
+            oud_item = bestaande[i] if i < len(bestaande) else {}
             getal = (request.form.get(f"getal_{i}") or "").strip()
             label = _parse_i18n_field(f"stat_label_{i}")
             if getal or any(label.values()):
-                items.append({"getal": getal, "label": auto_translate_i18n_field(label)})
+                items.append({"getal": getal, "label": auto_translate_i18n_field(label, existing=oud_item.get("label"))})
         data = {"items": items}
 
     elif block_type == "embed_html":
@@ -361,7 +372,8 @@ def _parse_block_form(block_type, existing_data):
                 _delete_uploaded_document(oud_bestand)
                 continue
 
-            label = auto_translate_i18n_field(_parse_i18n_field(f"doc_label_{i}"))
+            oud_label = bestaande[i].get("label") if i < len(bestaande) else None
+            label = auto_translate_i18n_field(_parse_i18n_field(f"doc_label_{i}"), existing=oud_label)
             nieuw_bestand = _save_uploaded_document(request.files.get(f"doc_file_{i}"))
             if nieuw_bestand:
                 _delete_uploaded_document(oud_bestand)
@@ -507,7 +519,7 @@ def edit_page(page_id):
     if error:
         return _render_page_edit(page, error=error, form_title=title_i18n, form_slug=slug, form_is_published=is_published)
 
-    title_i18n = auto_translate_i18n_field(title_i18n)
+    title_i18n = auto_translate_i18n_field(title_i18n, existing=page.title_i18n)
     page.title = title_i18n.get("nl") or title_i18n.get("en") or next((v for v in title_i18n.values() if v), "")
     page.title_i18n = title_i18n
     page.slug = slug

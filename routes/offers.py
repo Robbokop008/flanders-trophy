@@ -12,25 +12,14 @@ bevestiging tonen op het scherm - er gaat bewust geen automatische
 bevestigingsmail naar de club zelf (zie module-docstring van send_offer_request_mail).
 """
 
-from datetime import datetime
-
 from flask import Blueprint, render_template, request, current_app
 from flask_babel import gettext as _
 
 from extensions import db, limiter
-from models import OfferRequest, TRANSPORT_CHOICES
+from models import OfferRequest, TARIFF_CHOICES, NIGHTS_CHOICES
 from utils.mail import send_offer_request_mail
 
 offers_bp = Blueprint("offers", __name__)
-
-
-def _parse_date(value):
-    if not value:
-        return None
-    try:
-        return datetime.strptime(value, "%Y-%m-%d").date()
-    except ValueError:
-        return None
 
 
 def _parse_int(value):
@@ -39,6 +28,14 @@ def _parse_int(value):
     except (TypeError, ValueError):
         return 0
     return getal if getal > 0 else 0
+
+
+def _parse_nights(value):
+    try:
+        getal = int(value)
+    except (TypeError, ValueError):
+        return None
+    return getal if getal in dict(NIGHTS_CHOICES) else None
 
 
 def _form_values():
@@ -53,10 +50,8 @@ def _form_values():
         "email": (request.form.get("email") or "").strip(),
         "phone": (request.form.get("phone") or "").strip(),
         "expected_participants_raw": (request.form.get("expected_participants") or "").strip(),
-        "preferred_package": (request.form.get("preferred_package") or "").strip(),
-        "arrival_raw": (request.form.get("arrival") or "").strip(),
-        "departure_raw": (request.form.get("departure") or "").strip(),
-        "transport": request.form.get("transport") or "",
+        "preferred_package": request.form.get("preferred_package") or "",
+        "nights_raw": (request.form.get("nights") or "").strip(),
         "comments": (request.form.get("comments") or "").strip(),
     }
     for veld, _label in OfferRequest.TEAM_FIELDS:
@@ -68,7 +63,9 @@ def _form_values():
 @limiter.limit("5 per minute", methods=["POST"])
 def request_offer():
     if request.method != "POST":
-        return render_template("request_offer.html", transport_choices=TRANSPORT_CHOICES, form=_form_values())
+        return render_template(
+            "request_offer.html", tariff_choices=TARIFF_CHOICES, nights_choices=NIGHTS_CHOICES, form=_form_values()
+        )
 
     form = _form_values()
 
@@ -81,15 +78,16 @@ def request_offer():
         error = _("Please fill in at least one team in at least one category.")
 
     if error:
-        return render_template("request_offer.html", transport_choices=TRANSPORT_CHOICES, form=form, error=error)
+        return render_template(
+            "request_offer.html", tariff_choices=TARIFF_CHOICES, nights_choices=NIGHTS_CHOICES, form=form, error=error
+        )
 
     offer_request = OfferRequest(
         club_name=form["club_name"], country=form["country"],
         contact_person=form["contact_person"], email=form["email"], phone=form["phone"] or None,
         expected_participants=_parse_int(form["expected_participants_raw"]) or None,
-        preferred_package=form["preferred_package"] or None,
-        arrival_date=_parse_date(form["arrival_raw"]), departure_date=_parse_date(form["departure_raw"]),
-        transport=form["transport"] if form["transport"] in TRANSPORT_CHOICES else None,
+        preferred_package=form["preferred_package"] if form["preferred_package"] in TARIFF_CHOICES else None,
+        nights=_parse_nights(form["nights_raw"]),
         comments=form["comments"] or None,
     )
     for veld, _label in OfferRequest.TEAM_FIELDS:
@@ -105,4 +103,7 @@ def request_offer():
         # database) - wel loggen, zelfde patroon als routes/main.contact.
         current_app.logger.error(f"Kon offerteaanvraag-mail niet versturen: {exc}")
 
-    return render_template("request_offer.html", transport_choices=TRANSPORT_CHOICES, form=_form_values(), success=True)
+    return render_template(
+        "request_offer.html", tariff_choices=TARIFF_CHOICES, nights_choices=NIGHTS_CHOICES, form=_form_values(),
+        success=True,
+    )

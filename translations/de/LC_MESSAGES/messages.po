@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-21 11:46+0200\n"
+"POT-Creation-Date: 2026-08-22 15:21+0200\n"
 "PO-Revision-Date: 2026-08-21 11:47+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -20,43 +20,49 @@ msgstr ""
 
 #: routes/main.py:50
 msgid "Please fill in all fields correctly (with a valid email address)."
-msgstr "Bitte füllen Sie alle Felder korrekt aus (mit einer gültigen E-Mail-Adresse)."
+msgstr ""
+"Bitte füllen Sie alle Felder korrekt aus (mit einer gültigen E-Mail-"
+"Adresse)."
 
 #: routes/main.py:60
 msgid "Your message has been sent successfully."
 msgstr "Ihre Nachricht wurde erfolgreich gesendet."
 
-#: routes/offers.py:77
+#: routes/offers.py:74
 msgid "Please fill in club, country, contact person and email address."
 msgstr "Bitte geben Sie Verein, Land, Ansprechpartner und E-Mail-Adresse an."
 
-#: routes/offers.py:79
+#: routes/offers.py:76
 msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
-#: routes/offers.py:81
+#: routes/offers.py:78
 msgid "Please fill in at least one team in at least one category."
 msgstr "Bitte geben Sie mindestens ein Team in mindestens einer Kategorie an."
 
-#: templates/base.html:79
+#: templates/base.html:81
 msgid "International Easter handball tournament in Sint-Truiden."
 msgstr "Internationales Osterhandballturnier in Sint-Truiden."
 
-#: templates/base.html:83 templates/contact.html:7
+#: templates/base.html:85 templates/contact.html:7
 msgid "Contact"
 msgstr "Kontakt"
 
-#: templates/base.html:85
+#: templates/base.html:87
 msgid "Contact us"
 msgstr "Kontaktieren Sie uns"
 
-#: templates/base.html:90
+#: templates/base.html:92
 msgid "All rights reserved."
 msgstr "Alle Rechte vorbehalten."
 
 #: templates/contact.html:8
-msgid "Questions about the tournament? Send us a message and select the topic that fits best, so it reaches the right person."
-msgstr "Fragen zum Turnier? Senden Sie uns eine Nachricht und wählen Sie das passende Thema, damit sie die richtige Person erreicht."
+msgid ""
+"Questions about the tournament? Send us a message and select the topic "
+"that fits best, so it reaches the right person."
+msgstr ""
+"Fragen zum Turnier? Senden Sie uns eine Nachricht und wählen Sie das "
+"passende Thema, damit sie die richtige Person erreicht."
 
 #: templates/contact.html:20
 msgid "Topic"
@@ -140,7 +146,9 @@ msgstr "Pure Fun"
 
 #: templates/index.html:29
 msgid "Affordable packages, a full weekend program, and the Flag Parade."
-msgstr "Günstige Pakete, ein vollständiges Wochenendprogramm und die Flaggenparade."
+msgstr ""
+"Günstige Pakete, ein vollständiges Wochenendprogramm und die "
+"Flaggenparade."
 
 #: templates/index.html:32
 msgid "Categories 2027"
@@ -159,20 +167,37 @@ msgid "The Flag Parade"
 msgstr "Die Flaggenparade"
 
 #: templates/index.html:37
-msgid "900 handballers walking through the city centre — the opening moment of the tournament weekend, and a Flanders Trophy tradition."
-msgstr "900 Handballer, die durch die Innenstadt ziehen — der Eröffnungsmoment des Turnierwochenendes und eine Tradition von Flanders Trophy."
+msgid ""
+"900 handballers walking through the city centre — the opening moment of "
+"the tournament weekend, and a Flanders Trophy tradition."
+msgstr ""
+"900 Handballer, die durch die Innenstadt ziehen — der Eröffnungsmoment "
+"des Turnierwochenendes und eine Tradition von Flanders Trophy."
 
 #: templates/request_offer.html:7
 msgid "Request Your Offer"
 msgstr "Angebot anfordern"
 
 #: templates/request_offer.html:8
-msgid "The first step for foreign clubs joining Flanders Trophy 2027. Requesting an offer is <strong>not</strong> the same as a final registration — once we receive your request, our team prepares a personalised offer based on your teams and preferred package."
-msgstr "Der erste Schritt für ausländische Vereine, die an der Flanders Trophy 2027 teilnehmen. Ein Angebot anzufordern ist <strong>nicht</strong> dasselbe wie eine endgültige Anmeldung — sobald wir Ihre Anfrage erhalten, erstellt unser Team ein persönliches Angebot basierend auf Ihren Teams und Ihrem bevorzugten Paket."
+msgid ""
+"The first step for foreign clubs joining Flanders Trophy 2027. Requesting"
+" an offer is <strong>not</strong> the same as a final registration — once"
+" we receive your request, our team prepares a personalised offer based on"
+" your teams and preferred package."
+msgstr ""
+"Der erste Schritt für ausländische Vereine, die an der Flanders Trophy "
+"2027 teilnehmen. Ein Angebot anzufordern ist <strong>nicht</strong> "
+"dasselbe wie eine endgültige Anmeldung — sobald wir Ihre Anfrage "
+"erhalten, erstellt unser Team ein persönliches Angebot basierend auf "
+"Ihren Teams und Ihrem bevorzugten Paket."
 
 #: templates/request_offer.html:14
-msgid "Thank you! Your request has been received. Our Flanders Trophy team will prepare your personalised offer and get back to you by email."
-msgstr "Vielen Dank! Ihre Anfrage ist eingegangen. Unser Flanders-Trophy-Team erstellt Ihr persönliches Angebot und meldet sich per E-Mail bei Ihnen."
+msgid ""
+"Thank you! Your request has been received. Our Flanders Trophy team will "
+"prepare your personalised offer and get back to you by email."
+msgstr ""
+"Vielen Dank! Ihre Anfrage ist eingegangen. Unser Flanders-Trophy-Team "
+"erstellt Ihr persönliches Angebot und meldet sich per E-Mail bei Ihnen."
 
 #: templates/request_offer.html:23
 msgid "Club details"
@@ -211,40 +236,29 @@ msgid "Expected number of participants"
 msgstr "Erwartete Teilnehmerzahl"
 
 #: templates/request_offer.html:59
-msgid "Preferred tariff / accommodation"
-msgstr "Bevorzugter Tarif / Unterkunft"
+msgid "Tariff"
+msgstr "Tarif"
 
-#: templates/request_offer.html:62
-msgid "Arrival"
-msgstr "Ankunft"
+#: templates/request_offer.html:67
+msgid "Number of nights"
+msgstr "Anzahl Übernachtungen"
 
-#: templates/request_offer.html:65
-msgid "Departure"
-msgstr "Abreise"
-
-#: templates/request_offer.html:68
-msgid "Transport"
-msgstr "Transport"
-
-#: templates/request_offer.html:76
+#: templates/request_offer.html:75
 msgid "Additional comments"
 msgstr "Zusätzliche Bemerkungen"
 
-#: templates/request_offer.html:79
+#: templates/request_offer.html:78
 msgid "Request My Offer"
 msgstr "Mein Angebot anfordern"
-
-#: templates/pages/view.html:14
-msgid "This page is currently only available in English. The translation will follow soon."
-msgstr "Diese Seite ist derzeit nur auf Englisch verfügbar. Die Übersetzung folgt in Kürze."
 
 #. -----------------------------------------------------------------
 #. Onderstaande msgid's komen niet uit statische template-strings, maar
 #. uit databasewaarden (NavItem.label / Page.title, seed_navigation.py;
-#. CONTACT_TOPICS, routes/main.py; team-categorielabels en vervoerskeuzes,
-#. templates/request_offer.html) die via _() vertaald worden. pybabel
-#. extract kan die niet automatisch vinden (dynamische expressie, geen
-#. letterlijke string) - manueel toegevoegd zodat ze toch vertaald worden.
+#. CONTACT_TOPICS, routes/main.py; team-categorielabels, tariefkeuzes en
+#. overnachtingskeuzes, templates/request_offer.html) die via _() vertaald
+#. worden. pybabel extract kan die niet automatisch vinden (dynamische
+#. expressie, geen letterlijke string) - manueel toegevoegd zodat ze toch
+#. vertaald worden.
 msgid "Home"
 msgstr "Startseite"
 
@@ -365,12 +379,51 @@ msgstr "Männer U20"
 msgid "Men Seniors"
 msgstr "Männer Senioren"
 
-msgid "Bus"
-msgstr "Bus"
+msgid "Classroom"
+msgstr "Klassenzimmer"
 
-msgid "Car"
-msgstr "Auto"
+msgid "Classroom with camp beds"
+msgstr "Klassenzimmer mit Feldbetten"
 
-msgid "Not yet known"
-msgstr "Noch nicht bekannt"
+msgid "Dormitory with beds"
+msgstr "Schlafsaal mit Betten"
+
+msgid "Hotel offer"
+msgstr "Hotelangebot"
+
+msgid "Leave on Sunday"
+msgstr "Abreise am Sonntag"
+
+msgid "Leave on Monday"
+msgstr "Abreise am Montag"
+
+#~ msgid "Preferred tariff / accommodation"
+#~ msgstr "Bevorzugter Tarif / Unterkunft"
+
+#~ msgid "Arrival"
+#~ msgstr "Ankunft"
+
+#~ msgid "Departure"
+#~ msgstr "Abreise"
+
+#~ msgid "Transport"
+#~ msgstr "Transport"
+
+#~ msgid ""
+#~ "This page is currently only available"
+#~ " in English. The translation will "
+#~ "follow soon."
+#~ msgstr ""
+#~ "Diese Seite ist derzeit nur auf "
+#~ "Englisch verfügbar. Die Übersetzung folgt "
+#~ "in Kürze."
+
+#~ msgid "Bus"
+#~ msgstr "Bus"
+
+#~ msgid "Car"
+#~ msgstr "Auto"
+
+#~ msgid "Not yet known"
+#~ msgstr "Noch nicht bekannt"
 

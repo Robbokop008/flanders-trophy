@@ -28,8 +28,7 @@
                     <th>Land</th>
                     <th>Contactpersoon</th>
                     <th>Teams</th>
-                    <th>Aankomst</th>
-                    <th>Vertrek</th>
+                    <th>Nachten</th>
                     <th>Verwerkt</th>
                 </tr>
             </thead>
@@ -55,13 +54,11 @@
                                 {% endfor %}
                             </ul>
                         </details>
-                        {% if o.preferred_package %}<div class="muted" style="font-size:13px;">Pakket: {{ o.preferred_package }}</div>{% endif %}
+                        {% if o.preferred_package %}<div class="muted" style="font-size:13px;">Tarief: {{ o.preferred_package }}</div>{% endif %}
                         {% if o.expected_participants %}<div class="muted" style="font-size:13px;">{{ o.expected_participants }} deelnemers verwacht</div>{% endif %}
-                        {% if o.transport %}<div class="muted" style="font-size:13px;">Vervoer: {{ o.transport }}</div>{% endif %}
                         {% if o.comments %}<div class="muted" style="font-size:13px;">"{{ o.comments }}"</div>{% endif %}
                     </td>
-                    <td>{{ o.arrival_date.strftime('%d/%m/%Y') if o.arrival_date else '-' }}</td>
-                    <td>{{ o.departure_date.strftime('%d/%m/%Y') if o.departure_date else '-' }}</td>
+                    <td>{{ o.nights or '-' }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('admin.toggle_offer_request_handled', offer_request_id=o.id, show_handled=1 if show_handled else 0) }}">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

@@ -56,20 +56,19 @@
             <label for="expected_participants">{{ _('Expected number of participants') }}</label>
             <input type="number" min="0" id="expected_participants" name="expected_participants" value="{{ form.expected_participants_raw }}">
 
-            <label for="preferred_package">{{ _('Preferred tariff / accommodation') }}</label>
-            <input type="text" id="preferred_package" name="preferred_package" value="{{ form.preferred_package }}">
-
-            <label for="arrival">{{ _('Arrival') }}</label>
-            <input type="date" id="arrival" name="arrival" value="{{ form.arrival_raw }}">
-
-            <label for="departure">{{ _('Departure') }}</label>
-            <input type="date" id="departure" name="departure" value="{{ form.departure_raw }}">
-
-            <label for="transport">{{ _('Transport') }}</label>
-            <select id="transport" name="transport">
+            <label for="preferred_package">{{ _('Tariff') }}</label>
+            <select id="preferred_package" name="preferred_package">
                 <option value="">-</option>
-                {% for choice in transport_choices %}
-                <option value="{{ choice }}" {% if form.transport == choice %}selected{% endif %}>{{ _(choice|capitalize) }}</option>
+                {% for choice in tariff_choices %}
+                <option value="{{ choice }}" {% if form.preferred_package == choice %}selected{% endif %}>{{ _(choice) }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="nights">{{ _('Number of nights') }}</label>
+            <select id="nights" name="nights">
+                <option value="">-</option>
+                {% for value, label in nights_choices %}
+                <option value="{{ value }}" {% if form.nights_raw == value|string %}selected{% endif %}>{{ value }}: {{ _(label) }}</option>
                 {% endfor %}
             </select>
 

@@ -80,10 +80,8 @@ def send_offer_request_mail(offer_request):
 
     Teams: {teams_regel}
     Verwacht aantal deelnemers: {offer_request.expected_participants or '-'}
-    Voorkeur pakket: {offer_request.preferred_package or '-'}
-    Aankomst: {offer_request.arrival_date or '-'}
-    Vertrek: {offer_request.departure_date or '-'}
-    Vervoer: {offer_request.transport or '-'}
+    Tarief: {offer_request.preferred_package or '-'}
+    Aantal nachten: {offer_request.nights or '-'}
 
     Opmerkingen:
     {offer_request.comments or '-'}

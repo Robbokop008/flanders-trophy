@@ -84,15 +84,25 @@ def _is_leeg(value, html):
     return False
 
 
-def auto_translate_i18n_field(value, html=False):
+def auto_translate_i18n_field(value, html=False, existing=None):
     """Vult de lege talen van een per-taal veld (zoals geproduceerd door
     _parse_i18n_field in routes/admin.py) automatisch aan via DeepL, op basis
     van de eerst ingevulde taal (zie _AUTO_TRANSLATE_SOURCE_PRIORITY). Talen
     die de admin al zelf ingevuld heeft, worden nooit overschreven. Geeft
     'value' ongewijzigd terug als er geen brontekst is, of als DeepL niet
-    beschikbaar is (zie utils/translate.translate_text - faalt dan soft)."""
+    beschikbaar is (zie utils/translate.translate_text - faalt dan soft).
+
+    'existing' is de vorige opgeslagen waarde van dit veld (None/{} bij een
+    nieuw blok/nieuwe pagina) - zonder dit zou een latere bewerking van de
+    brontaal de andere (al ingevulde, maar intussen verouderde) vertalingen
+    nooit meer bijwerken: die zijn per definitie niet leeg, dus de
+    "leeg?"-check hierboven zou ze overslaan. Met 'existing' wordt een
+    taalveld toch herverteld als de brontekst gewijzigd is EN dat taalveld
+    zelf ongewijzigd is gebleven t.o.v. 'existing' (dus duidelijk een oude
+    auto-vertaling is, geen handmatige aanpassing van de admin)."""
     if not isinstance(value, dict):
         return value
+    existing = existing if isinstance(existing, dict) else {}
 
     source_lang = next(
         (lang for lang in _AUTO_TRANSLATE_SOURCE_PRIORITY if not _is_leeg(value.get(lang), html)),
@@ -102,9 +112,15 @@ def auto_translate_i18n_field(value, html=False):
         return value
 
     source_text = value[source_lang]
+    source_changed = _is_leeg(existing.get(source_lang), html) or existing.get(source_lang) != source_text
+
     result = dict(value)
     for lang in current_app.config["LANGUAGES"]:
-        if lang == source_lang or not _is_leeg(result.get(lang), html):
+        if lang == source_lang:
+            continue
+        target_value = result.get(lang)
+        is_stale_translation = not _is_leeg(existing.get(lang), html) and existing.get(lang) == target_value
+        if not _is_leeg(target_value, html) and not (source_changed and is_stale_translation):
             continue
         vertaling = translate_text(source_text, target_lang=lang, source_lang=source_lang, html=html)
         if vertaling is not None:

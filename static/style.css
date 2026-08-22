@@ -7,11 +7,10 @@
    ========================================================= */
 
 :root {
-  /* Blauw/geel - bewust behouden i.a.w. HBST-kleurcodes, logo volgt later */
+  /* Blauw - bewust behouden i.a.w. HBST-kleurcodes, logo volgt later */
   --blue: #05316b;
   --blue-dark: #032349;
   --blue-light: #eaeff6;
-  --yellow: #e8cb18;
 
   /* Text */
   --ink: #12203c;
@@ -56,7 +55,7 @@ body {
 
 /* Op de homepage is de achtergrond overal hetzelfde blauw als de navbar
    (var(--blue), niet het donkerder var(--blue-dark)) i.p.v. de standaard
-   lichte paginakleur - enkel de herofoto, de gele kaarten en ingebedde
+   lichte paginakleur - enkel de herofoto, de witte kaarten en ingebedde
    widgets steken daar nog tegen af. */
 body.home-page { background: var(--blue); }
 
@@ -113,7 +112,7 @@ main { display: block; flex: 1 0 auto; }
 }
 
 .lang-switcher-bar a:hover,
-.lang-switcher-bar a.active { color: var(--yellow); }
+.lang-switcher-bar a.active { color: var(--white); }
 
 .lang-switcher-bar .lang-sep { color: rgba(255, 255, 255, 0.3); font-size: 13px; }
 
@@ -137,14 +136,14 @@ main { display: block; flex: 1 0 auto; }
 }
 
 .brand-text-line1 {
-  color: var(--yellow);
+  color: var(--white);
   font-weight: 800;
   font-style: italic;
   font-size: 28px;
 }
 
 .brand-text-line2 {
-  color: var(--yellow);
+  color: var(--white);
   font-weight: 600;
   font-size: 20px;
 }
@@ -289,7 +288,7 @@ nav#nav-menu a:hover { color: var(--white); }
 }
 
 .btn-primary, .cta-button, .admin-button, .profile-action-button, .add-to-cart {
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
 }
 
@@ -626,13 +625,13 @@ form textarea { min-height: 120px; resize: vertical; }
 }
 
 .home-hero-kalender .section-title { color: var(--white); }
-.home-hero-kalender a { color: var(--yellow); text-decoration: none; }
+.home-hero-kalender a { color: var(--white); text-decoration: none; }
 
 .home-hero-nieuws {
   right: 40px;
   top: 40px;
   width: 720px;
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
 }
 
@@ -789,7 +788,7 @@ form textarea { min-height: 120px; resize: vertical; }
 
 .promo-card {
   position: relative;
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -958,7 +957,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
 
 .club-hero h1 {
   margin: 0;
-  color: var(--yellow);
+  color: var(--white);
   font-weight: 800;
   font-style: italic;
   font-size: 42px;
@@ -974,7 +973,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
 
 .club-card {
   position: relative;
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -1019,7 +1018,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--yellow);
+  color: var(--white);
   font-weight: 800;
   font-size: 20px;
 }
@@ -1049,7 +1048,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
 .club-accordion-body p:last-child { margin-bottom: 0; }
 .club-accordion-body ul { margin: 0 0 14px; padding-left: 22px; }
 .club-accordion-body li { margin-bottom: 6px; line-height: 1.6; }
-.club-accordion-body a { color: var(--yellow); }
+.club-accordion-body a { color: var(--white); }
 
 /* Genest binnen een top-level accordion-item (bv. Trainingen > G-Handbal) -
    zelfde openklap-mechaniek, kleinere/hoofdletterloze summary. */
@@ -1065,7 +1064,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--yellow);
+  color: var(--white);
   font-weight: 700;
   font-size: 15px;
 }
@@ -1086,7 +1085,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
 
 .club-subaccordion-item[open] > summary::after { transform: rotate(-135deg); }
 
-/* Hoofdinhoud + een gele CTA-kaart ernaast (Trainingen/Evenementen) - op
+/* Hoofdinhoud + een witte CTA-kaart ernaast (Trainingen/Evenementen) - op
    smallere schermen valt de kaart gewoon onder de hoofdinhoud. */
 .club-accordion-body-split {
   display: grid;
@@ -1185,7 +1184,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
   display: flex;
   align-items: center;
   gap: 12px;
-  color: var(--yellow);
+  color: var(--white);
   font-weight: 600;
 }
 
@@ -1247,7 +1246,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
   position: absolute;
   width: 380px;
   max-width: calc(100% - 80px);
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
   border-radius: var(--radius);
   box-shadow: var(--shadow-hover);
@@ -1310,7 +1309,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
 
 .team-subheading {
   margin: 0 0 14px;
-  color: var(--yellow);
+  color: var(--white);
   font-weight: 800;
   font-size: 20px;
 }
@@ -1329,7 +1328,7 @@ body.club-page, body.kalender-page, body.dames-page, body.heren-page, body.jeugd
 /* =========================================================
    CONTENT- & AUTH-PAGINA'S
    (contact, nieuws, generieke pagina's, teams, login/registreren/
-   profiel/account - alle andere publieke pagina's in dezelfde navy/gele
+   profiel/account - alle andere publieke pagina's in dezelfde navy/witte
    stijl als Club/Kalender/Dames/Heren/Jeugd/G-Handbal/FIT-Handbal)
    ========================================================= */
 body.content-page, body.auth-page { background: var(--blue); }
@@ -1346,9 +1345,7 @@ body.content-page, body.auth-page { background: var(--blue); }
 }
 
 /* "Papieren" kaart voor vrije/rijke inhoud (nieuws-detail, generieke
-   pagina's via de blokken-CMS): i.p.v. de kaart zelf ook geel te maken
-   (wat elk bestaand bloktype - tabellen, kolommen, FAQ, ... - opnieuw
-   zou moeten stylen) blijft dit een lichte "pagina" op de navy
+   pagina's via de blokken-CMS): een lichte "pagina" op de navy
    achtergrond, zoals de kaften van een brochure. */
 .content-card {
   max-width: 900px;
@@ -1361,8 +1358,8 @@ body.content-page, body.auth-page { background: var(--blue); }
 
 .content-card > img { max-width: 100%; border-radius: var(--radius-sm); }
 
-/* Overzicht-grids (nieuws, teams): gele kaarten i.p.v. de witte
-   .value-card, zelfde motief als .club-card/.promo-card elders. */
+/* Overzicht-grids (nieuws, teams), zelfde motief als
+   .club-card/.promo-card elders. */
 .content-grid {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -1372,7 +1369,7 @@ body.content-page, body.auth-page { background: var(--blue); }
 }
 
 .content-preview-card {
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -1408,7 +1405,7 @@ body.content-page, body.auth-page { background: var(--blue); }
 .auth-card {
   max-width: 420px;
   margin: 0 auto;
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
   border-radius: var(--radius);
   box-shadow: var(--shadow-hover);
@@ -1419,8 +1416,8 @@ body.content-page, body.auth-page { background: var(--blue); }
 .auth-card .login-note { text-align: center; margin-top: 18px; font-size: 14px; color: rgba(3, 35, 73, 0.7); }
 .auth-card .login-note a { color: var(--blue-dark); font-weight: 700; text-decoration: none; }
 
-/* Donkere knop-variant, voor gebruik binnen een gele kaart (waar de
-   standaard gele .btn-primary/.cta-button niet zou opvallen). */
+/* Donkere knop-variant, voor gebruik binnen een witte kaart (waar de
+   standaard witte .btn-primary/.cta-button niet zou opvallen). */
 .btn-dark {
   background: var(--blue-dark);
   color: var(--white);
@@ -1428,11 +1425,11 @@ body.content-page, body.auth-page { background: var(--blue); }
 
 .btn-dark:hover { filter: brightness(1.15); }
 
-/* Accountinstellingen: zelfde gele kaart als .profile-card (zie de
+/* Accountinstellingen: zelfde witte kaart als .profile-card (zie de
    PROFILE-sectie verderop), maar dat blok bestond nog niet voor
    account_settings - vandaar een eigen klasse. */
 .account-card {
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
   border: none;
   border-radius: var(--radius);
@@ -1521,7 +1518,7 @@ body.content-page, body.auth-page { background: var(--blue); }
 }
 
 .profile-card {
-  background: var(--yellow);
+  background: var(--white);
   color: var(--blue-dark);
   border: none;
   border-radius: var(--radius);
@@ -1544,7 +1541,7 @@ body.content-page, body.auth-page { background: var(--blue); }
 
 .profile-actions { display: flex; flex-direction: column; gap: 10px; }
 
-/* De standaard gele .profile-action-button valt weg op de nu ook gele
+/* De standaard witte .profile-action-button valt weg op de nu ook witte
    .profile-card - donkere variant, zelfde motief als .btn-dark. */
 .profile-actions .profile-action-button {
   background: var(--blue-dark);
@@ -2090,7 +2087,7 @@ nav#nav-menu > ul {
 }
 
 /* Zichtbare focus-ring voor toetsenbordgebruikers, los van het open/dicht-gedrag */
-.dropdown-toggle:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+.dropdown-toggle:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
 
 .dropdown {
   list-style: none;
@@ -2360,7 +2357,7 @@ nav#nav-menu > ul {
   color: var(--blue);
 }
 
-.block-bg-blauw .block-stat-getal, .block-bg-donker .block-stat-getal { color: var(--yellow); }
+.block-bg-blauw .block-stat-getal, .block-bg-donker .block-stat-getal { color: var(--white); }
 
 .block-stat-label {
   display: block;

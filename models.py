@@ -164,9 +164,7 @@ class OfferRequest(db.Model):
 
     expected_participants = db.Column(db.Integer)
     preferred_package = db.Column(db.String(200))
-    arrival_date = db.Column(db.Date)
-    departure_date = db.Column(db.Date)
-    transport = db.Column(db.String(30))
+    nights = db.Column(db.Integer)
     comments = db.Column(db.Text)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -187,7 +185,17 @@ class OfferRequest(db.Model):
         return f"<OfferRequest {self.club_name} ({self.country})>"
 
 
-TRANSPORT_CHOICES = ["bus", "car", "not yet known"]
+TARIFF_CHOICES = [
+    "Classroom",
+    "Classroom with camp beds",
+    "Dormitory with beds",
+    "Hotel offer",
+]
+
+NIGHTS_CHOICES = [
+    (2, "Leave on Sunday"),
+    (3, "Leave on Monday"),
+]
 
 
 class PageBlock(db.Model):
