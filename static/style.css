@@ -1,16 +1,14 @@
 /* =========================================================
    FLANDERS TROPHY — STYLESHEET
    Overgenomen van de hoofdclubsite (Handbal Sint-Truiden) als
-   startpunt. De kleuren hieronder zijn bewust behouden (beslissing
-   2026-08-21) - het logo/eigen huisstijl volgt later, dan worden
-   enkel de variabelen in :root vervangen.
+   startpunt. Kleurschema aangepast naar eigen huisstijl op 2026-08-22.
    ========================================================= */
 
 :root {
-  /* Blauw - bewust behouden i.a.w. HBST-kleurcodes, logo volgt later */
-  --blue: #05316b;
-  --blue-dark: #032349;
-  --blue-light: #eaeff6;
+  /* Blauw - eigen huisstijlkleur (aangepast 2026-08-22) */
+  --blue: #06719d;
+  --blue-dark: #044e6c;
+  --blue-light: #ebf4f7;
 
   /* Text */
   --ink: #12203c;
