@@ -5,7 +5,7 @@
 {% block admin_content %}
 <div class="admin-page-header">
     <h1>Nieuwe pagina toevoegen</h1>
-    <p>Titel, slug, afbeelding en publicatiestatus. Zodra de pagina is aangemaakt, bouw je de inhoud op via blokken.</p>
+    <p>Titel, slug, afbeelding en publicatiestatus. Vul de titel in minstens 1 taal in - de andere talen worden automatisch vertaald. Zodra de pagina is aangemaakt, bouw je de inhoud op via blokken.</p>
 </div>
 
 <section class="section">
@@ -16,10 +16,13 @@
     <form action="{{ url_for('admin.add_page') }}" method="post" class="admin-form" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <div>
-            <label for="title">Titel</label>
-            <input type="text" id="title" name="title" value="{{ form_title if form_title is defined else '' }}" required>
+        {% set ft = form_title if form_title is defined else {} %}
+        {% for code, name in languages.items() %}
+        <div class="lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}" style="grid-column:1/-1;">
+            <label for="title_{{ code }}">Titel ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
+            <input type="text" id="title_{{ code }}" name="title_{{ code }}" value="{{ ft.get(code, '') }}">
         </div>
+        {% endfor %}
         <div>
             <label for="slug">Slug (URL: /pagina/&lt;slug&gt;)</label>
             <input type="text" id="slug" name="slug" value="{{ form_slug if form_slug is defined else '' }}" placeholder="wordt automatisch afgeleid van de titel als je dit leeg laat">

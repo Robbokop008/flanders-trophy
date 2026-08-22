@@ -55,10 +55,13 @@
         <div class="page-settings-body">
             <form action="{{ url_for('admin.edit_page', page_id=page.id) }}" method="post" class="admin-form" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div>
-                    <label for="title">Titel</label>
-                    <input type="text" id="title" name="title" value="{{ form_title if form_title is defined else page.title }}" required>
+                {% set ft = form_title if form_title is defined else page.title_i18n %}
+                {% for code, name in languages.items() %}
+                <div class="lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}" style="grid-column:1/-1;">
+                    <label for="title_{{ code }}">Titel ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
+                    <input type="text" id="title_{{ code }}" name="title_{{ code }}" value="{{ ft.get(code, '') }}">
                 </div>
+                {% endfor %}
                 <div>
                     <label for="slug">Slug (URL: /pagina/&lt;slug&gt;)</label>
                     <input type="text" id="slug" name="slug" value="{{ form_slug if form_slug is defined else page.slug }}">

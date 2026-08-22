@@ -1,16 +1,26 @@
 {% extends "base.html" %}
 
-{% block title %}{{ _(page.title) }} - Flanders Trophy{% endblock %}
+{# i18n_raw (géén terugval naar Engels) heeft voorrang: dat is de nieuwe,
+   per-taal titel, automatisch vertaald via DeepL bij het opslaan (zie
+   routes/admin.py). _(page.title) erna is de bestaande, manueel vertaalde
+   gettext-catalogus (translations/<taal>/LC_MESSAGES) die de oorspronkelijke
+   MVP-pagina's al langer correct vertaalt - i18n_value (mét terugval naar
+   Engels) zou die al bestaande FR/DE-vertaling verdringen door gewoon de
+   Engelse titel terug te geven zodra title_i18n voor die taal nog leeg is,
+   dus gebruiken we hier bewust i18n_raw + deze eigen or-fallback in plaats
+   daarvan. #}
+{% set page_title = i18n_raw(page.title_i18n, current_lang) or _(page.title) %}
+{% block title %}{{ page_title }} - Flanders Trophy{% endblock %}
 
 {% block content %}
 <section class="club-hero">
-    <h1>{{ _(page.title) }}</h1>
+    <h1>{{ page_title }}</h1>
 </section>
 
 <section class="section">
     <div class="content-card">
         {% if page.hero_image %}
-            <img class="block-width-normaal" src="{{ url_for('static', filename='images/' + page.hero_image) }}" alt="{{ _(page.title) }}" style="width:100%;border-radius:var(--radius);margin-bottom:24px;display:block;">
+            <img class="block-width-normaal" src="{{ url_for('static', filename='images/' + page.hero_image) }}" alt="{{ page_title }}" style="width:100%;border-radius:var(--radius);margin-bottom:24px;display:block;">
         {% endif %}
 
         <div class="page-body">

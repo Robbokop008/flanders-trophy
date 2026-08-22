@@ -2311,6 +2311,33 @@ nav#nav-menu > ul {
 
 .block-faq-item p { margin: 10px 0 0; color: var(--muted); }
 
+.block-documents { display: flex; flex-direction: column; gap: 10px; text-align: left; list-style: none; padding: 0; margin: 0; }
+
+.block-document-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.block-document-item a:hover { border-color: var(--blue); }
+
+.block-document-ext {
+  flex-shrink: 0;
+  background: var(--blue-light);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+}
+
 .block-stats {
   display: flex;
   flex-wrap: wrap;

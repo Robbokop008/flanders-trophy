@@ -23,7 +23,8 @@ from extensions import db
 from models import Page, PageBlock, PAGE_BLOCK_TYPES, NavItem, NAV_ITEM_TYPES, User, OfferRequest
 from utils.auth import admin_required
 from utils.sanitize import sanitize_html
-from utils.page_blocks import block_afbeeldingsbestanden
+from utils.i18n import auto_translate_i18n_field
+from utils.page_blocks import block_afbeeldingsbestanden, block_documentbestanden
 from utils.url_validation import is_safe_target_url, parse_video_embed
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -63,6 +64,40 @@ def _delete_uploaded_image(filename):
         path.unlink(missing_ok=True)
     except OSError:
         current_app.logger.warning(f"Kon geüploade afbeelding niet verwijderen: {filename}")
+
+
+ALLOWED_DOCUMENT_EXTENSIONS = {".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx"}
+
+
+def _save_uploaded_document(document_file):
+    """Zelfde als _save_uploaded_image hierboven, maar voor downloadbare
+    documenten (PDF/Word/Excel/PowerPoint) in het "documents"-blok - eigen
+    map (DOCUMENT_UPLOAD_FOLDER) en extensie-allowlist."""
+    if not document_file or not document_file.filename:
+        return None
+
+    ext = Path(secure_filename(document_file.filename)).suffix.lower()
+    if ext not in ALLOWED_DOCUMENT_EXTENSIONS:
+        return None
+
+    upload_folder = Path(current_app.config["DOCUMENT_UPLOAD_FOLDER"])
+    upload_folder.mkdir(parents=True, exist_ok=True)
+
+    filename = f"{uuid4()}{ext}"
+    document_file.save(upload_folder / filename)
+    return filename
+
+
+def _delete_uploaded_document(filename):
+    """Verwijdert een eerder geüploed document van schijf. Zie
+    _delete_uploaded_image hierboven - zelfde aanpak, andere map."""
+    if not filename:
+        return
+    path = Path(current_app.config["DOCUMENT_UPLOAD_FOLDER"]) / filename
+    try:
+        path.unlink(missing_ok=True)
+    except OSError:
+        current_app.logger.warning(f"Kon geüpload document niet verwijderen: {filename}")
 
 
 def _slugify(text):
@@ -127,6 +162,7 @@ PAGE_BLOCK_TYPE_LABELS = {
     "faq": "Veelgestelde vragen",
     "stats": "Statistieken",
     "embed_html": "HTML/embed",
+    "documents": "Downloads / documenten",
 }
 
 
@@ -183,6 +219,10 @@ def _parse_block_form(block_type, existing_data):
             lang: sanitize_html(request.form.get(f"html_{lang}") or "")
             for lang in current_app.config["LANGUAGES"]
         }
+        # sanitize_html ook op de door DeepL aangevulde talen: die zouden
+        # geen onveilige tags mogen bevatten (DeepL bewaart enkel de tags uit
+        # de brontekst), maar dit is defense-in-depth, geen vertrouwen op DeepL.
+        html = {lang: sanitize_html(v) for lang, v in auto_translate_i18n_field(html, html=True).items()}
         data = {"html": html}
 
     elif block_type == "image_gallery":
@@ -210,8 +250,8 @@ def _parse_block_form(block_type, existing_data):
         bestaande = existing_data.get("columns", [])
         columns = []
         for i in range(aantal):
-            heading = _parse_i18n_field(f"heading_{i}")
-            text = _parse_i18n_field(f"text_{i}")
+            heading = auto_translate_i18n_field(_parse_i18n_field(f"heading_{i}"))
+            text = auto_translate_i18n_field(_parse_i18n_field(f"text_{i}"))
             oude_afbeelding = bestaande[i].get("image") if i < len(bestaande) else None
             nieuwe_afbeelding = _save_uploaded_image(request.files.get(f"image_{i}"))
             if nieuwe_afbeelding:
@@ -244,15 +284,16 @@ def _parse_block_form(block_type, existing_data):
         label = _parse_i18n_field("label")
         url = (request.form.get("url") or "").strip()
         stijl = request.form.get("style") if request.form.get("style") in ("primary", "secondary") else "primary"
-        data = {"label": label, "url": url, "style": stijl}
-        if not label.get("en"):
-            error = "Engelse tekst voor de knop is verplicht (de andere talen zijn optioneel en vallen anders terug op Engels)."
+        if not any(label.values()):
+            error = "Vul de knoptekst in voor minstens één taal (de andere talen worden automatisch vertaald)."
         elif not is_safe_target_url(url):
             error = "Ongeldige URL. Gebruik een pad dat begint met '/', of een volledige http(s)-URL."
+        label = auto_translate_i18n_field(label)
+        data = {"label": label, "url": url, "style": stijl}
 
     elif block_type == "quote":
-        text = _parse_i18n_field("text")
-        auteur = _parse_i18n_field("auteur")
+        text = auto_translate_i18n_field(_parse_i18n_field("text"))
+        auteur = auto_translate_i18n_field(_parse_i18n_field("auteur"))
         data = {"text": text, "auteur": auteur}
 
     elif block_type == "faq":
@@ -272,7 +313,7 @@ def _parse_block_form(block_type, existing_data):
             vraag = _parse_i18n_field(f"vraag_{i}")
             antwoord = _parse_i18n_field(f"antwoord_{i}")
             if any(vraag.values()) or any(antwoord.values()):
-                items.append({"vraag": vraag, "antwoord": antwoord})
+                items.append({"vraag": auto_translate_i18n_field(vraag), "antwoord": auto_translate_i18n_field(antwoord)})
         data = {"items": items}
 
     elif block_type == "stats":
@@ -288,12 +329,49 @@ def _parse_block_form(block_type, existing_data):
             getal = (request.form.get(f"getal_{i}") or "").strip()
             label = _parse_i18n_field(f"stat_label_{i}")
             if getal or any(label.values()):
-                items.append({"getal": getal, "label": label})
+                items.append({"getal": getal, "label": auto_translate_i18n_field(label)})
         data = {"items": items}
 
     elif block_type == "embed_html":
         html = sanitize_html(request.form.get("html") or "")
         data = {"html": html}
+
+    elif block_type == "documents":
+        # Zelfde dynamische-indices-aanpak als faq/stats hierboven, maar dan
+        # met een bestand per item (nieuw uploaden, vervangen of behouden -
+        # zelfde patroon als image_gallery/columns) i.p.v. enkel tekstvelden.
+        # Indices komen zowel uit de labelvelden als uit de file-inputs, want
+        # een net toegevoegd item heeft bij de eerste keer opslaan wel al een
+        # bestand maar mogelijk nog geen (ingevuld) label.
+        bestaande = existing_data.get("items", [])
+        indices = set()
+        for key in request.form:
+            match = re.match(r"^(?:doc_label_|doc_remove_)(\d+)(?:_\w+)?$", key)
+            if match:
+                indices.add(int(match.group(1)))
+        for key in request.files:
+            match = re.match(r"^doc_file_(\d+)$", key)
+            if match:
+                indices.add(int(match.group(1)))
+
+        items = []
+        for i in sorted(indices):
+            oud_bestand = bestaande[i].get("filename") if i < len(bestaande) else None
+            if request.form.get(f"doc_remove_{i}"):
+                _delete_uploaded_document(oud_bestand)
+                continue
+
+            label = auto_translate_i18n_field(_parse_i18n_field(f"doc_label_{i}"))
+            nieuw_bestand = _save_uploaded_document(request.files.get(f"doc_file_{i}"))
+            if nieuw_bestand:
+                _delete_uploaded_document(oud_bestand)
+                filename = nieuw_bestand
+            else:
+                filename = oud_bestand
+
+            if filename:
+                items.append({"filename": filename, "label": label})
+        data = {"items": items}
 
     else:
         return {}, "Onbekend bloktype."
@@ -363,14 +441,14 @@ def add_page():
     if request.method == "GET":
         return render_template("admin/page_form.html", user=g.user)
 
-    title = (request.form.get("title") or "").strip()
-    slug = _slugify(request.form.get("slug") or title)
+    title_i18n = _parse_i18n_field("title")
+    slug = _slugify(request.form.get("slug") or title_i18n.get("nl") or title_i18n.get("en") or "")
     is_published = bool(request.form.get("is_published"))
     hero_image = _save_uploaded_image(request.files.get("hero_image"))
 
     error = None
-    if not title:
-        error = "Titel is verplicht."
+    if not any(title_i18n.values()):
+        error = "Titel is verplicht in minstens één taal."
     elif not slug:
         error = "Slug is verplicht."
     elif Page.query.filter_by(slug=slug).first() is not None:
@@ -383,10 +461,12 @@ def add_page():
         _delete_uploaded_image(hero_image)
         return render_template(
             "admin/page_form.html", user=g.user, error=error,
-            form_title=title, form_slug=slug, form_is_published=is_published,
+            form_title=title_i18n, form_slug=slug, form_is_published=is_published,
         )
 
-    page = Page(title=title, slug=slug, hero_image=hero_image, is_published=is_published)
+    title_i18n = auto_translate_i18n_field(title_i18n)
+    title = title_i18n.get("nl") or title_i18n.get("en") or next((v for v in title_i18n.values() if v), "")
+    page = Page(title=title, title_i18n=title_i18n, slug=slug, hero_image=hero_image, is_published=is_published)
     db.session.add(page)
     db.session.commit()
     # Meteen doorrollen naar het bewerkscherm: een pagina zonder inhoud
@@ -412,22 +492,24 @@ def edit_page(page_id):
     if request.method == "GET":
         return _render_page_edit(page)
 
-    title = (request.form.get("title") or "").strip()
-    slug = _slugify(request.form.get("slug") or title)
+    title_i18n = _parse_i18n_field("title")
+    slug = _slugify(request.form.get("slug") or title_i18n.get("nl") or title_i18n.get("en") or "")
     is_published = bool(request.form.get("is_published"))
 
     error = None
-    if not title:
-        error = "Titel is verplicht."
+    if not any(title_i18n.values()):
+        error = "Titel is verplicht in minstens één taal."
     elif not slug:
         error = "Slug is verplicht."
     elif Page.query.filter(Page.slug == slug, Page.id != page.id).first() is not None:
         error = f"Er bestaat al een andere pagina met slug '{slug}'. Kies een andere titel of slug."
 
     if error:
-        return _render_page_edit(page, error=error, form_title=title, form_slug=slug, form_is_published=is_published)
+        return _render_page_edit(page, error=error, form_title=title_i18n, form_slug=slug, form_is_published=is_published)
 
-    page.title = title
+    title_i18n = auto_translate_i18n_field(title_i18n)
+    page.title = title_i18n.get("nl") or title_i18n.get("en") or next((v for v in title_i18n.values() if v), "")
+    page.title_i18n = title_i18n
     page.slug = slug
     page.is_published = is_published
 
@@ -471,6 +553,8 @@ def delete_page(page_id):
     for block in page.blocks:
         for filename in block_afbeeldingsbestanden(block):
             _delete_uploaded_image(filename)
+        for filename in block_documentbestanden(block):
+            _delete_uploaded_document(filename)
     _delete_uploaded_image(page.hero_image)
     db.session.delete(page)   # cascadeert naar PageBlock-rijen (Page.blocks-relationship)
     db.session.commit()
@@ -538,6 +622,8 @@ def delete_page_block(page_id, block_id):
     if block is not None and block.page_id == page_id:
         for filename in block_afbeeldingsbestanden(block):
             _delete_uploaded_image(filename)
+        for filename in block_documentbestanden(block):
+            _delete_uploaded_document(filename)
         db.session.delete(block)
         db.session.commit()
     return redirect(url_for("admin.edit_page", page_id=page_id))

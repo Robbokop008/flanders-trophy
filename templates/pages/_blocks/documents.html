@@ -1,0 +1,17 @@
+{% set items = block.data.get('items') or [] %}
+{% if items %}
+<ul class="block-documents">
+    {% for item in items %}
+    {% set label = i18n_value(item.label, current_lang) %}
+    {% set ext = item.filename.rsplit('.', 1)[-1] %}
+    <li class="block-document-item">
+        <a href="{{ url_for('static', filename='documents/' + item.filename) }}" download="{{ (label or 'document') }}.{{ ext }}">
+            <span class="block-document-ext">{{ ext|upper }}</span>
+            <span>{{ label or 'Document' }}</span>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% elif edit_mode is defined and edit_mode %}
+<div class="canvas-placeholder-box">+ Document toevoegen</div>
+{% endif %}

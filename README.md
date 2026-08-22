@@ -26,9 +26,12 @@ flanders-trophy/
 │   ├── sanitize.py                    # Saniteert rich-text HTML (bleach) vóór opslag
 │   ├── nav.py                            # Bouwt de navbar-boom op uit NavItem's
 │   ├── page_blocks.py                       # Stijl-defaults + afbeeldingen-opruiming per blok
+│   ├── i18n.py                                 # Taalkeuze + per-taal velden (auto_translate_i18n_field)
+│   ├── translate.py                               # DeepL-wrapper, gebruikt door utils/i18n.py
 │   └── url_validation.py                       # Validatie van knop-/video-URL's
 ├── scripts/
-│   └── create_admin.py                            # Maakt de eerste admin-gebruiker aan
+│   ├── create_admin.py                            # Maakt de eerste admin-gebruiker aan
+│   └── migrate_page_title_i18n.py                    # Eenmalig: Page.title_i18n toevoegen + vertalen
 ├── templates/
 │   ├── base.html                     # Gedeelde publieke layout (header/nav/footer),
 │   │                                    navbar wordt gerenderd uit nav_tree (zie utils/nav.py)
@@ -88,15 +91,24 @@ afweging). De taalwisselaar in de navbar linkt naar
 - **Site-chrome** (navigatie, knoppen, formulieren, foutmeldingen) is
   vertaald: statische template-strings staan als `{{ _('...') }}` in de
   templates, en databasewaarden die niet door `pybabel extract` gevonden
-  worden (`NavItem.label`/`Page.title`, `CONTACT_TOPICS`,
-  team-categorielabels, vervoerskeuzes) zijn manueel toegevoegd aan
-  `translations/messages.pot` (zie de commentaar daar) en dus ook
-  vertaalbaar via diezelfde `_()`.
-- **CMS-pagina-inhoud** (de content-blokken zelf: rich text, FAQ-antwoorden,
-  ...) is enkel Engels - dat vertalen is een aparte, grotere taak (zou een
-  taal/vertaalgroep-veld op `Page` vereisen). Bij het bekijken van een
-  pagina in een andere taal toont `templates/pages/view.html` een duidelijke
-  melding dat de inhoud nog Engelstalig is.
+  worden (`NavItem.label`, `CONTACT_TOPICS`, team-categorielabels,
+  vervoerskeuzes) zijn manueel toegevoegd aan `translations/messages.pot`
+  (zie de commentaar daar) en dus ook vertaalbaar via diezelfde `_()`. De
+  titels van de oorspronkelijke MVP-pagina's staan hier historisch ook nog
+  tussen (handmatig vertaald) - zie hieronder waarom nieuwere paginatitels
+  dat pad niet meer gebruiken.
+- **CMS-paginatitels en -inhoud** (de content-blokken: rich text,
+  FAQ-antwoorden, ...) worden per taal opgeslagen op `Page.title_i18n`
+  resp. in elk `PageBlock.data`-veld (zie `utils/i18n.py`), en **automatisch
+  aangevuld via de DeepL API** zodra een admin een pagina/blok opslaat met
+  minstens 1 taal ingevuld (zie `utils/translate.py`,
+  `utils/i18n.auto_translate_i18n_field`, en het inpluggen ervan in
+  `routes/admin.py`). Dit vereist een `DEEPL_API_KEY` in `.env`
+  (`.env.example`) - zonder key blijft opslaan gewoon werken, enkel zonder
+  automatische vertaling (een leeg gebleven taalveld valt dan terug op de
+  eerst ingevulde taal, zie `utils/i18n.resolve_i18n_field`). Bestaande
+  pagina's zijn eenmalig gemigreerd/vertaald via
+  `scripts/migrate_page_title_i18n.py`.
 - **Vertalingen bijwerken/uitbreiden**: pas de `{{ _('...') }}`-strings aan
   of voeg toe, draai dan
   `pybabel extract -F babel.cfg -o translations/messages.pot .`,

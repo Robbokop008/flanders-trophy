@@ -7,3 +7,4 @@ Flask-Babel==4.0.0
 bleach==6.1.0
 gunicorn==22.0.0
 psycopg2-binary==2.9.9
+deepl==1.32.0

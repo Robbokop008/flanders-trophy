@@ -27,6 +27,23 @@ def block_afbeeldingsbestanden(block):
     return afbeeldingen_uit_data(block.block_type, block.data)
 
 
+def documenten_uit_data(block_type, data):
+    """Zelfde als afbeeldingen_uit_data hierboven, maar voor het
+    "documents"-blok (PDF/Word/Excel/PowerPoint-uploads) - die bestanden
+    staan in static/documents/ (DOCUMENT_UPLOAD_FOLDER), een aparte map van
+    de afbeeldingen hierboven, dus een aparte opruim-helper."""
+    data = data or {}
+    if block_type == "documents":
+        return [i["filename"] for i in data.get("items", []) if i.get("filename")]
+    return []
+
+
+def block_documentbestanden(block):
+    """Geeft een lijst bestandsnamen (in static/documents/) terug die dit
+    blok gebruikt."""
+    return documenten_uit_data(block.block_type, block.data)
+
+
 STYLE_DEFAULTS = {"align": "left", "background": "none", "width": "normaal", "spacing": "normaal"}
 
 

@@ -44,9 +44,11 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Publieke site in 4 talen (zie utils/i18n.py voor taalkeuze-logica):
-    # Engels is de brontaal/standaard - CMS-paginatitels en -inhoud bestaan
-    # nog enkel in het Engels, enkel de vaste site-chrome (navigatie, knoppen,
-    # formulieren) is al vertaald via translations/<taal>/LC_MESSAGES.
+    # BABEL_DEFAULT_LOCALE hieronder is enkel de fallback-taal voor de
+    # site-chrome (navigatie, knoppen, formulieren, vertaald via
+    # translations/<taal>/LC_MESSAGES). CMS-paginatitels en -inhoud worden
+    # per taal opgeslagen en automatisch aangevuld via DeepL zodra een admin
+    # een taal invult (zie utils/translate.py, utils/i18n.py).
     LANGUAGES = {"en": "English", "nl": "Nederlands", "fr": "Français", "de": "Deutsch"}
     BABEL_DEFAULT_LOCALE = "en"
     BABEL_TRANSLATION_DIRECTORIES = os.path.join(BASE_DIR, "translations")
@@ -64,9 +66,18 @@ class Config:
     GMAIL_USER = os.environ.get("GMAIL_USER")
     GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD")
 
+    # Automatische vertaling van CMS-paginatitels/-inhoud (zie utils/translate.py) -
+    # optioneel: zonder key wordt er simpelweg niet vertaald (utils/translate.py
+    # geeft dan overal None terug in plaats van te crashen).
+    DEEPL_API_KEY = os.environ.get("DEEPL_API_KEY")
+
     # Upload-map voor geüploade afbeeldingen: pagina-hero-afbeeldingen en
     # inline afbeeldingen in de pagina-editor (relatief aan static/)
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "images")
+    # Upload-map voor downloadbare documenten (PDF/Word/Excel/PowerPoint) in
+    # het "documents"-blok (zie routes/admin.py) - los van UPLOAD_FOLDER
+    # hierboven, dat is specifiek voor afbeeldingen.
+    DOCUMENT_UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "documents")
     MAX_CONTENT_LENGTH = 8 * 1024 * 1024   # 8 MB, voorkomt te grote uploads
 
 

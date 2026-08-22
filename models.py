@@ -111,6 +111,12 @@ class Page(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(150), unique=True, nullable=False)
     title = db.Column(db.String(200), nullable=False)
+    # Titel per taal ({"en": ..., "nl": ..., "fr": ..., "de": ...}, zie
+    # utils/i18n.py), automatisch aangevuld via DeepL (routes/admin.py). De
+    # kolom hierboven ('title') blijft daarnaast bestaan als platte
+    # spiegelwaarde (NL, of EN als fallback) - enkel gebruikt voor de interne
+    # adminlijst/sortering, nooit getoond op de publieke site.
+    title_i18n = db.Column(db.JSON, nullable=False, default=dict)
     body_html = db.Column(db.Text, nullable=False, default="")
     hero_image = db.Column(db.String(255))   # bestandsnaam in static/images/
     is_published = db.Column(db.Boolean, nullable=False, default=False)
@@ -127,7 +133,7 @@ class Page(db.Model):
 
 PAGE_BLOCK_TYPES = [
     "rich_text", "image_gallery", "columns", "video", "button",
-    "quote", "faq", "stats", "embed_html",
+    "quote", "faq", "stats", "embed_html", "documents",
 ]
 
 

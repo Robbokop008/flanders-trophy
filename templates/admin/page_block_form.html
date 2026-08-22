@@ -54,8 +54,8 @@
            - zie utils/i18n.resolve_i18n_field() voor hoe dit bij het
            weergeven weer met terugval naar Engels samengevoegd wordt. #}
         {% for code, name in languages.items() %}
-        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
-            <label for="quill-editor-{{ code }}">Inhoud ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
+            <label for="quill-editor-{{ code }}">Inhoud ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
             <div id="quill-editor-{{ code }}" class="rich-text-lang-editor" data-textarea-id="html_{{ code }}" data-image-upload-url="{{ url_for('admin.upload_page_image') }}"></div>
             <textarea id="html_{{ code }}" name="html_{{ code }}" style="display:none;">{{ i18n_raw(d.html, code) }}</textarea>
         </div>
@@ -95,11 +95,11 @@
         <fieldset class="item-fieldset column-fieldset" data-col-index="{{ i }}">
             <legend>Kolom {{ i + 1 }}</legend>
             {% for code, name in languages.items() %}
-            <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+            <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
                 <label for="heading_{{ i }}_{{ code }}">Titel ({{ name }}, optioneel)</label>
                 <input type="text" id="heading_{{ i }}_{{ code }}" name="heading_{{ i }}_{{ code }}" value="{{ i18n_raw(col.heading, code) }}">
             </div>
-            <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+            <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
                 <label for="text_{{ i }}_{{ code }}">Tekst ({{ name }}, optioneel)</label>
                 <textarea id="text_{{ i }}_{{ code }}" name="text_{{ i }}_{{ code }}" rows="3">{{ i18n_raw(col.text, code) }}</textarea>
             </div>
@@ -123,8 +123,8 @@
 
         {% elif block_type == 'button' %}
         {% for code, name in languages.items() %}
-        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
-            <label for="label_{{ code }}">Tekst op de knop ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
+            <label for="label_{{ code }}">Tekst op de knop ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
             <input type="text" id="label_{{ code }}" name="label_{{ code }}" value="{{ i18n_raw(d.label, code) }}" placeholder="Bv. Lees meer">
         </div>
         {% endfor %}
@@ -142,11 +142,11 @@
 
         {% elif block_type == 'quote' %}
         {% for code, name in languages.items() %}
-        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
-            <label for="text_{{ code }}">Citaat ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
+            <label for="text_{{ code }}">Citaat ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
             <textarea id="text_{{ code }}" name="text_{{ code }}" rows="3">{{ i18n_raw(d.text, code) }}</textarea>
         </div>
-        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
+        <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
             <label for="auteur_{{ code }}">Auteur/functie ({{ name }}, optioneel)</label>
             <input type="text" id="auteur_{{ code }}" name="auteur_{{ code }}" value="{{ i18n_raw(d.auteur, code) }}" placeholder="Bv. Jan Janssens, voorzitter">
         </div>
@@ -164,12 +164,12 @@
             <fieldset class="item-fieldset faq-item-fieldset">
                 <legend>Vraag {{ loop.index }}</legend>
                 {% for code, name in languages.items() %}
-                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
-                    <label for="vraag_{{ item_index }}_{{ code }}">Vraag ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
+                    <label for="vraag_{{ item_index }}_{{ code }}">Vraag ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
                     <input type="text" id="vraag_{{ item_index }}_{{ code }}" name="vraag_{{ item_index }}_{{ code }}" value="{{ i18n_raw(item.vraag, code) }}">
                 </div>
-                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
-                    <label for="antwoord_{{ item_index }}_{{ code }}">Antwoord ({{ name }}){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
+                    <label for="antwoord_{{ item_index }}_{{ code }}">Antwoord ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
                     <textarea id="antwoord_{{ item_index }}_{{ code }}" name="antwoord_{{ item_index }}_{{ code }}" rows="3">{{ i18n_raw(item.antwoord, code) }}</textarea>
                 </div>
                 {% endfor %}
@@ -191,8 +191,8 @@
                     <input type="text" id="getal_{{ item_index }}" name="getal_{{ item_index }}" value="{{ item.getal or '' }}">
                 </div>
                 {% for code, name in languages.items() %}
-                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'en' else '' }}">
-                    <label for="stat_label_{{ item_index }}_{{ code }}">Label ({{ name }}, bv. leden){% if code != 'en' %} <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>{% endif %}</label>
+                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
+                    <label for="stat_label_{{ item_index }}_{{ code }}">Label ({{ name }}, bv. leden){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
                     <input type="text" id="stat_label_{{ item_index }}_{{ code }}" name="stat_label_{{ item_index }}_{{ code }}" value="{{ i18n_raw(item.label, code) }}">
                 </div>
                 {% endfor %}
@@ -208,6 +208,35 @@
             <textarea id="html" name="html" rows="8" style="font-family:monospace;font-size:13px;">{{ d.html or '' }}</textarea>
             <p class="muted" style="font-size:12px;">Wordt automatisch opgeschoond (enkel eenvoudige, veilige HTML toegestaan) - handig voor bv. een Google Maps-embed.</p>
         </div>
+
+        {% elif block_type == 'documents' %}
+        {# Zelfde dynamische-lijst-aanpak als faq/stats hierboven (zie
+           extra_scripts), maar dan met een bestand per item i.p.v. enkel
+           tekstvelden - zie routes/admin.py (_parse_block_form) voor hoe
+           dit server-side gelezen wordt. #}
+        <div id="documents-items">
+            {% for item in d.get('items') or [] %}
+            {% set item_index = loop.index0 %}
+            <fieldset class="item-fieldset documents-item-fieldset">
+                <legend>Document {{ loop.index }}</legend>
+                {% if item.filename %}
+                <p class="muted" style="font-size:13px;">Huidig bestand: <a href="{{ url_for('static', filename='documents/' + item.filename) }}" target="_blank" rel="noopener">bekijken ({{ item.filename.rsplit('.', 1)[-1]|upper }})</a></p>
+                {% endif %}
+                <div class="block-form-field">
+                    <label for="doc_file_{{ item_index }}">Vervang bestand (optioneel)</label>
+                    <input type="file" id="doc_file_{{ item_index }}" name="doc_file_{{ item_index }}" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                </div>
+                {% for code, name in languages.items() %}
+                <div class="block-form-field lang-field{{ ' lang-field-primary' if code == 'nl' else '' }}">
+                    <label for="doc_label_{{ item_index }}_{{ code }}">Label ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
+                    <input type="text" id="doc_label_{{ item_index }}_{{ code }}" name="doc_label_{{ item_index }}_{{ code }}" value="{{ i18n_raw(item.label, code) }}" placeholder="Bv. Toernooireglement">
+                </div>
+                {% endfor %}
+                <label style="font-weight:400;"><input type="checkbox" name="doc_remove_{{ item_index }}"> Dit document verwijderen</label>
+            </fieldset>
+            {% endfor %}
+        </div>
+        <button type="button" id="documents-add-btn" class="admin-button" style="margin-bottom:16px;">+ Document toevoegen</button>
         {% endif %}
 
         {% set weergave = resolve_style(d) %}
@@ -259,7 +288,7 @@
 {% endblock %}
 
 {% block extra_scripts %}
-{% if block_type in ('rich_text', 'faq', 'stats') %}
+{% if block_type in ('rich_text', 'faq', 'stats', 'documents') %}
 <script>
     var LANGUAGES = [{% for code, name in languages.items() %}{code: {{ code|tojson }}, name: {{ name|tojson }}}{% if not loop.last %}, {% endif %}{% endfor %}];
 </script>
@@ -297,12 +326,12 @@
     function langFieldsHtml(prefix, index, tag) {
         return LANGUAGES.map(function (lang) {
             var fieldId = prefix + '_' + index + '_' + lang.code;
-            var hint = lang.code === 'en' ? '' : ' <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>';
+            var hint = lang.code === 'nl' ? '' : ' <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>';
             var control = tag === 'textarea'
                 ? '<textarea id="' + fieldId + '" name="' + fieldId + '" rows="3"></textarea>'
                 : '<input type="text" id="' + fieldId + '" name="' + fieldId + '">';
             var labelText = (prefix === 'vraag' ? 'Vraag' : 'Antwoord') + ' (' + lang.name + ')' + hint;
-            return '<div class="block-form-field lang-field' + (lang.code === 'en' ? ' lang-field-primary' : '') + '">' +
+            return '<div class="block-form-field lang-field' + (lang.code === 'nl' ? ' lang-field-primary' : '') + '">' +
                 '<label for="' + fieldId + '">' + labelText + '</label>' + control + '</div>';
         }).join('');
     }
@@ -339,8 +368,8 @@
     function labelFieldsHtml(index) {
         return LANGUAGES.map(function (lang) {
             var fieldId = 'stat_label_' + index + '_' + lang.code;
-            var hint = lang.code === 'en' ? '' : ' <span class="muted" style="font-weight:400;">(optioneel, valt terug op Engels)</span>';
-            return '<div class="block-form-field lang-field' + (lang.code === 'en' ? ' lang-field-primary' : '') + '">' +
+            var hint = lang.code === 'nl' ? '' : ' <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>';
+            return '<div class="block-form-field lang-field' + (lang.code === 'nl' ? ' lang-field-primary' : '') + '">' +
                 '<label for="' + fieldId + '">Label (' + lang.name + ', bv. leden)' + hint + '</label>' +
                 '<input type="text" id="' + fieldId + '" name="' + fieldId + '"></div>';
         }).join('');
@@ -364,6 +393,46 @@
             '<input type="text" id="getal_' + index + '" name="getal_' + index + '"></div>' +
             labelFieldsHtml(index) +
             '<button type="button" class="btn btn-secondary stats-remove-btn">Verwijder statistiek</button>';
+        container.appendChild(fieldset);
+        wireRemoveButton(fieldset);
+    });
+})();
+</script>
+{% elif block_type == 'documents' %}
+<script>
+(function () {
+    var container = document.getElementById('documents-items');
+    var addBtn = document.getElementById('documents-add-btn');
+    var nextIndex = container.querySelectorAll('.documents-item-fieldset').length;
+
+    function labelFieldsHtml(index) {
+        return LANGUAGES.map(function (lang) {
+            var fieldId = 'doc_label_' + index + '_' + lang.code;
+            var hint = lang.code === 'nl' ? '' : ' <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>';
+            return '<div class="block-form-field lang-field' + (lang.code === 'nl' ? ' lang-field-primary' : '') + '">' +
+                '<label for="' + fieldId + '">Label (' + lang.name + ')' + hint + '</label>' +
+                '<input type="text" id="' + fieldId + '" name="' + fieldId + '" placeholder="Bv. Toernooireglement"></div>';
+        }).join('');
+    }
+
+    function wireRemoveButton(fieldset) {
+        fieldset.querySelector('.documents-remove-btn').addEventListener('click', function () {
+            fieldset.remove();
+        });
+    }
+
+    container.querySelectorAll('.documents-item-fieldset').forEach(wireRemoveButton);
+
+    addBtn.addEventListener('click', function () {
+        var index = nextIndex++;
+        var fieldset = document.createElement('fieldset');
+        fieldset.className = 'item-fieldset documents-item-fieldset';
+        fieldset.innerHTML =
+            '<legend>Nieuw document</legend>' +
+            '<div class="block-form-field"><label for="doc_file_' + index + '">Bestand</label>' +
+            '<input type="file" id="doc_file_' + index + '" name="doc_file_' + index + '" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"></div>' +
+            labelFieldsHtml(index) +
+            '<button type="button" class="btn btn-secondary documents-remove-btn">Verwijder document</button>';
         container.appendChild(fieldset);
         wireRemoveButton(fieldset);
     });
