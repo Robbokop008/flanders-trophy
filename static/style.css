@@ -1173,11 +1173,19 @@ form textarea { min-height: 120px; resize: vertical; }
 }
 
 @media (max-width: 900px) {
-  /* Op smalle schermen is er geen ruimte meer naast de tekstkolom - de
-     kaart wordt dan een volle-breedte achtergrond achter alle inhoud i.p.v.
-     enkel achter de rechterkant ervan. */
-  .hp-map-bg { width: 100%; object-position: 50% 15%; }
+  /* Op smalle schermen is er geen ruimte meer naast de tekstkolom - de kaart
+     komt dan volle breedte ACHTER de tekst/vlaggen i.p.v. ernaast te staan
+     (zoals op desktop). Vol contrast zou de tekst en vlaggen daarbovenop
+     onleesbaar/rommelig maken, dus wordt de kaart hier een subtiel
+     watermerk (lage opacity, minder hoog) i.p.v. een even dominant element
+     als op desktop. */
+  .hp-map-bg { width: 100%; height: 320px; object-position: 50% 10%; opacity: 0.16; }
   .hp-intro-content { max-width: none; }
+  /* Kleinere vlaggen + kleinere tussenruimte: op desktop is er ruimte
+     genoeg naast de kaart, maar op mobiel staat de rij vlaggen direct onder
+     de tagline en trekt op volle grootte te veel aandacht. */
+  .hp-flags { margin-top: 16px; gap: 6px; }
+  .hp-flag { width: 26px; height: 26px; }
 }
 
 @media (max-width: 600px) {
@@ -1185,6 +1193,8 @@ form textarea { min-height: 120px; resize: vertical; }
   .hp-intro-inner { padding: 36px 20px 0; }
   .hp-photobar { padding: 20px; }
   .hp-photobar-inner { grid-template-columns: 1fr; }
+  .hp-map-bg { height: 240px; }
+  .hp-flag { width: 22px; height: 22px; }
 }
 
 /* =========================================================
