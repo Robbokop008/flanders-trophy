@@ -967,30 +967,20 @@ form textarea { min-height: 120px; resize: vertical; }
 }
 
 /* "Flanders" als contourtekst (rand van de letters, doorzichtig midden) -
-   bewust een SVG <text> i.p.v. CSS' -webkit-text-stroke. Dat laatste gaf op
-   sommige toestellen (bv. Android/Chrome) een dubbele/kruisende contourlijn:
-   de meeste systeemlettertypes hebben geen echt vet gewicht 800 zoals
-   .hp-hero-title-solid hierboven gebruikt, dus "faket" de browser dat zelf
-   door de lettervorm te verdikken vóór onze eigen contourlijn erover komt.
-   Een SVG-tekstcontour (fill:none + stroke) heeft dat euvel niet, en
-   schaalt de lijndikte bovendien automatisch mee met de tekstgrootte (via
-   de viewBox) - geen aparte media-query-uitzondering voor kleine schermen
-   meer nodig. */
+   een voorgetekende PNG (static/images/flanders-outline.png), geen live
+   tekst met CSS/SVG-stroke meer. Zowel -webkit-text-stroke als een SVG
+   <text>-contour bleken op sommige toestellen (bv. Android/Chrome) een
+   dubbele/kruisende contourlijn te geven: de meeste systeemlettertypes
+   hebben geen echt vet gewicht zoals .hp-hero-title-solid hierboven
+   gebruikt, dus "faket" de browser dat zelf door de lettervorm te
+   verdikken, wat samen met een stroke een rommelige lijn oplevert - en dat
+   verschilt per toestel/lettertype, dus was niet consistent te fixen met
+   CSS. Een vaste afbeelding (eenmalig gerenderd, zie het genereer-script)
+   toont op elk toestel exact hetzelfde, ongeacht diens systeemlettertype. */
 .hp-hero-title-outline {
   display: block;
   width: clamp(230px, 46vw, 480px);
   height: auto;
-  overflow: visible;
-}
-
-.hp-hero-title-outline-text {
-  font-family: var(--font-family);
-  font-weight: 700;
-  font-style: italic;
-  font-size: 100px;
-  fill: none;
-  stroke: var(--white);
-  stroke-width: 2.4;
 }
 
 .hp-hero-trophy {
