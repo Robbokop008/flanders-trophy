@@ -956,33 +956,41 @@ form textarea { min-height: 120px; resize: vertical; }
 
 .hp-hero-title { margin: 0 0 24px; line-height: 1; }
 
-.hp-hero-title-outline, .hp-hero-title-solid {
+.hp-hero-title-solid {
   display: block;
   font-weight: 800;
   font-style: italic;
   font-family: var(--font-family);
-}
-
-.hp-hero-title-outline {
-  font-size: clamp(48px, 9vw, 100px);
-  color: transparent;
-  -webkit-text-stroke: 2px var(--white);
-  text-stroke: 2px var(--white);
-  /* De meeste systeemlettertypes (Roboto op Android, Segoe UI op Windows,
-     San Francisco op iOS) hebben geen echt 800-gewicht (zoals .hp-hero-title-
-     solid hierboven wel gebruikt) - de browser "faket" dat dan zelf door de
-     lettervorm te verdikken, wat samen met onze eigen -webkit-text-stroke een
-     dubbele/kruisende contourlijn oplevert (het gemelde "rare lijntjes"-
-     effect). Gewicht 700 bestaat wél echt in die lettertypes, dus geen
-     faux-bold meer nodig - dat lost het probleem bij de bron op, niet enkel
-     op kleine schermen. */
-  font-weight: 700;
-}
-
-.hp-hero-title-solid {
   font-size: clamp(28px, 5.5vw, 52px);
   color: var(--white);
   margin-top: 6px;
+}
+
+/* "Flanders" als contourtekst (rand van de letters, doorzichtig midden) -
+   bewust een SVG <text> i.p.v. CSS' -webkit-text-stroke. Dat laatste gaf op
+   sommige toestellen (bv. Android/Chrome) een dubbele/kruisende contourlijn:
+   de meeste systeemlettertypes hebben geen echt vet gewicht 800 zoals
+   .hp-hero-title-solid hierboven gebruikt, dus "faket" de browser dat zelf
+   door de lettervorm te verdikken vóór onze eigen contourlijn erover komt.
+   Een SVG-tekstcontour (fill:none + stroke) heeft dat euvel niet, en
+   schaalt de lijndikte bovendien automatisch mee met de tekstgrootte (via
+   de viewBox) - geen aparte media-query-uitzondering voor kleine schermen
+   meer nodig. */
+.hp-hero-title-outline {
+  display: block;
+  width: clamp(230px, 46vw, 480px);
+  height: auto;
+  overflow: visible;
+}
+
+.hp-hero-title-outline-text {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 100px;
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 2.4;
 }
 
 .hp-hero-trophy {
@@ -1204,14 +1212,6 @@ form textarea { min-height: 120px; resize: vertical; }
   .hp-photobar-inner { grid-template-columns: 1fr; }
   .hp-map-bg { height: 240px; }
   .hp-flag { width: 22px; height: 22px; }
-  /* Een vaste contourdikte van 2px (.hp-hero-title-outline hierboven) is
-     bedoeld voor de grote titel op desktop (tot 100px lettergrootte); op
-     een klein scherm valt de titel terug op zijn minimum (48px, zie de
-     clamp()), en wordt diezelfde 2px verhoudingsgewijs zo dik dat de
-     contourlijn zichzelf kruist binnenin letters (bv. de "a"/"d"/"e") -
-     vandaar de rare extra lijntjes. Dunnere contour op klein scherm lost
-     dat op. */
-  .hp-hero-title-outline { -webkit-text-stroke-width: 1px; text-stroke-width: 1px; }
 }
 
 /* =========================================================
