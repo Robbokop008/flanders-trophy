@@ -246,6 +246,18 @@ msgstr "Bijkomende opmerkingen"
 msgid "Request My Offer"
 msgstr "Vraag mijn offerte aan"
 
+#: templates/index.html:15
+msgid "Request your Offer"
+msgstr "Vraag je offerte aan"
+
+#: templates/index.html:35
+msgid "Worldwide"
+msgstr "Wereldwijd"
+
+#: templates/index.html:36
+msgid "Handball"
+msgstr "Handbal"
+
 #. -----------------------------------------------------------------
 #. Onderstaande msgid's komen niet uit statische template-strings, maar
 #. uit databasewaarden (NavItem.label / Page.title, seed_navigation.py;

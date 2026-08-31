@@ -144,6 +144,42 @@ mee als argumenten, zie de docstring bovenaan het script). Opnieuw draaien
 met dezelfde gebruikersnaam werkt het wachtwoord van die gebruiker bij
 i.p.v. een duplicaat aan te maken. Log daarna in via `/login`.
 
+## Databasebackup
+
+`scripts/backup_db.py` maakt een backup van de SQLite-database: een lokale
+kopie in `instance/backups/` (de laatste 14 dagelijkse backups blijven
+bewaard, oudere worden automatisch opgeruimd) én een off-server kopie via
+e-mail naar `GMAIL_USER` (zie `utils/mail.send_backup_mail`), zodat een
+probleem met de server zelf niet ook de enige backup meeneemt.
+
+Draai dit dagelijks via een scheduled task, bv. op PythonAnywhere's
+"Tasks"-tabblad:
+
+```bash
+python3.x /home/<gebruiker>/flanders-trophy/scripts/backup_db.py
+```
+
+Let op: het gratis PythonAnywhere-plan laat doorgaans 1 dagelijkse taak toe;
+op een betaald plan kan dit vaker. Het script ondersteunt enkel SQLite (de
+huidige productiedatabase) - bij een `DATABASE_URL` naar Postgres stopt het
+met een duidelijke melding, want een Postgres-backup vraagt een andere
+aanpak (bv. `pg_dump`).
+
+## Foutlogging &amp; monitoring
+
+In productie schrijft de app naar een draaiend logbestand,
+`instance/logs/app.log` (max 1 MB × 5 bestanden, zie `app.py`). Onverwachte
+serverfouten (HTTP 500) tonen bezoekers een nette foutpagina
+(`templates/errors/500.html`) en komen mét volledige traceback in dat
+logbestand terecht.
+
+`GET /health` geeft `{"status": "ok"}` (200) terug zolang de database
+bereikbaar is, anders `{"status": "error"}` (503) - bedoeld om extern te
+laten pingen door een gratis uptime-monitor zoals
+[UptimeRobot](https://uptimerobot.com) of [cron-job.org](https://cron-job.org),
+zodat een crash of downtime opvalt zonder dat iemand het toevallig moet
+melden.
+
 ## Nog te doen
 
 Dit is een scaffold, geen afgewerkte site. Voor je dit live zet:

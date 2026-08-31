@@ -7,7 +7,9 @@ orderbevestiging, inschrijvingen, GDPR-meldingen - horen bij functionaliteit
 die hier niet geport is).
 """
 
+import os
 import smtplib
+from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import current_app
@@ -50,6 +52,28 @@ def send_contact_mail(name, email, message, topic=None):
     {message}
     """
     msg.attach(MIMEText(body, "plain"))
+    _send(msg)
+
+
+def send_backup_mail(backup_pad):
+    """Stuurt een databasebackup als bijlage naar de organisatiemail (zie
+    scripts/backup_db.py) - de off-server kopie naast de lokale rotatie in
+    instance/backups/, zodat een schijfprobleem op de server niet ook de
+    enige backup meeneemt."""
+    gmail_user = current_app.config["GMAIL_USER"]
+    bestandsnaam = os.path.basename(backup_pad)
+
+    msg = MIMEMultipart()
+    msg["From"] = gmail_user
+    msg["To"] = gmail_user
+    msg["Subject"] = f"Databasebackup Flanders Trophy - {bestandsnaam}"
+    msg.attach(MIMEText(f"Automatische databasebackup in bijlage: {bestandsnaam}", "plain"))
+
+    with open(backup_pad, "rb") as f:
+        bijlage = MIMEApplication(f.read(), Name=bestandsnaam)
+    bijlage["Content-Disposition"] = f'attachment; filename="{bestandsnaam}"'
+    msg.attach(bijlage)
+
     _send(msg)
 
 

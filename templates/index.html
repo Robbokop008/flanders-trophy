@@ -3,38 +3,53 @@
 {% block title %}Flanders Handball Trophy 2027{% endblock %}
 
 {% block content %}
-<section class="club-hero">
-    <h1>Flanders Handball Trophy 2027</h1>
-    <p style="font-style:italic;">{{ _('Pure Fun & Handball') }}</p>
-    <p>{{ _('The largest international handball tournament in the Benelux.') }}</p>
-    <p class="block-button-wrap" style="margin-top:20px;">
-        <a href="{{ url_for('offers.request_offer') }}" class="btn btn-primary">{{ _('Request Your Offer for 2027') }}</a>
-    </p>
+<section class="hp-hero">
+    <div class="hp-hero-inner">
+        <h1 class="hp-hero-title">
+            <span class="hp-hero-title-outline">Flanders</span>
+            <span class="hp-hero-title-solid">Handball Trophy <span class="hp-hero-trophy" aria-hidden="true">&#127942;</span></span>
+        </h1>
+        <div class="hp-hero-buttons">
+            <a class="hp-pill hp-pill-social" href="{{ site_settings.instagram_url or '#' }}" target="_blank" rel="noopener">Instagram</a>
+            <a class="hp-pill hp-pill-social" href="{{ site_settings.facebook_url or '#' }}" target="_blank" rel="noopener">Facebook</a>
+            <a class="hp-pill hp-pill-offer" href="{{ url_for('offers.request_offer') }}">{{ _('Request your Offer') }}</a>
+        </div>
+    </div>
 </section>
 
-<section class="section">
-    <div class="content-card">
-        <div class="block-stats" style="margin-bottom:12px;">
-            <div class="block-stat"><span class="block-stat-getal">100+</span><span class="block-stat-label">{{ _('teams') }}</span></div>
-            <div class="block-stat"><span class="block-stat-getal">1,200+</span><span class="block-stat-label">{{ _('participants') }}</span></div>
-            <div class="block-stat"><span class="block-stat-getal">300+</span><span class="block-stat-label">{{ _('matches') }}</span></div>
-            <div class="block-stat"><span class="block-stat-getal">{{ _('International') }}</span><span class="block-stat-label">{{ _('teams') }}</span></div>
+<section class="hp-intro">
+    <div class="hp-intro-inner">
+        <img class="hp-map-bg" src="{{ url_for('static', filename='images/europe-map.svg') }}" alt="" aria-hidden="true">
+
+        <div class="hp-intro-content">
+            {% for block in home_page.blocks %}
+            {% set weergave = resolve_style(block.data) %}
+            <div class="page-block block-align-{{ weergave.align }} block-bg-{{ weergave.background }} block-width-{{ weergave.width }} block-spacing-{{ weergave.spacing }}">
+                {% include "pages/_blocks/" + block.block_type + ".html" %}
+            </div>
+            {% if loop.first %}
+            <ul class="hp-flags" aria-hidden="true">
+                {% for cc in ['be', 'nl', 'de', 'lu', 'it', 'ch', 'fr', 'se', 'hu', 'pl', 'eu'] %}
+                <li class="hp-flag"><img src="{{ url_for('static', filename='images/flags/' + cc + '.svg') }}" alt=""></li>
+                {% endfor %}
+                <li class="hp-flag"><img src="{{ url_for('static', filename='images/icons/globe.svg') }}" alt="" title="{{ _('Worldwide') }}"></li>
+                <li class="hp-flag"><img src="{{ url_for('static', filename='images/icons/handball.svg') }}" alt="" title="{{ _('Handball') }}"></li>
+            </ul>
+            {% endif %}
+            {% endfor %}
         </div>
+    </div>
 
-        <h2>{{ _('Why Flanders Trophy?') }}</h2>
-        <div class="values-grid block-columns">
-            <div class="value-card"><h3>{{ _('International Handball') }}</h3><p>{{ _('Teams from all over Europe') }}</p></div>
-            <div class="value-card"><h3>{{ _('Accommodation included') }}</h3><p>{{ _('Group accommodation is part of your package.') }}</p></div>
-            <div class="value-card"><h3>{{ _('Meals included') }}</h3><p>{{ _('Dinner and breakfast, all weekend.') }}</p></div>
-            <div class="value-card"><h3>{{ _('Pure Fun') }}</h3><p>{{ _('Affordable packages, a full weekend program, and the Flag Parade.') }}</p></div>
+    <div class="hp-photobar">
+        <div class="hp-photobar-inner">
+            {% for photo in [site_settings.photo_1, site_settings.photo_2, site_settings.photo_3] %}
+                {% if photo %}
+                <img class="hp-photo" src="{{ url_for('static', filename='images/' + photo) }}" alt="">
+                {% else %}
+                <div class="hp-photo-placeholder"></div>
+                {% endif %}
+            {% endfor %}
         </div>
-
-        <h2 style="margin-top:36px;">{{ _('Categories 2027') }}</h2>
-        <p>{{ _('Women | Men — U15 | U17 | U20 | Seniors') }}</p>
-        <p><a href="{{ url_for('pages.view', slug='categories') }}">{{ _('See all categories →') }}</a></p>
-
-        <h2 style="margin-top:36px;">{{ _('The Flag Parade') }}</h2>
-        <p>{{ _('900 handballers walking through the city centre — the opening moment of the tournament weekend, and a Flanders Trophy tradition.') }}</p>
     </div>
 </section>
 {% endblock %}

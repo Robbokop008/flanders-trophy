@@ -20,7 +20,7 @@ from werkzeug.routing import BuildError
 from datetime import datetime
 
 from extensions import db
-from models import Page, PageBlock, PAGE_BLOCK_TYPES, NavItem, NAV_ITEM_TYPES, User, OfferRequest
+from models import Page, PageBlock, PAGE_BLOCK_TYPES, NavItem, NAV_ITEM_TYPES, User, OfferRequest, SiteSettings, HOME_PAGE_SLUG
 from utils.auth import admin_required
 from utils.sanitize import sanitize_html
 from utils.i18n import auto_translate_i18n_field
@@ -412,6 +412,43 @@ def users():
 
 
 # ---------------------------------------------------------------------------
+# Home-pagina instellingen
+# ---------------------------------------------------------------------------
+
+@admin_bp.route("/home-settings", methods=["GET", "POST"])
+@admin_required
+def home_settings():
+    settings = SiteSettings.get()
+    error = None
+
+    if request.method == "POST":
+        instagram_url = (request.form.get("instagram_url") or "").strip()
+        facebook_url = (request.form.get("facebook_url") or "").strip()
+
+        if instagram_url and not is_safe_target_url(instagram_url):
+            error = "Ongeldige Instagram-link."
+        elif facebook_url and not is_safe_target_url(facebook_url):
+            error = "Ongeldige Facebook-link."
+        else:
+            settings.instagram_url = instagram_url or None
+            settings.facebook_url = facebook_url or None
+
+            for field in ("photo_1", "photo_2", "photo_3"):
+                if request.form.get(f"{field}_remove"):
+                    _delete_uploaded_image(getattr(settings, field))
+                    setattr(settings, field, None)
+                new_photo = _save_uploaded_image(request.files.get(field))
+                if new_photo:
+                    _delete_uploaded_image(getattr(settings, field))
+                    setattr(settings, field, new_photo)
+
+            db.session.commit()
+            return redirect(url_for("admin.home_settings"))
+
+    return render_template("admin/home_settings.html", user=g.user, settings=settings, error=error)
+
+
+# ---------------------------------------------------------------------------
 # Pagina's
 # ---------------------------------------------------------------------------
 
@@ -505,8 +542,11 @@ def edit_page(page_id):
         return _render_page_edit(page)
 
     title_i18n = _parse_i18n_field("title")
-    slug = _slugify(request.form.get("slug") or title_i18n.get("nl") or title_i18n.get("en") or "")
-    is_published = bool(request.form.get("is_published"))
+    slug = HOME_PAGE_SLUG if page.slug == HOME_PAGE_SLUG else _slugify(request.form.get("slug") or title_i18n.get("nl") or title_i18n.get("en") or "")
+    # De homepage staat altijd op / (main.home negeert is_published) - het
+    # publiceren-vinkje wordt voor die pagina niet eens getoond (zie
+    # page_canvas.html), dus altijd True i.p.v. het (afwezige) formveld.
+    is_published = True if page.slug == HOME_PAGE_SLUG else bool(request.form.get("is_published"))
 
     error = None
     if not any(title_i18n.values()):
@@ -538,7 +578,7 @@ def edit_page(page_id):
 @admin_required
 def toggle_page_published(page_id):
     page = Page.query.get(page_id)
-    if page is not None:
+    if page is not None and page.slug != HOME_PAGE_SLUG:
         page.is_published = not page.is_published
         db.session.commit()
     return redirect(url_for("admin.pages"))
@@ -550,6 +590,13 @@ def delete_page(page_id):
     page = Page.query.get(page_id)
     if page is None:
         return redirect(url_for("admin.pages"))
+
+    if page.slug == HOME_PAGE_SLUG:
+        alle_pagina_s = Page.query.order_by(Page.title).all()
+        return render_template(
+            "admin/pages_list.html", user=g.user, pages=alle_pagina_s,
+            error="De homepage kan niet verwijderd worden - pas ze aan via de blokken, of ontkoppel ze niet van slug 'home'.",
+        )
 
     linking_items = NavItem.query.filter_by(page_id=page_id).all()
     if linking_items:

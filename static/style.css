@@ -5,10 +5,11 @@
    ========================================================= */
 
 :root {
-  /* Blauw - eigen huisstijlkleur (aangepast 2026-08-22) */
-  --blue: #06719d;
+  /* Blauw - eigen huisstijlkleur (aangepast 2026-08-29, exacte FHT-tint) */
+  --blue: #07719d;
   --blue-dark: #044e6c;
   --blue-light: #ebf4f7;
+  --red: #e2372b;
 
   /* Text */
   --ink: #12203c;
@@ -51,11 +52,11 @@ body {
   flex-direction: column;
 }
 
-/* Op de homepage is de achtergrond overal hetzelfde blauw als de navbar
-   (var(--blue), niet het donkerder var(--blue-dark)) i.p.v. de standaard
-   lichte paginakleur - enkel de herofoto, de witte kaarten en ingebedde
-   widgets steken daar nog tegen af. */
-body.home-page { background: var(--blue); }
+/* De hero en de fotostrook (.hp-hero / .hp-photobar, zie HOMEPAGE-sectie
+   verderop) schilderen hun eigen blauwe achtergrond - de rest van de
+   homepage (het .hp-intro-gedeelte ertussen) is gewoon wit, dus de
+   body-achtergrond zelf blijft wit i.p.v. overal blauw. */
+body.home-page { background: var(--white); }
 
 a { color: inherit; }
 
@@ -939,6 +940,252 @@ form textarea { min-height: 120px; resize: vertical; }
 }
 
 .home-closing-social a:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* =========================================================
+   HOMEPAGE (redesign 2026-08-29)
+   ========================================================= */
+.hp-hero {
+  background: var(--blue);
+  padding: 56px 40px 48px;
+}
+
+.hp-hero-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.hp-hero-title { margin: 0 0 24px; line-height: 1; }
+
+.hp-hero-title-outline, .hp-hero-title-solid {
+  display: block;
+  font-weight: 800;
+  font-style: italic;
+  font-family: var(--font-family);
+}
+
+.hp-hero-title-outline {
+  font-size: clamp(48px, 9vw, 100px);
+  color: transparent;
+  -webkit-text-stroke: 2px var(--white);
+  text-stroke: 2px var(--white);
+}
+
+.hp-hero-title-solid {
+  font-size: clamp(28px, 5.5vw, 52px);
+  color: var(--white);
+  margin-top: 6px;
+}
+
+.hp-hero-trophy {
+  display: inline-block;
+  filter: brightness(0) invert(1);
+}
+
+.hp-hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.hp-pill {
+  display: inline-block;
+  padding: 11px 24px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.15s ease, filter 0.15s ease, background 0.15s ease;
+}
+
+.hp-pill-social {
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.hp-pill-social:hover { background: rgba(255, 255, 255, 0.28); }
+
+.hp-pill-offer {
+  background: var(--red);
+  color: var(--white);
+}
+
+.hp-pill-offer:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+.hp-intro-inner {
+  position: relative;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 48px 40px 56px;
+  overflow: hidden;
+}
+
+/* De Europakaart ligt als achtergrond ACHTER de tekst (niet ernaast in een
+   eigen kolom) - .hp-intro-content overlapt de linkerrand van de kaart, en
+   blijft leesbaar omdat de kaart in een lichte tint blauw staat (zie
+   static/images/europe-map.svg). Bewust een vaste hoogte i.p.v. de volle
+   sectiehoogte: de kaart hoort enkel achter de tagline/vlaggen/cijfers te
+   liggen, niet achter de "Who can participate?"/"Magical Moment"-tekst
+   eronder - die leest minder goed met een kaart erachter. object-fit:contain
+   (i.p.v. cover) toont het volledige icoon i.p.v. het bij te snijden - het
+   is nu één zelfstandig icoon, geen brede kaart meer om uit te snijden. */
+.hp-map-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 62%;
+  height: 460px;
+  object-fit: contain;
+  object-position: 100% 0%;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hp-intro-content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+/* De tekst-blokken (rich_text/stats) van de homepage-Page komen hier
+   binnen via de generieke bloksjablonen (zie routes/main.py
+   _get_or_create_home_page en templates/pages/_blocks/) - dezelfde blokken
+   als op elke andere pagina, enkel herstijld binnen .hp-intro-content zodat
+   ze bij het hero-ontwerp passen (grote italic-blauwe kop, cijfer-pillen
+   i.p.v. platte tekst). Het eerste blok (de tagline) krijgt een net iets
+   groter, vetgedrukt/cursief opschrift. */
+.hp-intro-content .page-block:first-child p {
+  color: var(--blue);
+  font-weight: 800;
+  font-style: italic;
+  font-size: 21px;
+  margin: 0 0 16px;
+}
+
+.hp-intro-content h2 {
+  color: var(--blue);
+  font-weight: 800;
+  font-style: italic;
+  font-size: 22px;
+  margin: 32px 0 8px;
+}
+
+.hp-intro-content .page-block:first-child h2 { margin-top: 0; }
+
+.hp-intro-content p { margin: 0 0 12px; line-height: 1.6; }
+.hp-intro-content p:last-child { margin-bottom: 0; }
+
+.hp-flags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+.hp-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  font-size: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.hp-flag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* Herstijling van het generieke .block-stats/.block-stat (zie
+   templates/pages/_blocks/stats.html, gedeeld met gewone CMS-pagina's) tot
+   de blauwe cijfer-pillen uit het hero-ontwerp - enkel binnen
+   .hp-intro-content, dus zonder impact op de stats-blok-styling elders. */
+.hp-intro-content .block-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 14px;
+  margin: 24px 0 8px;
+}
+
+.hp-intro-content .block-stat {
+  background: var(--blue-dark);
+  color: var(--white);
+  border-radius: 999px;
+  padding: 18px 28px;
+  text-align: center;
+  min-width: 150px;
+}
+
+.hp-intro-content .block-stat-getal { font-size: 26px; color: var(--white); }
+.hp-intro-content .block-stat-label { font-size: 12px; font-weight: 600; color: var(--white); opacity: 0.85; }
+
+.hp-photobar {
+  background: var(--blue);
+  margin-top: 48px;
+  padding: 24px 40px;
+}
+
+.hp-photobar-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.hp-photo-placeholder {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  position: relative;
+}
+
+.hp-photo {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  display: block;
+}
+
+.hp-photo-placeholder::after {
+  content: "\1F5BC";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 900px) {
+  /* Op smalle schermen is er geen ruimte meer naast de tekstkolom - de
+     kaart wordt dan een volle-breedte achtergrond achter alle inhoud i.p.v.
+     enkel achter de rechterkant ervan. */
+  .hp-map-bg { width: 100%; object-position: 50% 15%; }
+  .hp-intro-content { max-width: none; }
+}
+
+@media (max-width: 600px) {
+  .hp-hero { padding: 40px 20px 36px; }
+  .hp-intro-inner { padding: 36px 20px 0; }
+  .hp-photobar { padding: 20px; }
+  .hp-photobar-inner { grid-template-columns: 1fr; }
+}
 
 /* =========================================================
    CLUB-PAGINA (/club/)

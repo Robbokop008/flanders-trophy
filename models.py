@@ -101,6 +101,12 @@ class NavItem(db.Model):
 # Pagina's (CMS)
 # ---------------------------------------------------------------------------
 
+# Slug van de (altijd bestaande) homepage-Page - zie routes/main.py
+# _get_or_create_home_page(). Op deze slug na is een Page een gewone,
+# door de admin vrij aan te maken/verwijderen inhoudspagina.
+HOME_PAGE_SLUG = "home"
+
+
 class Page(db.Model):
     """Een door de admin beheerde inhoudspagina, getoond via /pagina/<slug>.
     De inhoud zelf zit in PageBlock-rijen (zie hieronder); body_html is
@@ -196,6 +202,33 @@ NIGHTS_CHOICES = [
     (2, "Leave on Sunday"),
     (3, "Leave on Monday"),
 ]
+
+
+class SiteSettings(db.Model):
+    """Singleton-rij (id altijd 1) met een handvol site-brede instellingen die
+    een admin via het adminpaneel kan aanpassen zonder in de code te moeten -
+    momenteel enkel de social-mediakoppelingen in de homepage-hero (zie
+    routes/admin.py home_settings en templates/index.html)."""
+    __tablename__ = "site_settings"
+
+    id = db.Column(db.Integer, primary_key=True)
+    instagram_url = db.Column(db.String(500))
+    facebook_url = db.Column(db.String(500))
+    # Bestandsnamen in static/images/, voor de fotostrook onderaan de
+    # homepage (zie templates/index.html) - zelfde opslagpatroon als
+    # Page.hero_image.
+    photo_1 = db.Column(db.String(255))
+    photo_2 = db.Column(db.String(255))
+    photo_3 = db.Column(db.String(255))
+
+    @classmethod
+    def get(cls):
+        settings = cls.query.get(1)
+        if settings is None:
+            settings = cls(id=1)
+            db.session.add(settings)
+            db.session.commit()
+        return settings
 
 
 class PageBlock(db.Model):

@@ -7,5 +7,7 @@ instance/*.db
 instance/*.db-shm
 instance/*.db-wal
 instance/*.db-journal
+instance/backups/
+instance/logs/
 .DS_Store
 .claude/settings.local.json

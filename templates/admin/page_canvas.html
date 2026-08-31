@@ -37,7 +37,9 @@
     <h1>{{ page.title }}</h1>
     <p>
         <a href="{{ url_for('admin.pages') }}">&larr; Terug naar Pagina's</a>
-        {% if page.is_published %}
+        {% if page.slug == 'home' %}
+        &middot; <a href="{{ url_for('main.home') }}" target="_blank" rel="noopener">Bekijk pagina &rarr;</a>
+        {% elif page.is_published %}
         &middot; <a href="{{ url_for('pages.view', slug=page.slug) }}" target="_blank" rel="noopener">Bekijk pagina &rarr;</a>
         {% else %}
         &middot; <a href="{{ url_for('admin.preview_page', page_id=page.id) }}" target="_blank" rel="noopener">Voorbeeld bekijken &rarr;</a>
@@ -64,17 +66,26 @@
                 {% endfor %}
                 <div>
                     <label for="slug">Slug (URL: /pagina/&lt;slug&gt;)</label>
+                    {% if page.slug == 'home' %}
+                    <input type="text" id="slug" value="home" disabled>
+                    <p class="muted" style="margin:4px 0 0;">Dit is de homepage - ze staat altijd op / en de slug kan niet gewijzigd worden.</p>
+                    {% else %}
                     <input type="text" id="slug" name="slug" value="{{ form_slug if form_slug is defined else page.slug }}">
+                    {% endif %}
                 </div>
+                {% if page.slug != 'home' %}
                 <div>
                     <label for="hero_image">Afbeelding bovenaan (optioneel)</label>
                     <input type="file" id="hero_image" name="hero_image" accept="image/*">
                     {% if page.hero_image %}<p class="muted">Huidige afbeelding: {{ page.hero_image }}</p>{% endif %}
                 </div>
+                {% endif %}
+                {% if page.slug != 'home' %}
                 <div class="checkbox-field">
                     {% set published = form_is_published if form_is_published is defined else page.is_published %}
                     <label for="is_published"><input type="checkbox" id="is_published" name="is_published" {{ 'checked' if published else '' }}> Gepubliceerd (zichtbaar voor bezoekers)</label>
                 </div>
+                {% endif %}
                 <div class="form-actions" style="grid-column:1/-1;">
                     <button type="submit" class="admin-button">Instellingen opslaan</button>
                 </div>

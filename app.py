@@ -9,6 +9,10 @@ en de app in kleinere, overzichtelijke stukken (blueprints) kan opdelen.
 Starten voor development doe je via run.py, niet via dit bestand direct.
 """
 
+import logging
+import os
+from logging.handlers import RotatingFileHandler
+
 from flask import Flask, render_template, request
 
 from config import config_by_name, ONVEILIGE_STANDAARD_SECRET_KEY
@@ -33,6 +37,25 @@ def create_app(config_name="development"):
             "echte, geheime sleutel in via de omgevingsvariabelen (.env) "
             "voor je de site in productie draait."
         )
+
+    # Logging naar een draaiend logbestand (instance/logs/app.log) i.p.v.
+    # enkel de console-output van de WSGI-server, die op een host als
+    # PythonAnywhere niet altijd makkelijk terug te vinden is. Bestaande
+    # current_app.logger.warning/error-aanroepen (routes/admin.py,
+    # routes/main.py, routes/offers.py) komen hierdoor ergens terecht i.p.v.
+    # in het niets te verdwijnen.
+    if not app.debug and not app.testing:
+        log_map = os.path.join(app.root_path, "instance", "logs")
+        os.makedirs(log_map, exist_ok=True)
+        file_handler = RotatingFileHandler(
+            os.path.join(log_map, "app.log"), maxBytes=1_000_000, backupCount=5
+        )
+        file_handler.setFormatter(logging.Formatter(
+            "%(asctime)s %(levelname)s %(name)s: %(message)s"
+        ))
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+        app.logger.setLevel(logging.INFO)
 
     # Extensies koppelen aan de app
     db.init_app(app)
@@ -134,6 +157,15 @@ def create_app(config_name="development"):
     @app.errorhandler(429)
     def te_veel_aanvragen(_error):
         return render_template("errors/429.html"), 429
+
+    # Onverwachte serverfouten: nette pagina i.p.v. Flask/Werkzeug's kale
+    # standaardpagina, en de volledige traceback in het logbestand
+    # hierboven i.p.v. enkel zichtbaar voor wie toevallig de host-console
+    # bekijkt.
+    @app.errorhandler(500)
+    def interne_serverfout(error):
+        app.logger.error("Interne serverfout op %s: %s", request.path, error, exc_info=True)
+        return render_template("errors/500.html"), 500
 
     # Baseline HTTP-securityheaders op elke response. Geen Content-Security-
     # Policy hier: de site gebruikt op verschillende plekken inline <style>/

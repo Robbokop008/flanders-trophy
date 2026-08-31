@@ -1,0 +1,47 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - Home-pagina{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>Home-pagina</h1>
+    <p>Social-links en de 3 foto's in de fotostrook onderaan de homepage.</p>
+</div>
+
+<section class="section">
+    {% if error %}
+    <p class="alert alert-error" style="margin-bottom:20px;">{{ error }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('admin.home_settings') }}" method="post" class="admin-form" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div>
+            <label for="instagram_url">Instagram-link</label>
+            <input type="text" id="instagram_url" name="instagram_url" value="{{ settings.instagram_url or '' }}" placeholder="https://instagram.com/...">
+        </div>
+        <div>
+            <label for="facebook_url">Facebook-link</label>
+            <input type="text" id="facebook_url" name="facebook_url" value="{{ settings.facebook_url or '' }}" placeholder="https://facebook.com/...">
+        </div>
+
+        {% for field, label in [('photo_1', 'Foto 1'), ('photo_2', 'Foto 2'), ('photo_3', 'Foto 3')] %}
+        <div>
+            <label for="{{ field }}">{{ label }}</label>
+            <input type="file" id="{{ field }}" name="{{ field }}" accept="image/*">
+            {% set current = settings[field] %}
+            {% if current %}
+            <p class="muted" style="margin:6px 0 0;">
+                <img src="{{ url_for('static', filename='images/' + current) }}" alt="" style="height:60px;border-radius:var(--radius-sm);display:block;margin-bottom:4px;">
+                <label class="checkbox-inline"><input type="checkbox" name="{{ field }}_remove"> Verwijderen</label>
+            </p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="form-actions" style="grid-column:1/-1;">
+            <button type="submit" class="admin-button">Opslaan</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

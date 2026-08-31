@@ -28,15 +28,18 @@
             <tbody>
                 {% for page in pages %}
                 <tr>
-                    <td>{{ page.title }}<br><code style="font-size:12px;color:var(--muted);">/pagina/{{ page.slug }}</code></td>
-                    <td><span class="order-status-badge">{{ 'Gepubliceerd' if page.is_published else 'Concept' }}</span></td>
+                    <td>{{ page.title }}<br><code style="font-size:12px;color:var(--muted);">{{ '/' if page.slug == 'home' else '/pagina/' + page.slug }}</code></td>
+                    <td><span class="order-status-badge">{{ 'Homepage' if page.slug == 'home' else ('Gepubliceerd' if page.is_published else 'Concept') }}</span></td>
                     <td>
                         <a href="{{ url_for('admin.edit_page', page_id=page.id) }}" class="admin-button btn-sm">Bewerken</a>
-                        {% if page.is_published %}
+                        {% if page.slug == 'home' %}
+                        <a href="{{ url_for('main.home') }}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Bekijken</a>
+                        {% elif page.is_published %}
                         <a href="{{ url_for('pages.view', slug=page.slug) }}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Bekijken</a>
                         {% else %}
                         <a href="{{ url_for('admin.preview_page', page_id=page.id) }}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Voorbeeld</a>
                         {% endif %}
+                        {% if page.slug != 'home' %}
                         <form action="{{ url_for('admin.toggle_page_published', page_id=page.id) }}" method="post" style="display:inline;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             {% if page.is_published %}
@@ -49,6 +52,7 @@
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deze pagina definitief verwijderen?');">Verwijderen</button>
                         </form>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
