@@ -1195,6 +1195,14 @@ form textarea { min-height: 120px; resize: vertical; }
   .hp-photobar-inner { grid-template-columns: 1fr; }
   .hp-map-bg { height: 240px; }
   .hp-flag { width: 22px; height: 22px; }
+  /* Een vaste contourdikte van 2px (.hp-hero-title-outline hierboven) is
+     bedoeld voor de grote titel op desktop (tot 100px lettergrootte); op
+     een klein scherm valt de titel terug op zijn minimum (48px, zie de
+     clamp()), en wordt diezelfde 2px verhoudingsgewijs zo dik dat de
+     contourlijn zichzelf kruist binnenin letters (bv. de "a"/"d"/"e") -
+     vandaar de rare extra lijntjes. Dunnere contour op klein scherm lost
+     dat op. */
+  .hp-hero-title-outline { -webkit-text-stroke-width: 1px; text-stroke-width: 1px; }
 }
 
 /* =========================================================
