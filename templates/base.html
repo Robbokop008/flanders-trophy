@@ -4,6 +4,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Flanders Trophy{% endblock %}</title>
+
+    {# Standaard-omschrijving (site-brede fallback); een pagina overschrijft
+       dit blok met een omschrijving afgeleid uit haar eigen inhoud - zie
+       page_meta_description() in utils/seo.py, gebruikt in index.html en
+       pages/view.html. #}
+    <meta name="description" content="{% block meta_description %}{{ _('The biggest international handball tournament in the BeNeLux, held every year in Sint-Truiden.') }}{% endblock %}">
+    {# request.base_url bevat geen querystring (bv. ?next=... op /login) -
+       zonder canonical zou zo'n URL-variant als een aparte pagina kunnen
+       tellen in zoekmachines. #}
+    <link rel="canonical" href="{{ request.base_url }}">
+
+    {# self.title()/self.meta_description() hergebruiken hierboven al
+       gerenderde blocks i.p.v. de titel/omschrijving een tweede keer op te
+       bouwen - zie https://jinja.palletsprojects.com/templates/#super-blocks. #}
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Flanders Trophy">
+    <meta property="og:locale" content="{{ current_lang }}">
+    <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+    <meta property="og:description" content="{{ self.meta_description() }}">
+    <meta property="og:url" content="{{ request.base_url }}">
+    {% block og_image %}{% endblock %}
+    <meta name="twitter:card" content="summary_large_image">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body{% if body_page_class %} class="{{ body_page_class }}"{% endif %}>

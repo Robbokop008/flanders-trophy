@@ -4,7 +4,7 @@ routes/main.py
 Routes voor het publieke, informatieve deel van de site: home en contact.
 """
 
-from flask import Blueprint, render_template, request, current_app, session, redirect, url_for
+from flask import Blueprint, Response, render_template, request, current_app, session, redirect, url_for
 from flask_babel import gettext as _
 from sqlalchemy import text
 
@@ -130,6 +130,47 @@ def health():
         current_app.logger.error(f"Health check faalde: {exc}")
         return {"status": "error"}, 503
     return {"status": "ok"}, 200
+
+
+@main_bp.route("/robots.txt")
+@limiter.exempt
+def robots_txt():
+    regels = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /login",
+        "Disallow: /health",
+        f"Sitemap: {url_for('main.sitemap_xml', _external=True)}",
+    ]
+    return Response("\n".join(regels) + "\n", mimetype="text/plain")
+
+
+@main_bp.route("/sitemap.xml")
+@limiter.exempt
+def sitemap_xml():
+    """Enkel gepubliceerde pagina's + de vaste publieke routes - geen
+    /admin, /login of de taal-/health-/set-language-hulproutes. De homepage
+    (slug 'home') staat al apart in VASTE_URLS via main.home; de generieke
+    /pagina/<slug>-lus hieronder slaat die dus bewust over (zie ook
+    routes/pages.view, dat /pagina/home zelf al 404 geeft)."""
+    vaste_urls = [
+        {"loc": url_for("main.home", _external=True), "lastmod": None, "priority": "1.0"},
+        {"loc": url_for("main.contact", _external=True), "lastmod": None, "priority": "0.5"},
+        {"loc": url_for("offers.request_offer", _external=True), "lastmod": None, "priority": "0.8"},
+    ]
+    pagina_urls = [
+        {
+            "loc": url_for("pages.view", slug=page.slug, _external=True),
+            "lastmod": page.updated_at.strftime("%Y-%m-%d") if page.updated_at else None,
+            "priority": "0.7",
+        }
+        for page in Page.query.filter(Page.is_published.is_(True), Page.slug != HOME_PAGE_SLUG).all()
+    ]
+    return Response(
+        render_template("sitemap.xml", urls=vaste_urls + pagina_urls),
+        mimetype="application/xml",
+    )
 
 
 @main_bp.route("/set-language/<lang_code>")

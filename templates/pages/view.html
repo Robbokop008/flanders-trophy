@@ -12,6 +12,12 @@
 {% set page_title = i18n_raw(page.title_i18n, current_lang) or _(page.title) %}
 {% block title %}{{ page_title }} - Flanders Trophy{% endblock %}
 
+{% block meta_description %}{{ page_meta_description(page, current_lang, super()) }}{% endblock %}
+
+{% block og_image %}
+{% if page.hero_image %}<meta property="og:image" content="{{ url_for('static', filename='images/' + page.hero_image, _external=True) }}">{% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="club-hero">
     <h1>{{ page_title }}</h1>

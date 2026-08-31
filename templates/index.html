@@ -2,6 +2,12 @@
 
 {% block title %}Flanders Handball Trophy 2027{% endblock %}
 
+{% block meta_description %}{{ page_meta_description(home_page, current_lang, super()) }}{% endblock %}
+
+{% block og_image %}
+{% if site_settings.photo_1 %}<meta property="og:image" content="{{ url_for('static', filename='images/' + site_settings.photo_1, _external=True) }}">{% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="hp-hero">
     <div class="hp-hero-inner">

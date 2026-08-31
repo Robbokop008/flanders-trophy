@@ -147,6 +147,13 @@ def create_app(config_name="development"):
 
     app.add_template_global(resolve_style, name="resolve_style")
 
+    # Jinja-global om een meta-omschrijving af te leiden uit de eigenlijke
+    # paginainhoud (i.p.v. een apart in te vullen SEO-veld) - zie
+    # utils/seo.py en templates/base.html (block meta_description).
+    from utils.seo import page_meta_description
+
+    app.add_template_global(page_meta_description, name="page_meta_description")
+
     # Eigen foutpagina's i.p.v. Flask/Werkzeug's kale standaardpagina's:
     # 404 (onbestaande URL) en 429 (rate limit overschreden, bv. te vaak
     # inloggen na elkaar - zie @limiter.limit(...) in routes/auth.py).
