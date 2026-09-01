@@ -180,6 +180,31 @@ laten pingen door een gratis uptime-monitor zoals
 zodat een crash of downtime opvalt zonder dat iemand het toevallig moet
 melden.
 
+## Google Analytics &amp; privacybeleid
+
+Bij het opstarten wordt automatisch een privacybeleid-pagina aangemaakt
+(slug `privacy-policy`, zichtbaar in `/admin/pages`) met een Engelstalige
+GDPR-basistekst, maar met overal `[AAN TE VULLEN: ...]`-placeholders voor
+gegevens die enkel de club zelf kan invullen (officiële organisatienaam,
+adres, contactadres voor privacyvragen, bewaartermijnen, ...) - zie
+`routes/pages.py ensure_privacy_policy_page()`. De pagina staat bewust
+**niet** gepubliceerd tot een admin ze zelf nagekeken, aangevuld en
+gepubliceerd heeft.
+
+Stappen om Google Analytics in te schakelen:
+
+1. Vul de privacybeleid-pagina aan via `/admin/pages` en publiceer ze.
+2. Zet je GA4-meet-ID (bv. `G-XXXXXXXXXX`) in `.env` als
+   `GOOGLE_ANALYTICS_ID` (zie `.env.example`).
+3. Herstart de app.
+
+Pas als **beide** stappen gebeurd zijn, verschijnt de cookiebanner en laadt
+Analytics ergens (zie `templates/base.html`,
+`static/js/cookie_consent.js`) - en dan ook enkel nadat een bezoeker zelf op
+"Accepteren" klikt (de keuze wordt onthouden via `localStorage`, met een
+"Cookie-instellingen"-link in de footer om ze nadien te wijzigen). Zonder
+GA-meet-ID of zonder gepubliceerd privacybeleid gebeurt er nergens iets.
+
 ## Nog te doen
 
 Dit is een scaffold, geen afgewerkte site. Voor je dit live zet:

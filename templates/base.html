@@ -108,6 +108,12 @@
                 <h3>{{ _('Contact') }}</h3>
                 <ul>
                     <li><a href="{{ url_for('main.contact') }}">{{ _('Contact us') }}</a></li>
+                    {% if privacy_policy_url %}
+                    <li><a href="{{ privacy_policy_url }}">{{ _('Privacy policy') }}</a></li>
+                    {% endif %}
+                    {% if google_analytics_id %}
+                    <li><a href="#" id="cookie-settings-link">{{ _('Cookie settings') }}</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -115,6 +121,27 @@
             <p>&copy; {{ huidig_jaar }} Flanders Trophy. {{ _('All rights reserved.') }}</p>
         </div>
     </footer>
+
+    {% if google_analytics_id %}
+    {# Cookiebanner: getoond zolang er geen bewaarde keuze is (zie
+       static/js/cookie_consent.js). Enkel aanwezig als er zowel een
+       GA-meet-ID geconfigureerd is als de privacybeleid-pagina effectief
+       gepubliceerd is (zie inject_analytics_config in app.py) - zonder
+       allebei wordt hier niets getoond en laadt Analytics nergens. #}
+    <div id="cookie-banner" class="cookie-banner" hidden>
+        <p>{{ _('We use cookies to understand how visitors use this website (Google Analytics). We only do this with your permission.') }}
+            <a href="{{ privacy_policy_url }}">{{ _('Privacy policy') }}</a>
+        </p>
+        <div class="cookie-banner-buttons">
+            <button type="button" id="cookie-reject" class="btn btn-secondary btn-sm">{{ _('Reject') }}</button>
+            <button type="button" id="cookie-accept" class="btn btn-primary btn-sm">{{ _('Accept') }}</button>
+        </div>
+    </div>
+    <script>
+        window.GOOGLE_ANALYTICS_ID = {{ google_analytics_id|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/cookie_consent.js') }}" defer></script>
+    {% endif %}
 
     <script>
         const menuToggle = document.getElementById('menu-toggle');

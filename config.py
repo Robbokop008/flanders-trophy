@@ -71,6 +71,14 @@ class Config:
     # geeft dan overal None terug in plaats van te crashen).
     DEEPL_API_KEY = os.environ.get("DEEPL_API_KEY")
 
+    # Google Analytics-meet-ID (bv. "G-XXXXXXXXXX") - optioneel: zonder deze
+    # waarde wordt er nergens een cookiebanner getoond en laadt Analytics
+    # nergens (zie templates/base.html, static/js/cookie_consent.js). Er
+    # wordt ook pas iets geladen nadat een bezoeker toestemming geeft EN de
+    # privacybeleid-pagina gepubliceerd is (zie routes/pages.py
+    # ensure_privacy_policy_page) - nooit automatisch getoond zonder allebei.
+    GOOGLE_ANALYTICS_ID = os.environ.get("GOOGLE_ANALYTICS_ID")
+
     # Upload-map voor geüploade afbeeldingen: pagina-hero-afbeeldingen en
     # inline afbeeldingen in de pagina-editor (relatief aan static/)
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "images")

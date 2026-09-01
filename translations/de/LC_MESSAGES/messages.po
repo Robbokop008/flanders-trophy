@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-22 15:21+0200\n"
+"POT-Creation-Date: 2026-09-01 16:59+0200\n"
 "PO-Revision-Date: 2026-08-21 11:47+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: routes/main.py:50
+#: routes/main.py:200
 msgid "Please fill in all fields correctly (with a valid email address)."
 msgstr ""
 "Bitte füllen Sie alle Felder korrekt aus (mit einer gültigen E-Mail-"
 "Adresse)."
 
-#: routes/main.py:60
+#: routes/main.py:210
 msgid "Your message has been sent successfully."
 msgstr "Ihre Nachricht wurde erfolgreich gesendet."
 
@@ -40,21 +40,53 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 msgid "Please fill in at least one team in at least one category."
 msgstr "Bitte geben Sie mindestens ein Team in mindestens einer Kategorie an."
 
-#: templates/base.html:81
+#: templates/base.html:12
+msgid ""
+"The biggest international handball tournament in the BeNeLux, held every "
+"year in Sint-Truiden."
+msgstr ""
+"Das größte internationale Handballturnier der Beneluxstaaten, jährlich in "
+"Sint-Truiden."
+
+#: templates/base.html:104
 msgid "International Easter handball tournament in Sint-Truiden."
 msgstr "Internationales Osterhandballturnier in Sint-Truiden."
 
-#: templates/base.html:85 templates/contact.html:7
+#: templates/base.html:108 templates/contact.html:7
 msgid "Contact"
 msgstr "Kontakt"
 
-#: templates/base.html:87
+#: templates/base.html:110
 msgid "Contact us"
 msgstr "Kontaktieren Sie uns"
 
-#: templates/base.html:92
+#: templates/base.html:112 templates/base.html:133
+msgid "Privacy policy"
+msgstr "Datenschutzerklärung"
+
+#: templates/base.html:115
+msgid "Cookie settings"
+msgstr "Cookie-Einstellungen"
+
+#: templates/base.html:121
 msgid "All rights reserved."
 msgstr "Alle Rechte vorbehalten."
+
+#: templates/base.html:132
+msgid ""
+"We use cookies to understand how visitors use this website (Google "
+"Analytics). We only do this with your permission."
+msgstr ""
+"Wir verwenden Cookies, um zu verstehen, wie Besucher diese Website nutzen "
+"(Google Analytics). Das tun wir nur mit Ihrer Zustimmung."
+
+#: templates/base.html:136
+msgid "Reject"
+msgstr "Ablehnen"
+
+#: templates/base.html:137
+msgid "Accept"
+msgstr "Akzeptieren"
 
 #: templates/contact.html:8
 msgid ""
@@ -84,95 +116,17 @@ msgstr "Nachricht"
 msgid "Send message"
 msgstr "Nachricht senden"
 
-#: templates/index.html:8
-msgid "Pure Fun & Handball"
-msgstr "Pure Fun & Handball"
-
-#: templates/index.html:9
-msgid "The largest international handball tournament in the Benelux."
-msgstr "Das größte internationale Handballturnier der Beneluxstaaten."
-
-#: templates/index.html:11
-msgid "Request Your Offer for 2027"
-msgstr "Angebot für 2027 anfordern"
-
-#: templates/index.html:18 templates/index.html:21
-msgid "teams"
-msgstr "Teams"
-
-#: templates/index.html:19
-msgid "participants"
-msgstr "Teilnehmer"
-
-#: templates/index.html:20
-msgid "matches"
-msgstr "Spiele"
-
 #: templates/index.html:21
-msgid "International"
-msgstr "Internationale"
+msgid "Request your Offer"
+msgstr "Angebot anfordern"
 
-#: templates/index.html:24
-msgid "Why Flanders Trophy?"
-msgstr "Warum Flanders Trophy?"
+#: templates/index.html:41
+msgid "Worldwide"
+msgstr "Weltweit"
 
-#: templates/index.html:26
-msgid "International Handball"
-msgstr "Internationaler Handball"
-
-#: templates/index.html:26
-msgid "Teams from all over Europe"
-msgstr "Teams aus ganz Europa"
-
-#: templates/index.html:27
-msgid "Accommodation included"
-msgstr "Unterkunft inklusive"
-
-#: templates/index.html:27
-msgid "Group accommodation is part of your package."
-msgstr "Gruppenunterkunft ist Teil Ihres Pakets."
-
-#: templates/index.html:28
-msgid "Meals included"
-msgstr "Verpflegung inklusive"
-
-#: templates/index.html:28
-msgid "Dinner and breakfast, all weekend."
-msgstr "Abendessen und Frühstück, das ganze Wochenende."
-
-#: templates/index.html:29
-msgid "Pure Fun"
-msgstr "Pure Fun"
-
-#: templates/index.html:29
-msgid "Affordable packages, a full weekend program, and the Flag Parade."
-msgstr ""
-"Günstige Pakete, ein vollständiges Wochenendprogramm und die "
-"Flaggenparade."
-
-#: templates/index.html:32
-msgid "Categories 2027"
-msgstr "Kategorien 2027"
-
-#: templates/index.html:33
-msgid "Women | Men — U15 | U17 | U20 | Seniors"
-msgstr "Frauen | Männer — U15 | U17 | U20 | Senioren"
-
-#: templates/index.html:34
-msgid "See all categories →"
-msgstr "Alle Kategorien ansehen →"
-
-#: templates/index.html:36
-msgid "The Flag Parade"
-msgstr "Die Flaggenparade"
-
-#: templates/index.html:37
-msgid ""
-"900 handballers walking through the city centre — the opening moment of "
-"the tournament weekend, and a Flanders Trophy tradition."
-msgstr ""
-"900 Handballer, die durch die Innenstadt ziehen — der Eröffnungsmoment "
-"des Turnierwochenendes und eine Tradition von Flanders Trophy."
+#: templates/index.html:42
+msgid "Handball"
+msgstr "Handball"
 
 #: templates/request_offer.html:7
 msgid "Request Your Offer"
@@ -251,164 +205,6 @@ msgstr "Zusätzliche Bemerkungen"
 msgid "Request My Offer"
 msgstr "Mein Angebot anfordern"
 
-#: templates/index.html:15
-msgid "Request your Offer"
-msgstr "Angebot anfordern"
-
-#: templates/index.html:35
-msgid "Worldwide"
-msgstr "Weltweit"
-
-#: templates/index.html:36
-msgid "Handball"
-msgstr "Handball"
-
-#. -----------------------------------------------------------------
-#. Onderstaande msgid's komen niet uit statische template-strings, maar
-#. uit databasewaarden (NavItem.label / Page.title, seed_navigation.py;
-#. CONTACT_TOPICS, routes/main.py; team-categorielabels, tariefkeuzes en
-#. overnachtingskeuzes, templates/request_offer.html) die via _() vertaald
-#. worden. pybabel extract kan die niet automatisch vinden (dynamische
-#. expressie, geen letterlijke string) - manueel toegevoegd zodat ze toch
-#. vertaald worden.
-msgid "Home"
-msgstr "Startseite"
-
-msgid "Tournament"
-msgstr "Turnier"
-
-msgid "About Flanders Trophy"
-msgstr "Über Flanders Trophy"
-
-msgid "Categories"
-msgstr "Kategorien"
-
-msgid "Accommodation"
-msgstr "Unterkunft"
-
-msgid "Meals"
-msgstr "Mahlzeiten"
-
-msgid "Weekend Program"
-msgstr "Wochenendprogramm"
-
-msgid "Flag Parade"
-msgstr "Flaggenparade"
-
-msgid "Tournament Format"
-msgstr "Turnierformat"
-
-msgid "Tournament Rules"
-msgstr "Turnierregeln"
-
-msgid "Fair Play"
-msgstr "Fair Play"
-
-msgid "Prices & Stay"
-msgstr "Preise & Aufenthalt"
-
-msgid "Packages & Tariffs"
-msgstr "Pakete & Tarife"
-
-msgid "Shuttle"
-msgstr "Shuttle"
-
-msgid "Program"
-msgstr "Programm"
-
-msgid "Teams & Groups"
-msgstr "Teams & Gruppen"
-
-msgid "Match Schedule"
-msgstr "Spielplan"
-
-msgid "Locations"
-msgstr "Standorte"
-
-msgid "Results"
-msgstr "Ergebnisse"
-
-msgid "Live Results"
-msgstr "Live-Ergebnisse"
-
-msgid "Rankings"
-msgstr "Ranglisten"
-
-msgid "Previous Editions"
-msgstr "Frühere Ausgaben"
-
-msgid "Practical Info"
-msgstr "Praktische Infos"
-
-msgid "Check-in"
-msgstr "Check-in"
-
-msgid "Travel & Parking"
-msgstr "Anreise & Parken"
-
-msgid "FAQ"
-msgstr "Häufige Fragen"
-
-msgid "Downloads"
-msgstr "Downloads"
-
-msgid "General questions"
-msgstr "Allgemeine Fragen"
-
-msgid "Registration / Offers"
-msgstr "Anmeldung / Angebote"
-
-msgid "Referees"
-msgstr "Schiedsrichter"
-
-msgid "Parade"
-msgstr "Parade"
-
-msgid "During tournament"
-msgstr "Während des Turniers"
-
-msgid "Women U15"
-msgstr "Frauen U15"
-
-msgid "Women U17"
-msgstr "Frauen U17"
-
-msgid "Women U20"
-msgstr "Frauen U20"
-
-msgid "Women Seniors"
-msgstr "Frauen Senioren"
-
-msgid "Men U15"
-msgstr "Männer U15"
-
-msgid "Men U17"
-msgstr "Männer U17"
-
-msgid "Men U20"
-msgstr "Männer U20"
-
-msgid "Men Seniors"
-msgstr "Männer Senioren"
-
-msgid "Classroom"
-msgstr "Klassenzimmer"
-
-msgid "Classroom with camp beds"
-msgstr "Klassenzimmer mit Feldbetten"
-
-msgid "Dormitory with beds"
-msgstr "Schlafsaal mit Betten"
-
-msgid "Hotel offer"
-msgstr "Hotelangebot"
-
-msgid "Leave on Sunday"
-msgstr "Abreise am Sonntag"
-
-msgid "Leave on Monday"
-msgstr "Abreise am Montag"
-
 #~ msgid "Preferred tariff / accommodation"
 #~ msgstr "Bevorzugter Tarif / Unterkunft"
 
@@ -438,4 +234,212 @@ msgstr "Abreise am Montag"
 
 #~ msgid "Not yet known"
 #~ msgstr "Noch nicht bekannt"
+
+#~ msgid "Pure Fun & Handball"
+#~ msgstr "Pure Fun & Handball"
+
+#~ msgid "Request Your Offer for 2027"
+#~ msgstr "Angebot für 2027 anfordern"
+
+#~ msgid "teams"
+#~ msgstr "Teams"
+
+#~ msgid "participants"
+#~ msgstr "Teilnehmer"
+
+#~ msgid "matches"
+#~ msgstr "Spiele"
+
+#~ msgid "International"
+#~ msgstr "Internationale"
+
+#~ msgid "Why Flanders Trophy?"
+#~ msgstr "Warum Flanders Trophy?"
+
+#~ msgid "International Handball"
+#~ msgstr "Internationaler Handball"
+
+#~ msgid "Teams from all over Europe"
+#~ msgstr "Teams aus ganz Europa"
+
+#~ msgid "Accommodation included"
+#~ msgstr "Unterkunft inklusive"
+
+#~ msgid "Group accommodation is part of your package."
+#~ msgstr "Gruppenunterkunft ist Teil Ihres Pakets."
+
+#~ msgid "Meals included"
+#~ msgstr "Verpflegung inklusive"
+
+#~ msgid "Dinner and breakfast, all weekend."
+#~ msgstr "Abendessen und Frühstück, das ganze Wochenende."
+
+#~ msgid "Pure Fun"
+#~ msgstr "Pure Fun"
+
+#~ msgid "Affordable packages, a full weekend program, and the Flag Parade."
+#~ msgstr ""
+#~ "Günstige Pakete, ein vollständiges "
+#~ "Wochenendprogramm und die Flaggenparade."
+
+#~ msgid "Categories 2027"
+#~ msgstr "Kategorien 2027"
+
+#~ msgid "Women | Men — U15 | U17 | U20 | Seniors"
+#~ msgstr "Frauen | Männer — U15 | U17 | U20 | Senioren"
+
+#~ msgid "See all categories →"
+#~ msgstr "Alle Kategorien ansehen →"
+
+#~ msgid "The Flag Parade"
+#~ msgstr "Die Flaggenparade"
+
+#~ msgid ""
+#~ "900 handballers walking through the city"
+#~ " centre — the opening moment of "
+#~ "the tournament weekend, and a Flanders"
+#~ " Trophy tradition."
+#~ msgstr ""
+#~ "900 Handballer, die durch die Innenstadt"
+#~ " ziehen — der Eröffnungsmoment des "
+#~ "Turnierwochenendes und eine Tradition von "
+#~ "Flanders Trophy."
+
+#~ msgid "Home"
+#~ msgstr "Startseite"
+
+#~ msgid "Tournament"
+#~ msgstr "Turnier"
+
+#~ msgid "About Flanders Trophy"
+#~ msgstr "Über Flanders Trophy"
+
+#~ msgid "Categories"
+#~ msgstr "Kategorien"
+
+#~ msgid "Accommodation"
+#~ msgstr "Unterkunft"
+
+#~ msgid "Meals"
+#~ msgstr "Mahlzeiten"
+
+#~ msgid "Weekend Program"
+#~ msgstr "Wochenendprogramm"
+
+#~ msgid "Flag Parade"
+#~ msgstr "Flaggenparade"
+
+#~ msgid "Tournament Format"
+#~ msgstr "Turnierformat"
+
+#~ msgid "Tournament Rules"
+#~ msgstr "Turnierregeln"
+
+#~ msgid "Fair Play"
+#~ msgstr "Fair Play"
+
+#~ msgid "Prices & Stay"
+#~ msgstr "Preise & Aufenthalt"
+
+#~ msgid "Packages & Tariffs"
+#~ msgstr "Pakete & Tarife"
+
+#~ msgid "Shuttle"
+#~ msgstr "Shuttle"
+
+#~ msgid "Program"
+#~ msgstr "Programm"
+
+#~ msgid "Teams & Groups"
+#~ msgstr "Teams & Gruppen"
+
+#~ msgid "Match Schedule"
+#~ msgstr "Spielplan"
+
+#~ msgid "Locations"
+#~ msgstr "Standorte"
+
+#~ msgid "Results"
+#~ msgstr "Ergebnisse"
+
+#~ msgid "Live Results"
+#~ msgstr "Live-Ergebnisse"
+
+#~ msgid "Rankings"
+#~ msgstr "Ranglisten"
+
+#~ msgid "Previous Editions"
+#~ msgstr "Frühere Ausgaben"
+
+#~ msgid "Practical Info"
+#~ msgstr "Praktische Infos"
+
+#~ msgid "Check-in"
+#~ msgstr "Check-in"
+
+#~ msgid "Travel & Parking"
+#~ msgstr "Anreise & Parken"
+
+#~ msgid "FAQ"
+#~ msgstr "Häufige Fragen"
+
+#~ msgid "Downloads"
+#~ msgstr "Downloads"
+
+#~ msgid "General questions"
+#~ msgstr "Allgemeine Fragen"
+
+#~ msgid "Registration / Offers"
+#~ msgstr "Anmeldung / Angebote"
+
+#~ msgid "Referees"
+#~ msgstr "Schiedsrichter"
+
+#~ msgid "Parade"
+#~ msgstr "Parade"
+
+#~ msgid "During tournament"
+#~ msgstr "Während des Turniers"
+
+#~ msgid "Women U15"
+#~ msgstr "Frauen U15"
+
+#~ msgid "Women U17"
+#~ msgstr "Frauen U17"
+
+#~ msgid "Women U20"
+#~ msgstr "Frauen U20"
+
+#~ msgid "Women Seniors"
+#~ msgstr "Frauen Senioren"
+
+#~ msgid "Men U15"
+#~ msgstr "Männer U15"
+
+#~ msgid "Men U17"
+#~ msgstr "Männer U17"
+
+#~ msgid "Men U20"
+#~ msgstr "Männer U20"
+
+#~ msgid "Men Seniors"
+#~ msgstr "Männer Senioren"
+
+#~ msgid "Classroom"
+#~ msgstr "Klassenzimmer"
+
+#~ msgid "Classroom with camp beds"
+#~ msgstr "Klassenzimmer mit Feldbetten"
+
+#~ msgid "Dormitory with beds"
+#~ msgstr "Schlafsaal mit Betten"
+
+#~ msgid "Hotel offer"
+#~ msgstr "Hotelangebot"
+
+#~ msgid "Leave on Sunday"
+#~ msgstr "Abreise am Sonntag"
+
+#~ msgid "Leave on Monday"
+#~ msgstr "Abreise am Montag"
 

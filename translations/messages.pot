@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-22 15:21+0200\n"
+"POT-Creation-Date: 2026-09-01 16:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: routes/main.py:50
+#: routes/main.py:200
 msgid "Please fill in all fields correctly (with a valid email address)."
 msgstr ""
 
-#: routes/main.py:60
+#: routes/main.py:210
 msgid "Your message has been sent successfully."
 msgstr ""
 
@@ -37,20 +37,48 @@ msgstr ""
 msgid "Please fill in at least one team in at least one category."
 msgstr ""
 
-#: templates/base.html:81
+#: templates/base.html:12
+msgid ""
+"The biggest international handball tournament in the BeNeLux, held every "
+"year in Sint-Truiden."
+msgstr ""
+
+#: templates/base.html:104
 msgid "International Easter handball tournament in Sint-Truiden."
 msgstr ""
 
-#: templates/base.html:85 templates/contact.html:7
+#: templates/base.html:108 templates/contact.html:7
 msgid "Contact"
 msgstr ""
 
-#: templates/base.html:87
+#: templates/base.html:110
 msgid "Contact us"
 msgstr ""
 
-#: templates/base.html:92
+#: templates/base.html:112 templates/base.html:133
+msgid "Privacy policy"
+msgstr ""
+
+#: templates/base.html:115
+msgid "Cookie settings"
+msgstr ""
+
+#: templates/base.html:121
 msgid "All rights reserved."
+msgstr ""
+
+#: templates/base.html:132
+msgid ""
+"We use cookies to understand how visitors use this website (Google "
+"Analytics). We only do this with your permission."
+msgstr ""
+
+#: templates/base.html:136
+msgid "Reject"
+msgstr ""
+
+#: templates/base.html:137
+msgid "Accept"
 msgstr ""
 
 #: templates/contact.html:8
@@ -79,90 +107,16 @@ msgstr ""
 msgid "Send message"
 msgstr ""
 
-#: templates/index.html:8
-msgid "Pure Fun & Handball"
-msgstr ""
-
-#: templates/index.html:9
-msgid "The largest international handball tournament in the Benelux."
-msgstr ""
-
-#: templates/index.html:11
-msgid "Request Your Offer for 2027"
-msgstr ""
-
-#: templates/index.html:18 templates/index.html:21
-msgid "teams"
-msgstr ""
-
-#: templates/index.html:19
-msgid "participants"
-msgstr ""
-
-#: templates/index.html:20
-msgid "matches"
-msgstr ""
-
 #: templates/index.html:21
-msgid "International"
+msgid "Request your Offer"
 msgstr ""
 
-#: templates/index.html:24
-msgid "Why Flanders Trophy?"
+#: templates/index.html:41
+msgid "Worldwide"
 msgstr ""
 
-#: templates/index.html:26
-msgid "International Handball"
-msgstr ""
-
-#: templates/index.html:26
-msgid "Teams from all over Europe"
-msgstr ""
-
-#: templates/index.html:27
-msgid "Accommodation included"
-msgstr ""
-
-#: templates/index.html:27
-msgid "Group accommodation is part of your package."
-msgstr ""
-
-#: templates/index.html:28
-msgid "Meals included"
-msgstr ""
-
-#: templates/index.html:28
-msgid "Dinner and breakfast, all weekend."
-msgstr ""
-
-#: templates/index.html:29
-msgid "Pure Fun"
-msgstr ""
-
-#: templates/index.html:29
-msgid "Affordable packages, a full weekend program, and the Flag Parade."
-msgstr ""
-
-#: templates/index.html:32
-msgid "Categories 2027"
-msgstr ""
-
-#: templates/index.html:33
-msgid "Women | Men — U15 | U17 | U20 | Seniors"
-msgstr ""
-
-#: templates/index.html:34
-msgid "See all categories →"
-msgstr ""
-
-#: templates/index.html:36
-msgid "The Flag Parade"
-msgstr ""
-
-#: templates/index.html:37
-msgid ""
-"900 handballers walking through the city centre — the opening moment of "
-"the tournament weekend, and a Flanders Trophy tradition."
+#: templates/index.html:42
+msgid "Handball"
 msgstr ""
 
 #: templates/request_offer.html:7
@@ -233,152 +187,5 @@ msgstr ""
 
 #: templates/request_offer.html:78
 msgid "Request My Offer"
-msgstr ""
-
-#. -----------------------------------------------------------------
-#. Onderstaande msgid's komen niet uit statische template-strings, maar
-#. uit databasewaarden (NavItem.label / Page.title, seed_navigation.py;
-#. CONTACT_TOPICS, routes/main.py; team-categorielabels, tariefkeuzes en
-#. overnachtingskeuzes, templates/request_offer.html) die via _() vertaald
-#. worden. pybabel extract kan die niet automatisch vinden (dynamische
-#. expressie, geen letterlijke string) - manueel toegevoegd zodat ze toch
-#. vertaald worden.
-#. -----------------------------------------------------------------
-msgid "Home"
-msgstr ""
-
-msgid "Tournament"
-msgstr ""
-
-msgid "About Flanders Trophy"
-msgstr ""
-
-msgid "Categories"
-msgstr ""
-
-msgid "Accommodation"
-msgstr ""
-
-msgid "Meals"
-msgstr ""
-
-msgid "Weekend Program"
-msgstr ""
-
-msgid "Flag Parade"
-msgstr ""
-
-msgid "Tournament Format"
-msgstr ""
-
-msgid "Tournament Rules"
-msgstr ""
-
-msgid "Fair Play"
-msgstr ""
-
-msgid "Prices & Stay"
-msgstr ""
-
-msgid "Packages & Tariffs"
-msgstr ""
-
-msgid "Shuttle"
-msgstr ""
-
-msgid "Program"
-msgstr ""
-
-msgid "Teams & Groups"
-msgstr ""
-
-msgid "Match Schedule"
-msgstr ""
-
-msgid "Locations"
-msgstr ""
-
-msgid "Results"
-msgstr ""
-
-msgid "Live Results"
-msgstr ""
-
-msgid "Rankings"
-msgstr ""
-
-msgid "Previous Editions"
-msgstr ""
-
-msgid "Practical Info"
-msgstr ""
-
-msgid "Check-in"
-msgstr ""
-
-msgid "Travel & Parking"
-msgstr ""
-
-msgid "FAQ"
-msgstr ""
-
-msgid "Downloads"
-msgstr ""
-
-msgid "General questions"
-msgstr ""
-
-msgid "Registration / Offers"
-msgstr ""
-
-msgid "Referees"
-msgstr ""
-
-msgid "Parade"
-msgstr ""
-
-msgid "During tournament"
-msgstr ""
-
-msgid "Women U15"
-msgstr ""
-
-msgid "Women U17"
-msgstr ""
-
-msgid "Women U20"
-msgstr ""
-
-msgid "Women Seniors"
-msgstr ""
-
-msgid "Men U15"
-msgstr ""
-
-msgid "Men U17"
-msgstr ""
-
-msgid "Men U20"
-msgstr ""
-
-msgid "Men Seniors"
-msgstr ""
-
-msgid "Classroom"
-msgstr ""
-
-msgid "Classroom with camp beds"
-msgstr ""
-
-msgid "Dormitory with beds"
-msgstr ""
-
-msgid "Hotel offer"
-msgstr ""
-
-msgid "Leave on Sunday"
-msgstr ""
-
-msgid "Leave on Monday"
 msgstr ""
 

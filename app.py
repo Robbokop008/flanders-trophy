@@ -13,7 +13,7 @@ import logging
 import os
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 
 from config import config_by_name, ONVEILIGE_STANDAARD_SECRET_KEY
 from extensions import db, csrf, limiter, babel
@@ -97,6 +97,12 @@ def create_app(config_name="development"):
     with app.app_context():
         db.create_all()
 
+        # Privacybeleid-pagina met placeholder-inhoud, klaar om door de club
+        # aangevuld en gepubliceerd te worden - zie routes/pages.py.
+        from routes.pages import ensure_privacy_policy_page
+
+        ensure_privacy_policy_page()
+
     # Stelt de navbar-boom (NavItem's) beschikbaar in elke template, zodat
     # base.html de navigatie kan renderen zonder dat elke route dit zelf
     # moet meegeven.
@@ -123,11 +129,33 @@ def create_app(config_name="development"):
         "pages.view": "content-page",
         "offers.request_offer": "content-page",
         "auth.login": "auth-page",
+        # Adminvoorbeeld van een (nog niet gepubliceerde) pagina rendert
+        # hetzelfde sjabloon als pages.view (zie routes/admin.py
+        # preview_page) - zonder deze regel ontbreekt de blauwe achtergrond
+        # waar .club-hero h1 (witte tekst) op ontworpen is, en is de
+        # paginatitel in de preview onleesbaar wit-op-wit.
+        "admin.preview_page": "content-page",
     }
 
     @app.context_processor
     def inject_body_page_class():
         return {"body_page_class": PAGINA_STIJL_PER_ENDPOINT.get(request.endpoint)}
+
+    # Cookiebanner + Google Analytics (zie templates/base.html,
+    # static/js/cookie_consent.js) mogen pas iets tonen/laden zodra er zowel
+    # een GA-meet-ID geconfigureerd is (GOOGLE_ANALYTICS_ID) als de
+    # privacybeleid-pagina effectief gepubliceerd is (zie routes/pages.py
+    # ensure_privacy_policy_page - staat bewust standaard NIET gepubliceerd
+    # zolang de placeholder-tekst niet aangevuld is).
+    from models import Page, PRIVACY_POLICY_SLUG
+
+    @app.context_processor
+    def inject_analytics_config():
+        privacy_page = Page.query.filter_by(slug=PRIVACY_POLICY_SLUG, is_published=True).first()
+        return {
+            "google_analytics_id": app.config.get("GOOGLE_ANALYTICS_ID") if privacy_page else None,
+            "privacy_policy_url": url_for("pages.view", slug=PRIVACY_POLICY_SLUG) if privacy_page else None,
+        }
 
     # Jinja-filter die gesaniteerde rich-text HTML omzet naar leesbare platte
     # tekst voor previews - zie utils/sanitize.py.

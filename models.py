@@ -106,6 +106,15 @@ class NavItem(db.Model):
 # door de admin vrij aan te maken/verwijderen inhoudspagina.
 HOME_PAGE_SLUG = "home"
 
+# Slug van de privacybeleid-Page, met placeholder-inhoud aangemaakt bij het
+# opstarten van de app (zie routes/pages.py ensure_privacy_policy_page(),
+# aangeroepen vanuit app.py) - bewust als gewone Page i.p.v. een vast
+# sjabloon, zodat de club de tekst zelf kan bijwerken via /admin/pages
+# (inclusief automatische vertaling, net als elke andere pagina) i.p.v.
+# telkens een developer nodig te hebben. Staat bewust NIET automatisch
+# gepubliceerd - zie ensure_privacy_policy_page().
+PRIVACY_POLICY_SLUG = "privacy-policy"
+
 
 class Page(db.Model):
     """Een door de admin beheerde inhoudspagina, getoond via /pagina/<slug>.

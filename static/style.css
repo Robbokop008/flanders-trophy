@@ -2455,6 +2455,92 @@ nav#nav-menu > ul {
   .page-body table { display: block; overflow-x: auto; }
 }
 
+/* Tabel-toolbar van de admin-editor zelf (static/js/admin_rich_editor.js) -
+   los van .page-body table hierboven, dat is de PUBLIEKE weergave van
+   opgeslagen tabellen. Deze klassen hadden nog helemaal geen CSS: de JS zet
+   wel top/left inline, maar zonder position:absolute/fixed had dat geen
+   enkel effect - het menu/dialoogvenster rendert dan gewoon als een kaal
+   blok op zijn normale plek in de paginaflow, helemaal onderaan <body>. */
+.ql-table-dropdown {
+  position: absolute;
+  z-index: 200;
+  min-width: 210px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-hover);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ql-table-dropdown button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.ql-table-dropdown button:hover { background: var(--blue-light); }
+
+.ql-table-dropdown button.ql-table-dropdown-danger { color: var(--danger); }
+.ql-table-dropdown button.ql-table-dropdown-danger:hover { background: rgba(220, 38, 38, 0.08); }
+
+/* "Tabel invoegen"-dialoog (rijen/kolommen kiezen) - zelfde reden als
+   hierboven: zonder position:fixed geen overlay, gewoon een kaal blok
+   onderaan de pagina. */
+.table-size-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.table-size-dialog {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  padding: 24px;
+  width: min(320px, 100%);
+}
+
+.table-size-dialog h3 { margin: 0 0 16px; font-size: 18px; color: var(--ink); }
+
+.table-size-dialog label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.table-size-dialog input[type="number"] {
+  width: 80px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.table-size-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 /* Quill rendert zowel bullet- als genummerde lijsten als <ol><li
    data-list="...">, nooit als <ul> (zie utils/sanitize.py) - zonder deze
    regel zou een bullet-lijst hier tonen met het browser-standaardgedrag
@@ -2656,3 +2742,62 @@ nav#nav-menu > ul {
 @media (max-width: 600px) {
   .spond-embed-wrap-card { height: 320px; }
 }
+
+/* =========================================================
+   COOKIEBANNER (Google Analytics-toestemming)
+   ========================================================= */
+/* [hidden] heeft in de standaard browserstijl dezelfde specificiteit als
+   .cookie-banner hieronder, en de eigen stylesheet "wint" dan van de
+   browserstandaard - zonder deze regel bleef de banner dus gewoon zichtbaar
+   staan nadat static/js/cookie_consent.js het hidden-attribuut al correct
+   gezet had (de knop deed intern wel zijn werk - toestemming bewaard,
+   Analytics geladen - maar zichtbaar veranderde er niets). */
+.cookie-banner[hidden] { display: none; }
+
+.cookie-banner {
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--blue-dark);
+  color: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  padding: 18px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.cookie-banner p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  flex: 1 1 320px;
+}
+
+.cookie-banner a { color: var(--white); text-decoration: underline; }
+
+.cookie-banner-buttons {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+/* .btn-secondary is elders standaard wit-op-wit (zie regel 300 hierboven) -
+   op deze donkerblauwe banner zou dat "Weigeren" precies even nadrukkelijk
+   maken als "Accepteren". Zelfde doorschijnende stijl als .hp-pill-social
+   (static/style.css, homepage-hero) voor een duidelijk minder nadrukkelijke
+   tweede knop op een blauwe achtergrond. */
+.cookie-banner .btn-secondary {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.cookie-banner .btn-secondary:hover { background: rgba(255, 255, 255, 0.26); }
