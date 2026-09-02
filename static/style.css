@@ -446,6 +446,34 @@ form textarea { min-height: 120px; resize: vertical; }
 
 .login-note a { color: var(--blue); font-weight: 600; text-decoration: none; }
 
+/* Wachtwoordveld met "oogje" om de ingevoerde tekens te tonen/verbergen
+   (zie static/js/password_toggle.js) - .password-field is de relatief
+   gepositioneerde wrapper rond het <input>, .password-toggle het knopje
+   errin. Werkt zowel binnen .auth-card (login) als .admin-form. */
+.password-field { position: relative; }
+.password-field input[type="password"],
+.password-field input[type="text"] { padding-right: 44px; }
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.password-toggle:hover, .password-toggle:focus-visible { color: var(--blue-dark); }
+.password-toggle svg { width: 20px; height: 20px; display: block; }
+
 /* =========================================================
    PRODUCT DETAIL
    (naam/prijs-klassen ook hergebruikt in shop/checkout_success.html

@@ -1,0 +1,60 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - Mijn account{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>Mijn account</h1>
+    <p>Wijzig hier je eigen wachtwoord.</p>
+</div>
+
+<section class="section">
+    {% if error %}
+    <p class="alert alert-error" style="margin-bottom:20px;">{{ error }}</p>
+    {% endif %}
+    {% if success %}
+    <p class="alert alert-success" style="margin-bottom:20px;">{{ success }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('admin.account') }}" method="post" class="admin-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div style="grid-column:1/-1;">
+            <label for="current_password">Huidig wachtwoord</label>
+            <div class="password-field">
+                <input type="password" id="current_password" name="current_password" required autocomplete="current-password">
+                <button type="button" class="password-toggle" data-toggle-for="current_password" aria-label="Wachtwoord tonen" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </div>
+        </div>
+        <div>
+            <label for="new_password">Nieuw wachtwoord</label>
+            <div class="password-field">
+                <input type="password" id="new_password" name="new_password" required autocomplete="new-password" minlength="8">
+                <button type="button" class="password-toggle" data-toggle-for="new_password" aria-label="Wachtwoord tonen" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </div>
+            <p class="muted" style="margin:6px 0 0;font-size:13px;">Minstens 8 tekens.</p>
+        </div>
+        <div>
+            <label for="confirm_password">Bevestig nieuw wachtwoord</label>
+            <div class="password-field">
+                <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password" minlength="8">
+                <button type="button" class="password-toggle" data-toggle-for="confirm_password" aria-label="Wachtwoord tonen" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-actions" style="grid-column:1/-1;">
+            <button type="submit" class="admin-button">Wachtwoord wijzigen</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/password_toggle.js') }}" defer></script>
+{% endblock %}

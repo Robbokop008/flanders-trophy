@@ -144,6 +144,10 @@ mee als argumenten, zie de docstring bovenaan het script). Opnieuw draaien
 met dezelfde gebruikersnaam werkt het wachtwoord van die gebruiker bij
 i.p.v. een duplicaat aan te maken. Log daarna in via `/login`.
 
+Voor elke **volgende** admin is dit script niet meer nodig: eenmaal
+ingelogd kan je via `/admin/users` → "+ Nieuwe gebruiker" rechtstreeks in
+het adminpaneel een nieuwe (admin-)login aanmaken, zonder terminal.
+
 ## Databasebackup
 
 `scripts/backup_db.py` maakt een backup van de SQLite-database: een lokale

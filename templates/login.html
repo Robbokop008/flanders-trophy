@@ -17,7 +17,12 @@
             <input id="username" type="text" name="username" class="login-input" placeholder="Voer uw gebruikersnaam in" required>
 
             <label for="password">Wachtwoord</label>
-            <input id="password" type="password" name="password" class="login-input" placeholder="••••••••" required>
+            <div class="password-field">
+                <input id="password" type="password" name="password" class="login-input" placeholder="••••••••" required autocomplete="current-password">
+                <button type="button" class="password-toggle" data-toggle-for="password" aria-label="Wachtwoord tonen" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </div>
 
             {% if error %}
                 <p class="error">{{ error }}</p>
@@ -27,4 +32,8 @@
         </form>
     </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/password_toggle.js') }}" defer></script>
 {% endblock %}

@@ -1,0 +1,62 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - Nieuwe gebruiker{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <h1>Nieuwe gebruiker</h1>
+    <p>Maak een nieuwe login aan voor het adminpaneel. Als beveiliging gaat er een meldingsmail naar de organisatiemail zodra dit account aangemaakt is.</p>
+</div>
+
+<section class="section">
+    {% if error %}
+    <p class="alert alert-error" style="margin-bottom:20px;">{{ error }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('admin.create_user') }}" method="post" class="admin-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div>
+            <label for="first_name">Voornaam</label>
+            <input type="text" id="first_name" name="first_name" value="{{ form_data.get('first_name', '') }}" required>
+        </div>
+        <div>
+            <label for="last_name">Achternaam</label>
+            <input type="text" id="last_name" name="last_name" value="{{ form_data.get('last_name', '') }}" required>
+        </div>
+        <div>
+            <label for="username">Gebruikersnaam</label>
+            <input type="text" id="username" name="username" value="{{ form_data.get('username', '') }}" required autocomplete="off">
+        </div>
+        <div>
+            <label for="email">E-mailadres</label>
+            <input type="email" id="email" name="email" value="{{ form_data.get('email', '') }}">
+        </div>
+        <div>
+            <label for="password">Wachtwoord</label>
+            <div class="password-field">
+                <input type="password" id="password" name="password" required autocomplete="new-password" minlength="8">
+                <button type="button" class="password-toggle" data-toggle-for="password" aria-label="Wachtwoord tonen" aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </div>
+            <p class="muted" style="margin:6px 0 0;font-size:13px;">Minstens 8 tekens.</p>
+        </div>
+        <div>
+            <label style="display:flex;align-items:center;gap:8px;margin-top:28px;">
+                <input type="checkbox" name="is_admin" {{ 'checked' if (not form_data) or form_data.get('is_admin') else '' }}>
+                Admin (toegang tot dit adminpaneel)
+            </label>
+        </div>
+
+        <div class="form-actions" style="grid-column:1/-1;">
+            <button type="submit" class="admin-button">Gebruiker aanmaken</button>
+            <a href="{{ url_for('admin.users') }}" class="btn btn-secondary btn-sm">Annuleren</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/password_toggle.js') }}" defer></script>
+{% endblock %}

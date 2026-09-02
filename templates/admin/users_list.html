@@ -5,10 +5,12 @@
 {% block admin_content %}
 <div class="admin-page-header">
     <h1>Gebruikers</h1>
-    <p>Read-only overzicht van de admin-gebruikers. Nieuwe admins maak je aan via <code>scripts/create_admin.py</code>.</p>
+    <p>Overzicht van de admin-gebruikers.</p>
 </div>
 
 <section class="section">
+    <p style="margin-bottom:20px;"><a href="{{ url_for('admin.create_user') }}" class="admin-button btn-sm">+ Nieuwe gebruiker</a></p>
+
     {% if users %}
     <div class="table-wrap">
         <table class="admin-table">

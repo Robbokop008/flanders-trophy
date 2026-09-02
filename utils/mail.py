@@ -1,10 +1,9 @@
 """
 utils/mail.py
 --------------
-Helperfunctie om e-mails te versturen via Gmail SMTP: enkel het
-contactformulier op deze site (de andere mailfuncties van de hoofdclubsite -
-orderbevestiging, inschrijvingen, GDPR-meldingen - horen bij functionaliteit
-die hier niet geport is).
+Helperfuncties om e-mails te versturen via Gmail SMTP: contactformulier,
+offerteaanvraag, databasebackup, en een beveiligingsmelding bij het
+aanmaken van een nieuwe admin-login (zie routes/admin.py create_user).
 """
 
 import os
@@ -74,6 +73,39 @@ def send_backup_mail(backup_pad):
     bijlage["Content-Disposition"] = f'attachment; filename="{bestandsnaam}"'
     msg.attach(bijlage)
 
+    _send(msg)
+
+
+def send_new_admin_mail(new_user, created_by):
+    """Stuurt een beveiligingsmelding naar de organisatiemail zodra een
+    nieuwe admin-login aangemaakt wordt (zie routes/admin.py create_user) -
+    zodat een onverwachte/ongeautoriseerde nieuwe admin opvalt, ongeacht wie
+    er op dat moment ingelogd was. Faalt bewust soft (zie de aanroep in
+    routes/admin.py): een mailhapering mag het aanmaken van een admin niet
+    blokkeren."""
+    gmail_user = current_app.config["GMAIL_USER"]
+
+    msg = MIMEMultipart()
+    msg["From"] = gmail_user
+    msg["To"] = gmail_user
+    msg["Subject"] = f"Beveiligingsmelding: nieuwe {'admin' if new_user.is_admin else 'gebruiker'} aangemaakt - {_veilige_header_waarde(new_user.username)}"
+
+    body = f"""
+    Er werd zonet een nieuwe login aangemaakt op de Flanders Trophy-website.
+
+    Naam: {new_user.first_name} {new_user.last_name}
+    Gebruikersnaam: {new_user.username}
+    Email: {new_user.email or '-'}
+    Admin-rechten: {'Ja' if new_user.is_admin else 'Nee'}
+
+    Aangemaakt door: {created_by.username} ({created_by.first_name} {created_by.last_name})
+    Tijdstip: {new_user.created_at.strftime('%d/%m/%Y %H:%M') if new_user.created_at else '-'}
+
+    Herken je dit niet, of kwam dit niet van jullie eigen team? Wijzig dan
+    meteen het wachtwoord van de betrokken admin-account(s) en controleer
+    de gebruikerslijst in het adminpaneel (/admin/users).
+    """
+    msg.attach(MIMEText(body, "plain"))
     _send(msg)
 
 

@@ -2,10 +2,11 @@
 routes/admin.py
 ----------------
 Adminpaneel: de generieke CMS - pagina's (opgebouwd uit blokken), navigatie
-en een read-only gebruikerslijst. Overgenomen (en flink getrimd) van de
-hoofdclubsite: dat adminpaneel beheert ook een webshop, nieuws, evenementen,
-teams, sponsors en inschrijvingen - allemaal club-specifiek en dus hier niet
-geport. Wat overblijft is de herbruikbare CMS-motor.
+en gebruikersbeheer (aanmaken/overzicht, geen bewerken/verwijderen).
+Overgenomen (en flink getrimd) van de hoofdclubsite: dat adminpaneel
+beheert ook een webshop, nieuws, evenementen, teams, sponsors en
+inschrijvingen - allemaal club-specifiek en dus hier niet geport. Wat
+overblijft is de herbruikbare CMS-motor.
 """
 
 import re
@@ -22,6 +23,7 @@ from datetime import datetime
 from extensions import db
 from models import Page, PageBlock, PAGE_BLOCK_TYPES, NavItem, NAV_ITEM_TYPES, User, OfferRequest, SiteSettings, HOME_PAGE_SLUG
 from utils.auth import admin_required
+from utils.mail import send_new_admin_mail
 from utils.sanitize import sanitize_html
 from utils.i18n import auto_translate_i18n_field
 from utils.page_blocks import block_afbeeldingsbestanden, block_documentbestanden
@@ -409,6 +411,84 @@ def dashboard():
 def users():
     all_users = User.query.order_by(User.username).all()
     return render_template("admin/users_list.html", user=g.user, users=all_users)
+
+
+@admin_bp.route("/users/create", methods=["GET", "POST"])
+@admin_required
+def create_user():
+    """Nieuwe gebruiker aanmaken vanuit het adminpaneel zelf - het alternatief
+    voor scripts/create_admin.py (dat blijft ook werken, bv. om de eerste
+    admin-login aan te maken vóór er al iemand ingelogd kan zijn)."""
+    error = None
+    form_data = {}
+
+    if request.method == "POST":
+        form_data = request.form
+        first_name = (request.form.get("first_name") or "").strip()
+        last_name = (request.form.get("last_name") or "").strip()
+        username = (request.form.get("username") or "").strip()
+        email = (request.form.get("email") or "").strip()
+        password = request.form.get("password") or ""
+        is_admin = bool(request.form.get("is_admin"))
+
+        if not first_name or not last_name or not username or not password:
+            error = "Voornaam, achternaam, gebruikersnaam en wachtwoord zijn verplicht."
+        elif len(password) < 8:
+            error = "Wachtwoord moet minstens 8 tekens lang zijn."
+        elif User.query.filter_by(username=username).first() is not None:
+            error = "Deze gebruikersnaam is al in gebruik."
+        elif email and User.query.filter_by(email=email).first() is not None:
+            error = "Dit e-mailadres is al in gebruik."
+        else:
+            new_user = User(
+                first_name=first_name, last_name=last_name,
+                username=username, email=email or None,
+                is_admin=is_admin,
+            )
+            new_user.set_password(password)
+            db.session.add(new_user)
+            db.session.commit()
+
+            try:
+                send_new_admin_mail(new_user, created_by=g.user)
+            except Exception as exc:
+                # Beveiligingsmelding is een extra laag, geen harde vereiste -
+                # een mailhapering mag het aanmaken van de gebruiker zelf niet
+                # blokkeren (zelfde afweging als bij contact/offerteaanvraag).
+                current_app.logger.error(f"Kon beveiligingsmelding voor nieuwe gebruiker niet versturen: {exc}")
+
+            return redirect(url_for("admin.users"))
+
+    return render_template("admin/user_form.html", user=g.user, error=error, form_data=form_data)
+
+
+@admin_bp.route("/account", methods=["GET", "POST"])
+@admin_required
+def account():
+    """Eigen wachtwoord wijzigen. Vereist het huidige wachtwoord - dit is
+    geen 'wachtwoord vergeten'-stroom (die bestaat hier bewust niet, zie
+    routes/auth.py), enkel een ingelogde admin die zijn eigen wachtwoord
+    kent en wil aanpassen."""
+    error = None
+    success = None
+
+    if request.method == "POST":
+        current_password = request.form.get("current_password") or ""
+        new_password = request.form.get("new_password") or ""
+        confirm_password = request.form.get("confirm_password") or ""
+
+        if not g.user.check_password(current_password):
+            error = "Huidig wachtwoord is onjuist."
+        elif len(new_password) < 8:
+            error = "Nieuw wachtwoord moet minstens 8 tekens lang zijn."
+        elif new_password != confirm_password:
+            error = "De bevestiging komt niet overeen met het nieuwe wachtwoord."
+        else:
+            g.user.set_password(new_password)
+            db.session.commit()
+            success = "Je wachtwoord is gewijzigd."
+
+    return render_template("admin/account.html", user=g.user, error=error, success=success)
 
 
 # ---------------------------------------------------------------------------
