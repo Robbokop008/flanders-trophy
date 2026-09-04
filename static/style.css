@@ -90,15 +90,48 @@ main { display: block; flex: 1 0 auto; }
 .header-sponsors { order: 2; margin-left: auto; }
 .cart-icon { order: 3; }
 .lang-switcher-bar { order: 3; margin-left: auto; }
+.lang-switcher-compact { order: 3; margin-left: auto; }
 .menu-toggle { order: 4; }
 
-/* Taalwisselaar (EN/NL/FR/DE): compacte "NL ▾"-knop rechtstreeks in de
-   navbar, los van het hamburger-klapmenu - op elke schermbreedte in één
-   klik bereikbaar i.p.v. eerst het hamburgermenu te moeten openklappen.
-   Hergebruikt het .has-dropdown/.dropdown-toggle/.dropdown-mechaniek
+/* Taalwisselaar (EN/NL/FR/DE): op ruimere schermen staan alle talen naast
+   elkaar, rechtstreeks klikbaar (.lang-switcher-bar). Op erg smalle
+   schermen is daar geen plaats meer voor naast logo + hamburger - de
+   media query bij RESPONSIVE NAV verderop wisselt dan naar de compacte
+   "NL ▾"-knop met eigen dropdown (.lang-switcher-compact hieronder), zodat
+   je nooit eerst het hamburgermenu moet openklappen om van taal te
+   wisselen. */
+.lang-switcher-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lang-switcher-bar a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.lang-switcher-bar a:hover,
+.lang-switcher-bar a.active { color: var(--white); }
+
+.lang-switcher-bar .lang-sep { color: rgba(255, 255, 255, 0.3); font-size: 13px; }
+
+.lang-switcher-compact { display: none; }
+
+/* Hergebruikt het .has-dropdown/.dropdown-toggle/.dropdown-mechaniek
    (incl. pijltje en klik-JS) van de navigatiecategorieën hieronder bij
    NAV-PANEEL - enkel de positionering hier is anders, want deze dropdown
-   hangt los in de navbar i.p.v. binnenin het verticale #nav-menu-paneel. */
+   moet los over de pagina zweven i.p.v. mee te schuiven binnenin het
+   verticale #nav-menu-paneel. De selector hieronder is bewust
+   ".lang-switcher-compact .lang-switcher-dropdown" i.p.v. gewoon
+   ".lang-switcher-dropdown": zo wint deze regel altijd van de latere,
+   even specifieke ".dropdown { position: static }" bij NAV-PANEEL - zonder
+   die extra specificiteit viel de dropdown terug in de normale
+   pagina-doorstroom (position: static), wat de knop deed opspringen en een
+   gat in de navbar duwde in plaats van los over de pagina te zweven. */
 .lang-switcher-toggle {
   width: auto;
   gap: 6px;
@@ -109,7 +142,7 @@ main { display: block; flex: 1 0 auto; }
   letter-spacing: 0.02em;
 }
 
-.lang-switcher-dropdown {
+.lang-switcher-compact .lang-switcher-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
@@ -2444,7 +2477,9 @@ nav#nav-menu > ul {
    winkelmandje) niet op één rij naast elkaar - de hoofdsponsor-logo's
    vallen dan naar een eigen, gecentreerde tweede rij i.p.v. te verdwijnen
    (ze staan nergens anders meer op de site sinds de sponsorstrook op de
-   homepage weg is). */
+   homepage weg is). Ook geen plaats meer voor de volledige "EN | NL | FR |
+   DE"-balk naast logo + hamburger - die wisselt hier naar de compacte
+   "NL ▾"-knop (zie .lang-switcher-bar/.lang-switcher-compact hierboven). */
 @media (max-width: 480px) {
   .site-header { padding: 0 16px; }
   .navbar { gap: 12px; flex-wrap: wrap; row-gap: 10px; }
@@ -2452,6 +2487,9 @@ nav#nav-menu > ul {
   .brand-badge { height: 38px; }
   .brand-text-line1 { font-size: 16px; }
   .brand-text-line2 { font-size: 12px; }
+
+  .lang-switcher-bar { display: none; }
+  .lang-switcher-compact { display: block; }
 }
 
 /* =========================================================

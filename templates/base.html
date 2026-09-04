@@ -40,13 +40,26 @@
                 </span>
             </a>
 
-            {# Compacte "NL ▾"-knop, altijd rechtstreeks klikbaar in de navbar
-               (los van het hamburger-klapmenu) - hergebruikt hetzelfde
-               .has-dropdown/.dropdown-toggle/.dropdown-mechaniek (incl. de
-               klik-JS onderaan dit bestand) als de navigatiecategorieën
-               hieronder, enkel met eigen positionering (zie
-               .lang-switcher-toggle/.lang-switcher-dropdown in style.css). #}
-            <div class="lang-switcher-bar has-dropdown">
+            {# Op ruimere schermen: alle talen naast elkaar, rechtstreeks
+               klikbaar (.lang-switcher-bar). Op erg smalle schermen is
+               daar geen plaats meer voor naast logo + hamburger - daar
+               wijkt dit uit naar een compacte "NL ▾"-knop met eigen
+               dropdown (.lang-switcher-compact hieronder); welke van de
+               twee getoond wordt, bepaalt de media query bij
+               .lang-switcher-bar/.lang-switcher-compact in style.css. #}
+            <div class="lang-switcher-bar">
+                {% for code, name in languages.items() %}
+                <a href="{{ url_for('main.set_language', lang_code=code, next=request.path) }}"{% if code == current_lang %} class="active"{% endif %}>{{ code|upper }}</a>{% if not loop.last %}<span class="lang-sep">|</span>{% endif %}
+                {% endfor %}
+            </div>
+
+            {# Hergebruikt hetzelfde .has-dropdown/.dropdown-toggle/.dropdown-
+               mechaniek (incl. de klik-JS onderaan dit bestand) als de
+               navigatiecategorieën hieronder, enkel met eigen positionering
+               (zie .lang-switcher-toggle/.lang-switcher-dropdown in
+               style.css) zodat de opties los over de pagina zweven i.p.v.
+               de rest van de navbar naar beneden te duwen. #}
+            <div class="lang-switcher-compact has-dropdown">
                 <button type="button" class="dropdown-toggle lang-switcher-toggle" aria-expanded="false">{{ current_lang|upper }}</button>
                 <ul class="dropdown lang-switcher-dropdown">
                     {% for code, name in languages.items() %}
