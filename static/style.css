@@ -92,30 +92,37 @@ main { display: block; flex: 1 0 auto; }
 .lang-switcher-bar { order: 3; margin-left: auto; }
 .menu-toggle { order: 4; }
 
-/* Taalwisselaar (EN/NL/FR/DE) rechtstreeks in de navbar, los van het
-   hamburger-klapmenu - enkel op erg smalle schermen wijkt dit uit naar de
-   .lang-switcher-mobile-kopie binnenin #nav-menu (zie de media query bij
-   RESPONSIVE NAV verderop, en templates/base.html). */
-.lang-switcher-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.lang-switcher-bar a {
-  color: rgba(255, 255, 255, 0.7);
+/* Taalwisselaar (EN/NL/FR/DE): compacte "NL ▾"-knop rechtstreeks in de
+   navbar, los van het hamburger-klapmenu - op elke schermbreedte in één
+   klik bereikbaar i.p.v. eerst het hamburgermenu te moeten openklappen.
+   Hergebruikt het .has-dropdown/.dropdown-toggle/.dropdown-mechaniek
+   (incl. pijltje en klik-JS) van de navigatiecategorieën hieronder bij
+   NAV-PANEEL - enkel de positionering hier is anders, want deze dropdown
+   hangt los in de navbar i.p.v. binnenin het verticale #nav-menu-paneel. */
+.lang-switcher-toggle {
+  width: auto;
+  gap: 6px;
+  padding: 6px 4px;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
   font-weight: 700;
-  text-decoration: none;
   letter-spacing: 0.02em;
 }
 
-.lang-switcher-bar a:hover,
-.lang-switcher-bar a.active { color: var(--white); }
+.lang-switcher-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin: 8px 0 0;
+  min-width: 140px;
+  background: var(--blue-dark);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-hover);
+  padding: 6px;
+  z-index: 30;
+}
 
-.lang-switcher-bar .lang-sep { color: rgba(255, 255, 255, 0.3); font-size: 13px; }
-
-#nav-menu .lang-switcher-mobile { display: none; }
+.lang-switcher-dropdown li a.active { font-weight: 700; }
 
 .brand {
   display: flex;
@@ -2431,14 +2438,6 @@ nav#nav-menu > ul {
   .hero, .hero.hero-short { padding: 40px 20px; }
   .hero h1 { font-size: 30px; }
   .section { padding: 36px 20px; }
-}
-
-/* Op erg smalle schermen is er geen plaats meer voor logo + "EN | NL | FR |
-   DE" + hamburger naast elkaar - de taalwisselaar wijkt dan uit naar een
-   kopie binnenin het klapmenu (zie templates/base.html). */
-@media (max-width: 480px) {
-  .lang-switcher-bar { display: none; }
-  #nav-menu .lang-switcher-mobile { display: block; }
 }
 
 /* Op erg smalle schermen past de kop (brand + sponsors + hamburger +
