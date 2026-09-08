@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-01 16:59+0200\n"
+"POT-Creation-Date: 2026-09-08 16:17+0200\n"
 "PO-Revision-Date: 2026-08-21 11:47+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -18,31 +18,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: routes/main.py:200
+#: routes/main.py:27
+msgid "General questions"
+msgstr "Questions générales"
+
+#: routes/main.py:28
+msgid "Registration / Offers"
+msgstr "Inscription / Offres"
+
+#: routes/main.py:29
+msgid "Referees"
+msgstr "Arbitres"
+
+#: routes/main.py:30
+msgid "Parade"
+msgstr "Parade"
+
+#: routes/main.py:31
+msgid "During tournament"
+msgstr "Pendant le tournoi"
+
+#: routes/main.py:224
 msgid "Please fill in all fields correctly (with a valid email address)."
 msgstr ""
 "Veuillez remplir correctement tous les champs (avec une adresse e-mail "
 "valide)."
 
-#: routes/main.py:210
+#: routes/main.py:234
 msgid "Your message has been sent successfully."
 msgstr "Votre message a été envoyé avec succès."
 
-#: routes/offers.py:74
+#: routes/offers.py:81
 msgid "Please fill in club, country, contact person and email address."
 msgstr ""
 "Veuillez indiquer le club, le pays, la personne de contact et l'adresse "
 "e-mail."
 
-#: routes/offers.py:76
+#: routes/offers.py:83
 msgid "Please enter a valid email address."
 msgstr "Veuillez saisir une adresse e-mail valide."
 
-#: routes/offers.py:78
+#: routes/offers.py:85
 msgid "Please fill in at least one team in at least one category."
 msgstr "Veuillez indiquer au moins une équipe dans au moins une catégorie."
 
-#: templates/base.html:12
+#: templates/base.html:13
 msgid ""
 "The biggest international handball tournament in the BeNeLux, held every "
 "year in Sint-Truiden."
@@ -50,31 +70,31 @@ msgstr ""
 "Le plus grand tournoi international de handball du Benelux, organisé "
 "chaque année à Sint-Truiden."
 
-#: templates/base.html:104
+#: templates/base.html:111
 msgid "International Easter handball tournament in Sint-Truiden."
 msgstr "Tournoi international de handball de Pâques à Sint-Truiden."
 
-#: templates/base.html:108 templates/contact.html:7
+#: templates/base.html:115 templates/contact.html:7
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/base.html:110
+#: templates/base.html:117
 msgid "Contact us"
 msgstr "Contactez-nous"
 
-#: templates/base.html:112 templates/base.html:133
+#: templates/base.html:119 templates/base.html:140
 msgid "Privacy policy"
 msgstr "Politique de confidentialité"
 
-#: templates/base.html:115
+#: templates/base.html:122
 msgid "Cookie settings"
 msgstr "Paramètres des cookies"
 
-#: templates/base.html:121
+#: templates/base.html:128
 msgid "All rights reserved."
 msgstr "Tous droits réservés."
 
-#: templates/base.html:132
+#: templates/base.html:139
 msgid ""
 "We use cookies to understand how visitors use this website (Google "
 "Analytics). We only do this with your permission."
@@ -83,11 +103,11 @@ msgstr ""
 "utilisent ce site (Google Analytics). Nous ne le faisons qu'avec votre "
 "permission."
 
-#: templates/base.html:136
+#: templates/base.html:143
 msgid "Reject"
 msgstr "Refuser"
 
-#: templates/base.html:137
+#: templates/base.html:144
 msgid "Accept"
 msgstr "Accepter"
 
@@ -119,15 +139,23 @@ msgstr "Message"
 msgid "Send message"
 msgstr "Envoyer le message"
 
-#: templates/index.html:21
+#: templates/index.html:22
+msgid "Sold out"
+msgstr "Complet"
+
+#: templates/index.html:24
+msgid "Request your Offer soon"
+msgstr "Demandez bientôt votre offre"
+
+#: templates/index.html:26
 msgid "Request your Offer"
 msgstr "Demandez votre offre"
 
-#: templates/index.html:41
+#: templates/index.html:47
 msgid "Worldwide"
 msgstr "Dans le monde entier"
 
-#: templates/index.html:42
+#: templates/index.html:48
 msgid "Handball"
 msgstr "Handball"
 
@@ -389,21 +417,6 @@ msgstr "Demander mon offre"
 
 #~ msgid "Downloads"
 #~ msgstr "Téléchargements"
-
-#~ msgid "General questions"
-#~ msgstr "Questions générales"
-
-#~ msgid "Registration / Offers"
-#~ msgstr "Inscription / Offres"
-
-#~ msgid "Referees"
-#~ msgstr "Arbitres"
-
-#~ msgid "Parade"
-#~ msgstr "Parade"
-
-#~ msgid "During tournament"
-#~ msgstr "Pendant le tournoi"
 
 #~ msgid "Women U15"
 #~ msgstr "Femmes U15"

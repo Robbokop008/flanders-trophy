@@ -17,6 +17,19 @@ main_bp = Blueprint("main", __name__)
 
 CONTACT_TOPICS = ["General questions", "Registration / Offers", "Referees", "Parade", "During tournament"]
 
+# contact.html vertaalt elk onderwerp via {{ _(t) }} met t als variabele -
+# pybabel's extractor herkent enkel _()-aanroepen met een letterlijke string
+# als argument, dus zonder dit blok (nooit uitgevoerd) verdwijnen deze 5
+# strings telkens weer als "obsolete" uit translations/*/LC_MESSAGES/messages.po
+# bij de volgende `pybabel extract`/`update`, en blijft het dropdown-menu
+# onvertaald staan.
+if False:
+    _("General questions")
+    _("Registration / Offers")
+    _("Referees")
+    _("Parade")
+    _("During tournament")
+
 
 def _get_or_create_home_page():
     """De homepage-tekst (tagline, kerncijfers, "Who can participate?",
@@ -182,6 +195,17 @@ def set_language(lang_code):
     if not next_url.startswith("/") or next_url.startswith("//"):
         next_url = url_for("main.home")
     return redirect(next_url)
+
+
+@main_bp.route("/<any(nl, en, fr, de):lang_code>")
+def legacy_language_redirect(lang_code):
+    """De vorige site gebruikte taal-voorvoegsels in de URL (bv. /nl), nog
+    geïndexeerd in Google - deze site kiest de taal via een sessie-cookie
+    i.p.v. URL-prefixen, dus zonder deze route geven die oude links een 404.
+    Permanente redirect i.p.v. 404, zodat bestaande zoekresultaten en
+    bladwijzers naar de juiste pagina (in de juiste taal) doorverwijzen."""
+    session["lang"] = lang_code
+    return redirect(url_for("main.home"), code=301)
 
 
 @main_bp.route("/contact", methods=["GET", "POST"])

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-01 16:59+0200\n"
+"POT-Creation-Date: 2026-09-08 16:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,67 +17,87 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: routes/main.py:200
+#: routes/main.py:27
+msgid "General questions"
+msgstr ""
+
+#: routes/main.py:28
+msgid "Registration / Offers"
+msgstr ""
+
+#: routes/main.py:29
+msgid "Referees"
+msgstr ""
+
+#: routes/main.py:30
+msgid "Parade"
+msgstr ""
+
+#: routes/main.py:31
+msgid "During tournament"
+msgstr ""
+
+#: routes/main.py:224
 msgid "Please fill in all fields correctly (with a valid email address)."
 msgstr ""
 
-#: routes/main.py:210
+#: routes/main.py:234
 msgid "Your message has been sent successfully."
 msgstr ""
 
-#: routes/offers.py:74
+#: routes/offers.py:81
 msgid "Please fill in club, country, contact person and email address."
 msgstr ""
 
-#: routes/offers.py:76
+#: routes/offers.py:83
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: routes/offers.py:78
+#: routes/offers.py:85
 msgid "Please fill in at least one team in at least one category."
 msgstr ""
 
-#: templates/base.html:12
+#: templates/base.html:13
 msgid ""
 "The biggest international handball tournament in the BeNeLux, held every "
 "year in Sint-Truiden."
 msgstr ""
 
-#: templates/base.html:104
+#: templates/base.html:111
 msgid "International Easter handball tournament in Sint-Truiden."
 msgstr ""
 
-#: templates/base.html:108 templates/contact.html:7
+#: templates/base.html:115 templates/contact.html:7
 msgid "Contact"
 msgstr ""
 
-#: templates/base.html:110
+#: templates/base.html:117
 msgid "Contact us"
 msgstr ""
 
-#: templates/base.html:112 templates/base.html:133
+#: templates/base.html:119 templates/base.html:140
 msgid "Privacy policy"
 msgstr ""
 
-#: templates/base.html:115
+#: templates/base.html:122
 msgid "Cookie settings"
 msgstr ""
 
-#: templates/base.html:121
+#: templates/base.html:128
 msgid "All rights reserved."
 msgstr ""
 
-#: templates/base.html:132
+#: templates/base.html:139
 msgid ""
 "We use cookies to understand how visitors use this website (Google "
 "Analytics). We only do this with your permission."
 msgstr ""
 
-#: templates/base.html:136
+#: templates/base.html:143
 msgid "Reject"
 msgstr ""
 
-#: templates/base.html:137
+#: templates/base.html:144
 msgid "Accept"
 msgstr ""
 
@@ -107,15 +127,23 @@ msgstr ""
 msgid "Send message"
 msgstr ""
 
-#: templates/index.html:21
+#: templates/index.html:22
+msgid "Sold out"
+msgstr ""
+
+#: templates/index.html:24
+msgid "Request your Offer soon"
+msgstr ""
+
+#: templates/index.html:26
 msgid "Request your Offer"
 msgstr ""
 
-#: templates/index.html:41
+#: templates/index.html:47
 msgid "Worldwide"
 msgstr ""
 
-#: templates/index.html:42
+#: templates/index.html:48
 msgid "Handball"
 msgstr ""
 

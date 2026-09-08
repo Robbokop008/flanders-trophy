@@ -253,6 +253,13 @@ nav#nav-menu a {
 
 nav#nav-menu a:hover { color: var(--white); }
 
+.nav-link-disabled {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  cursor: default;
+}
+
 .cart-icon {
   font-size: 22px;
   text-decoration: none;
@@ -1088,6 +1095,12 @@ form textarea { min-height: 120px; resize: vertical; }
 }
 
 .hp-pill-offer:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+.hp-pill-offer[aria-disabled="true"] {
+  cursor: default;
+}
+
+.hp-pill-offer[aria-disabled="true"]:hover { filter: none; transform: none; }
 
 .hp-intro-inner {
   position: relative;
@@ -2122,8 +2135,19 @@ body.content-page, body.auth-page { background: var(--blue); }
 }
 
 .admin-form h3 { grid-column: 1 / -1; margin: 0 0 4px; color: var(--blue); }
+.admin-form h3:not(:first-child) { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 4px; }
 .admin-form textarea { grid-column: 1 / -1; }
 .admin-form .btn, .admin-form .admin-button { grid-column: 1 / -1; justify-self: start; margin-top: 20px; }
+
+.admin-form-photos {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 700px) {
+  .admin-form-photos { grid-template-columns: 1fr; }
+}
 
 .checkbox-field { grid-column: 1 / -1; margin: 6px 0; }
 .checkbox-field label {

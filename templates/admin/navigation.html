@@ -13,7 +13,8 @@
   .nav-type-badge { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); background: var(--blue-light); padding: 2px 8px; border-radius: 20px; }
   .nav-item-edit-form { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1; }
   .nav-item-edit-form input[type=text], .nav-item-edit-form select { padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; }
-  .nav-item-edit-form input[name=label] { min-width: 160px; font-weight: 600; }
+  .nav-item-edit-form input.nav-label-input { min-width: 110px; }
+  .nav-item-edit-form input.nav-label-input-primary { min-width: 160px; font-weight: 600; }
   .nav-item-actions { display: flex; align-items: center; gap: 6px; margin-left: auto; }
   .nav-item-actions form { display: inline-flex; }
   .nav-move-form select { padding: 4px 6px; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
@@ -39,10 +40,12 @@
     <h2 class="section-title" style="margin-bottom:12px;">Nieuw navigatie-item</h2>
     <form action="{{ url_for('admin.add_nav_item') }}" method="post" class="nav-add-form" id="add-nav-form">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {% for code, name in languages.items() %}
         <div>
-            <label for="add-label">Label</label>
-            <input type="text" id="add-label" name="label" required>
+            <label for="add-label-{{ code }}">Label ({{ name }}){% if code != 'nl' %} <span class="muted" style="font-weight:400;">(optioneel — wordt automatisch vertaald)</span>{% endif %}</label>
+            <input type="text" id="add-label-{{ code }}" name="label_{{ code }}"{% if code == 'nl' %} required{% endif %}>
         </div>
+        {% endfor %}
         <div>
             <label for="add-type">Type</label>
             <select id="add-type" name="item_type">

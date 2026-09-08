@@ -18,7 +18,13 @@
         <div class="hp-hero-buttons">
             <a class="hp-pill hp-pill-social" href="{{ site_settings.instagram_url or '#' }}" target="_blank" rel="noopener">Instagram</a>
             <a class="hp-pill hp-pill-social" href="{{ site_settings.facebook_url or '#' }}" target="_blank" rel="noopener">Facebook</a>
+            {% if site_settings.offer_status == 'sold_out' %}
+            <span class="hp-pill hp-pill-offer" aria-disabled="true">{{ _('Sold out') }}</span>
+            {% elif site_settings.offer_status == 'coming_soon' %}
+            <span class="hp-pill hp-pill-offer" aria-disabled="true">{{ _('Request your Offer soon') }}</span>
+            {% else %}
             <a class="hp-pill hp-pill-offer" href="{{ url_for('offers.request_offer') }}">{{ _('Request your Offer') }}</a>
+            {% endif %}
         </div>
     </div>
 </section>

@@ -5,7 +5,7 @@
 {% block admin_content %}
 <div class="admin-page-header">
     <h1>Home-pagina</h1>
-    <p>Social-links en de 3 foto's in de fotostrook onderaan de homepage.</p>
+    <p>Social-links, de "Request your Offer"-knop en de 3 foto's in de fotostrook onderaan de homepage.</p>
 </div>
 
 <section class="section">
@@ -16,6 +16,7 @@
     <form action="{{ url_for('admin.home_settings') }}" method="post" class="admin-form" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
+        <h3>Social links</h3>
         <div>
             <label for="instagram_url">Instagram-link</label>
             <input type="text" id="instagram_url" name="instagram_url" value="{{ settings.instagram_url or '' }}" placeholder="https://instagram.com/...">
@@ -25,19 +26,36 @@
             <input type="text" id="facebook_url" name="facebook_url" value="{{ settings.facebook_url or '' }}" placeholder="https://facebook.com/...">
         </div>
 
-        {% for field, label in [('photo_1', 'Foto 1'), ('photo_2', 'Foto 2'), ('photo_3', 'Foto 3')] %}
-        <div>
-            <label for="{{ field }}">{{ label }}</label>
-            <input type="file" id="{{ field }}" name="{{ field }}" accept="image/*">
-            {% set current = settings[field] %}
-            {% if current %}
-            <p class="muted" style="margin:6px 0 0;">
-                <img src="{{ url_for('static', filename='images/' + current) }}" alt="" style="height:60px;border-radius:var(--radius-sm);display:block;margin-bottom:4px;">
-                <label class="checkbox-inline"><input type="checkbox" name="{{ field }}_remove"> Verwijderen</label>
+        <h3>"Request your Offer"-knop</h3>
+        <div style="grid-column:1/-1;">
+            <label for="offer_status">Status</label>
+            <select id="offer_status" name="offer_status">
+                <option value="coming_soon" {% if settings.offer_status == 'coming_soon' %}selected{% endif %}>Nog niet beschikbaar</option>
+                <option value="available" {% if settings.offer_status == 'available' %}selected{% endif %}>Beschikbaar</option>
+                <option value="sold_out" {% if settings.offer_status == 'sold_out' %}selected{% endif %}>Niet meer beschikbaar (sold out)</option>
+            </select>
+            <p class="muted" style="margin:6px 0 0;font-size:13px;">
+                "Nog niet beschikbaar" toont "Request your Offer soon", "Beschikbaar" toont de normale knop, "Niet meer
+                beschikbaar" toont "Sold out". Bij de eerste en laatste stand is het aanvraagformulier niet bereikbaar.
             </p>
-            {% endif %}
         </div>
-        {% endfor %}
+
+        <h3>Fotostrook</h3>
+        <div class="admin-form-photos">
+            {% for field, label in [('photo_1', 'Foto 1'), ('photo_2', 'Foto 2'), ('photo_3', 'Foto 3')] %}
+            <div>
+                <label for="{{ field }}">{{ label }}</label>
+                {% set current = settings[field] %}
+                {% if current %}
+                <img src="{{ url_for('static', filename='images/' + current) }}" alt="" style="height:60px;border-radius:var(--radius-sm);display:block;margin-bottom:6px;">
+                {% endif %}
+                <input type="file" id="{{ field }}" name="{{ field }}" accept="image/*">
+                {% if current %}
+                <label class="checkbox-inline" style="margin-top:6px;"><input type="checkbox" name="{{ field }}_remove"> Verwijderen</label>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
 
         <div class="form-actions" style="grid-column:1/-1;">
             <button type="submit" class="admin-button">Opslaan</button>

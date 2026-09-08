@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-01 16:59+0200\n"
+"POT-Creation-Date: 2026-09-08 16:17+0200\n"
 "PO-Revision-Date: 2026-08-21 11:47+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -18,73 +18,93 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: routes/main.py:200
+#: routes/main.py:27
+msgid "General questions"
+msgstr "Allgemeine Fragen"
+
+#: routes/main.py:28
+msgid "Registration / Offers"
+msgstr "Anmeldung / Angebote"
+
+#: routes/main.py:29
+msgid "Referees"
+msgstr "Schiedsrichter"
+
+#: routes/main.py:30
+msgid "Parade"
+msgstr "Parade"
+
+#: routes/main.py:31
+msgid "During tournament"
+msgstr "Während des Turniers"
+
+#: routes/main.py:224
 msgid "Please fill in all fields correctly (with a valid email address)."
 msgstr ""
 "Bitte füllen Sie alle Felder korrekt aus (mit einer gültigen E-Mail-"
 "Adresse)."
 
-#: routes/main.py:210
+#: routes/main.py:234
 msgid "Your message has been sent successfully."
 msgstr "Ihre Nachricht wurde erfolgreich gesendet."
 
-#: routes/offers.py:74
+#: routes/offers.py:81
 msgid "Please fill in club, country, contact person and email address."
 msgstr "Bitte geben Sie Verein, Land, Ansprechpartner und E-Mail-Adresse an."
 
-#: routes/offers.py:76
+#: routes/offers.py:83
 msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
-#: routes/offers.py:78
+#: routes/offers.py:85
 msgid "Please fill in at least one team in at least one category."
 msgstr "Bitte geben Sie mindestens ein Team in mindestens einer Kategorie an."
 
-#: templates/base.html:12
+#: templates/base.html:13
 msgid ""
 "The biggest international handball tournament in the BeNeLux, held every "
 "year in Sint-Truiden."
 msgstr ""
-"Das größte internationale Handballturnier der Beneluxstaaten, jährlich in "
-"Sint-Truiden."
+"Das größte internationale Handballturnier der Beneluxstaaten, jährlich in"
+" Sint-Truiden."
 
-#: templates/base.html:104
+#: templates/base.html:111
 msgid "International Easter handball tournament in Sint-Truiden."
 msgstr "Internationales Osterhandballturnier in Sint-Truiden."
 
-#: templates/base.html:108 templates/contact.html:7
+#: templates/base.html:115 templates/contact.html:7
 msgid "Contact"
 msgstr "Kontakt"
 
-#: templates/base.html:110
+#: templates/base.html:117
 msgid "Contact us"
 msgstr "Kontaktieren Sie uns"
 
-#: templates/base.html:112 templates/base.html:133
+#: templates/base.html:119 templates/base.html:140
 msgid "Privacy policy"
 msgstr "Datenschutzerklärung"
 
-#: templates/base.html:115
+#: templates/base.html:122
 msgid "Cookie settings"
 msgstr "Cookie-Einstellungen"
 
-#: templates/base.html:121
+#: templates/base.html:128
 msgid "All rights reserved."
 msgstr "Alle Rechte vorbehalten."
 
-#: templates/base.html:132
+#: templates/base.html:139
 msgid ""
 "We use cookies to understand how visitors use this website (Google "
 "Analytics). We only do this with your permission."
 msgstr ""
-"Wir verwenden Cookies, um zu verstehen, wie Besucher diese Website nutzen "
-"(Google Analytics). Das tun wir nur mit Ihrer Zustimmung."
+"Wir verwenden Cookies, um zu verstehen, wie Besucher diese Website nutzen"
+" (Google Analytics). Das tun wir nur mit Ihrer Zustimmung."
 
-#: templates/base.html:136
+#: templates/base.html:143
 msgid "Reject"
 msgstr "Ablehnen"
 
-#: templates/base.html:137
+#: templates/base.html:144
 msgid "Accept"
 msgstr "Akzeptieren"
 
@@ -116,15 +136,23 @@ msgstr "Nachricht"
 msgid "Send message"
 msgstr "Nachricht senden"
 
-#: templates/index.html:21
+#: templates/index.html:22
+msgid "Sold out"
+msgstr "Ausverkauft"
+
+#: templates/index.html:24
+msgid "Request your Offer soon"
+msgstr "Bald Angebot anfordern"
+
+#: templates/index.html:26
 msgid "Request your Offer"
 msgstr "Angebot anfordern"
 
-#: templates/index.html:41
+#: templates/index.html:47
 msgid "Worldwide"
 msgstr "Weltweit"
 
-#: templates/index.html:42
+#: templates/index.html:48
 msgid "Handball"
 msgstr "Handball"
 
@@ -385,21 +413,6 @@ msgstr "Mein Angebot anfordern"
 
 #~ msgid "Downloads"
 #~ msgstr "Downloads"
-
-#~ msgid "General questions"
-#~ msgstr "Allgemeine Fragen"
-
-#~ msgid "Registration / Offers"
-#~ msgstr "Anmeldung / Angebote"
-
-#~ msgid "Referees"
-#~ msgstr "Schiedsrichter"
-
-#~ msgid "Parade"
-#~ msgstr "Parade"
-
-#~ msgid "During tournament"
-#~ msgstr "Während des Turniers"
 
 #~ msgid "Women U15"
 #~ msgstr "Frauen U15"

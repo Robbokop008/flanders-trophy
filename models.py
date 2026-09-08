@@ -78,6 +78,12 @@ class NavItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey("nav_items.id"), nullable=True)
     label = db.Column(db.String(100), nullable=False)
+    # Vertaald label per taal ({"en": ..., "nl": ..., "fr": ..., "de": ...},
+    # zelfde patroon als Page.title_i18n), automatisch aangevuld via DeepL
+    # (zie routes/admin.py add_nav_item/edit_nav_item). De kolom hierboven
+    # ('label') blijft daarnaast bestaan als platte spiegelkolom voor de
+    # interne navigatie-adminlijst (templates/admin/navigation.html).
+    label_i18n = db.Column(db.JSON, nullable=True)
     position = db.Column(db.Integer, nullable=False, default=0)
     item_type = db.Column(db.String(20), nullable=False)
 
@@ -213,11 +219,22 @@ NIGHTS_CHOICES = [
 ]
 
 
+#: Standen van de "Request your Offer"-knop op de homepage (zie
+#: routes/admin.py home_settings, templates/admin/home_settings.html,
+#: templates/index.html en routes/offers.py request_offer). Bepaalt zowel de
+#: knoptekst als of het aanvraagformulier bereikbaar is.
+OFFER_STATUS_COMING_SOON = "coming_soon"
+OFFER_STATUS_AVAILABLE = "available"
+OFFER_STATUS_SOLD_OUT = "sold_out"
+OFFER_STATUS_CHOICES = [OFFER_STATUS_COMING_SOON, OFFER_STATUS_AVAILABLE, OFFER_STATUS_SOLD_OUT]
+
+
 class SiteSettings(db.Model):
     """Singleton-rij (id altijd 1) met een handvol site-brede instellingen die
     een admin via het adminpaneel kan aanpassen zonder in de code te moeten -
-    momenteel enkel de social-mediakoppelingen in de homepage-hero (zie
-    routes/admin.py home_settings en templates/index.html)."""
+    de social-mediakoppelingen in de homepage-hero en de status van de
+    "Request your Offer"-knop (zie routes/admin.py home_settings en
+    templates/index.html)."""
     __tablename__ = "site_settings"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -229,6 +246,7 @@ class SiteSettings(db.Model):
     photo_1 = db.Column(db.String(255))
     photo_2 = db.Column(db.String(255))
     photo_3 = db.Column(db.String(255))
+    offer_status = db.Column(db.String(20), nullable=False, default=OFFER_STATUS_AVAILABLE)
 
     @classmethod
     def get(cls):

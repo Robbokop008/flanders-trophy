@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Flanders Trophy{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/FHT.ico') }}">
 
     {# Standaard-omschrijving (site-brede fallback); een pagina overschrijft
        dit blok met een omschrijving afgeleid uit haar eigen inhoud - zie
@@ -84,12 +85,16 @@
                                 {% for child in item.children %}
                                     {% if child.item_type == 'divider' %}
                                     <li class="dropdown-group-label">{{ _(child.label) }}</li>
+                                    {% elif child.disabled %}
+                                    <li><span class="nav-link-disabled" aria-disabled="true">{{ child.label }}</span></li>
                                     {% else %}
                                     <li><a href="{{ child.url }}"{% if child.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ _(child.label) }}</a></li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
                         </li>
+                        {% elif item.disabled %}
+                        <li><span class="nav-link-disabled" aria-disabled="true">{{ item.label }}</span></li>
                         {% else %}
                         <li><a href="{{ item.url }}"{% if item.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ _(item.label) }}</a></li>
                         {% endif %}

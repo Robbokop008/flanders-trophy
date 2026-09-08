@@ -5,7 +5,9 @@
 
         <form action="{{ url_for('admin.edit_nav_item', item_id=item.id) }}" method="post" class="nav-item-edit-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="text" name="label" value="{{ item.label }}" required>
+            {% for code, name in languages.items() %}
+            <input type="text" name="label_{{ code }}" value="{{ i18n_raw(item.label_i18n, code) }}"{% if code == 'nl' %} required{% endif %} placeholder="Label ({{ name }})" title="Label ({{ name }}){% if code != 'nl' %} - optioneel, wordt automatisch vertaald{% endif %}" class="nav-label-input{{ ' nav-label-input-primary' if code == 'nl' else '' }}">
+            {% endfor %}
 
             {% if item.item_type == 'page' %}
             <select name="page_id">

@@ -12,11 +12,11 @@ bevestiging tonen op het scherm - er gaat bewust geen automatische
 bevestigingsmail naar de club zelf (zie module-docstring van send_offer_request_mail).
 """
 
-from flask import Blueprint, render_template, request, current_app
+from flask import Blueprint, render_template, request, current_app, redirect, url_for
 from flask_babel import gettext as _
 
 from extensions import db, limiter
-from models import OfferRequest, TARIFF_CHOICES, NIGHTS_CHOICES
+from models import OfferRequest, TARIFF_CHOICES, NIGHTS_CHOICES, SiteSettings, OFFER_STATUS_AVAILABLE
 from utils.mail import send_offer_request_mail
 
 offers_bp = Blueprint("offers", __name__)
@@ -62,6 +62,13 @@ def _form_values():
 @offers_bp.route("/request-offer", methods=["GET", "POST"])
 @limiter.limit("5 per minute", methods=["POST"])
 def request_offer():
+    # De knop op de homepage (templates/index.html) verbergt de link naar dit
+    # formulier al buiten de "available"-stand, maar de route zelf moet ook
+    # ontoegankelijk zijn (rechtstreekse URL, oude bladwijzer, ...) - zie
+    # models.SiteSettings.offer_status en routes/admin.py home_settings.
+    if SiteSettings.get().offer_status != OFFER_STATUS_AVAILABLE:
+        return redirect(url_for("main.home"))
+
     if request.method != "POST":
         return render_template(
             "request_offer.html", tariff_choices=TARIFF_CHOICES, nights_choices=NIGHTS_CHOICES, form=_form_values()

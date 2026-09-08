@@ -21,7 +21,7 @@ from werkzeug.routing import BuildError
 from datetime import datetime
 
 from extensions import db
-from models import Page, PageBlock, PAGE_BLOCK_TYPES, NavItem, NAV_ITEM_TYPES, User, OfferRequest, SiteSettings, HOME_PAGE_SLUG
+from models import Page, PageBlock, PAGE_BLOCK_TYPES, NavItem, NAV_ITEM_TYPES, User, OfferRequest, SiteSettings, HOME_PAGE_SLUG, OFFER_STATUS_CHOICES
 from utils.auth import admin_required
 from utils.mail import send_new_admin_mail
 from utils.sanitize import sanitize_html
@@ -504,14 +504,18 @@ def home_settings():
     if request.method == "POST":
         instagram_url = (request.form.get("instagram_url") or "").strip()
         facebook_url = (request.form.get("facebook_url") or "").strip()
+        offer_status = request.form.get("offer_status") or ""
 
         if instagram_url and not is_safe_target_url(instagram_url):
             error = "Ongeldige Instagram-link."
         elif facebook_url and not is_safe_target_url(facebook_url):
             error = "Ongeldige Facebook-link."
+        elif offer_status not in OFFER_STATUS_CHOICES:
+            error = "Ongeldige status voor 'Request your Offer'."
         else:
             settings.instagram_url = instagram_url or None
             settings.facebook_url = facebook_url or None
+            settings.offer_status = offer_status
 
             for field in ("photo_1", "photo_2", "photo_3"):
                 if request.form.get(f"{field}_remove"):
@@ -853,7 +857,7 @@ def navigation():
 @admin_bp.route("/navigation/add", methods=["POST"])
 @admin_required
 def add_nav_item():
-    label = (request.form.get("label") or "").strip()
+    label_i18n = _parse_i18n_field("label")
     item_type = request.form.get("item_type") or ""
     parent_id = request.form.get("parent_id") or None
     parent_id = int(parent_id) if parent_id else None
@@ -864,8 +868,8 @@ def add_nav_item():
     open_in_new_tab = bool(request.form.get("open_in_new_tab"))
 
     error = None
-    if not label:
-        error = "Label is verplicht."
+    if not any(label_i18n.values()):
+        error = "Label is verplicht (in minstens één taal)."
     elif item_type not in NAV_ITEM_TYPES:
         error = "Ongeldig type."
     elif item_type == "category" and parent_id is not None:
@@ -876,9 +880,12 @@ def add_nav_item():
     if error:
         return render_template("admin/navigation.html", **_nav_admin_context(error=error))
 
+    label_i18n = auto_translate_i18n_field(label_i18n)
+    label = label_i18n.get("nl") or label_i18n.get("en") or next((v for v in label_i18n.values() if v), "")
+
     max_position = db.session.query(db.func.max(NavItem.position)).filter_by(parent_id=parent_id).scalar() or 0
     item = NavItem(
-        label=label, item_type=item_type, parent_id=parent_id,
+        label=label, label_i18n=label_i18n, item_type=item_type, parent_id=parent_id,
         page_id=page_id if item_type == "page" else None,
         route_endpoint=route_endpoint if item_type == "route" else None,
         external_url=external_url if item_type == "external" else None,
@@ -896,7 +903,7 @@ def edit_nav_item(item_id):
     if item is None:
         return redirect(url_for("admin.navigation"))
 
-    label = (request.form.get("label") or "").strip()
+    label_i18n = _parse_i18n_field("label")
     page_id = request.form.get("page_id") or None
     page_id = int(page_id) if page_id else None
     route_endpoint = (request.form.get("route_endpoint") or "").strip() or None
@@ -905,15 +912,17 @@ def edit_nav_item(item_id):
     is_visible = bool(request.form.get("is_visible"))
 
     error = None
-    if not label:
-        error = "Label is verplicht."
+    if not any(label_i18n.values()):
+        error = "Label is verplicht (in minstens één taal)."
     else:
         error = _validate_nav_target(item.item_type, page_id, route_endpoint, external_url)
 
     if error:
         return render_template("admin/navigation.html", **_nav_admin_context(error=error))
 
-    item.label = label
+    label_i18n = auto_translate_i18n_field(label_i18n, existing=item.label_i18n)
+    item.label = label_i18n.get("nl") or label_i18n.get("en") or next((v for v in label_i18n.values() if v), "")
+    item.label_i18n = label_i18n
     if item.item_type == "page":
         item.page_id = page_id
     elif item.item_type == "route":

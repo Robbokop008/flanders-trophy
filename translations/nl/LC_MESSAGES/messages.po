@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-01 16:59+0200\n"
+"POT-Creation-Date: 2026-09-08 16:17+0200\n"
 "PO-Revision-Date: 2026-08-21 11:47+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -18,27 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: routes/main.py:200
+#: routes/main.py:27
+msgid "General questions"
+msgstr "Algemene vragen"
+
+#: routes/main.py:28
+msgid "Registration / Offers"
+msgstr "Inschrijving / Offertes"
+
+#: routes/main.py:29
+msgid "Referees"
+msgstr "Scheidsrechters"
+
+#: routes/main.py:30
+msgid "Parade"
+msgstr "Parade"
+
+#: routes/main.py:31
+msgid "During tournament"
+msgstr "Tijdens het toernooi"
+
+#: routes/main.py:224
 msgid "Please fill in all fields correctly (with a valid email address)."
 msgstr "Vul alle velden correct in (met een geldig e-mailadres)."
 
-#: routes/main.py:210
+#: routes/main.py:234
 msgid "Your message has been sent successfully."
 msgstr "Je bericht is succesvol verzonden."
 
-#: routes/offers.py:74
+#: routes/offers.py:81
 msgid "Please fill in club, country, contact person and email address."
 msgstr "Vul club, land, contactpersoon en e-mailadres in."
 
-#: routes/offers.py:76
+#: routes/offers.py:83
 msgid "Please enter a valid email address."
 msgstr "Vul een geldig e-mailadres in."
 
-#: routes/offers.py:78
+#: routes/offers.py:85
 msgid "Please fill in at least one team in at least one category."
 msgstr "Vul minstens één team in bij minstens één categorie."
 
-#: templates/base.html:12
+#: templates/base.html:13
 msgid ""
 "The biggest international handball tournament in the BeNeLux, held every "
 "year in Sint-Truiden."
@@ -46,43 +66,43 @@ msgstr ""
 "Het grootste internationale handbaltoernooi van de Benelux, elk jaar in "
 "Sint-Truiden."
 
-#: templates/base.html:104
+#: templates/base.html:111
 msgid "International Easter handball tournament in Sint-Truiden."
 msgstr "Internationaal paashandbaltoernooi in Sint-Truiden."
 
-#: templates/base.html:108 templates/contact.html:7
+#: templates/base.html:115 templates/contact.html:7
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/base.html:110
+#: templates/base.html:117
 msgid "Contact us"
 msgstr "Contacteer ons"
 
-#: templates/base.html:112 templates/base.html:133
+#: templates/base.html:119 templates/base.html:140
 msgid "Privacy policy"
 msgstr "Privacybeleid"
 
-#: templates/base.html:115
+#: templates/base.html:122
 msgid "Cookie settings"
 msgstr "Cookie-instellingen"
 
-#: templates/base.html:121
+#: templates/base.html:128
 msgid "All rights reserved."
 msgstr "Alle rechten voorbehouden."
 
-#: templates/base.html:132
+#: templates/base.html:139
 msgid ""
 "We use cookies to understand how visitors use this website (Google "
 "Analytics). We only do this with your permission."
 msgstr ""
-"We gebruiken cookies om te begrijpen hoe bezoekers deze website gebruiken "
-"(Google Analytics). Dat doen we enkel met jouw toestemming."
+"We gebruiken cookies om te begrijpen hoe bezoekers deze website gebruiken"
+" (Google Analytics). Dat doen we enkel met jouw toestemming."
 
-#: templates/base.html:136
+#: templates/base.html:143
 msgid "Reject"
 msgstr "Weigeren"
 
-#: templates/base.html:137
+#: templates/base.html:144
 msgid "Accept"
 msgstr "Accepteren"
 
@@ -114,15 +134,23 @@ msgstr "Bericht"
 msgid "Send message"
 msgstr "Bericht versturen"
 
-#: templates/index.html:21
+#: templates/index.html:22
+msgid "Sold out"
+msgstr "Uitverkocht"
+
+#: templates/index.html:24
+msgid "Request your Offer soon"
+msgstr "Vraag binnenkort je offerte aan"
+
+#: templates/index.html:26
 msgid "Request your Offer"
 msgstr "Vraag je offerte aan"
 
-#: templates/index.html:41
+#: templates/index.html:47
 msgid "Worldwide"
 msgstr "Wereldwijd"
 
-#: templates/index.html:42
+#: templates/index.html:48
 msgid "Handball"
 msgstr "Handbal"
 
@@ -382,21 +410,6 @@ msgstr "Vraag mijn offerte aan"
 
 #~ msgid "Downloads"
 #~ msgstr "Downloads"
-
-#~ msgid "General questions"
-#~ msgstr "Algemene vragen"
-
-#~ msgid "Registration / Offers"
-#~ msgstr "Inschrijving / Offertes"
-
-#~ msgid "Referees"
-#~ msgstr "Scheidsrechters"
-
-#~ msgid "Parade"
-#~ msgstr "Parade"
-
-#~ msgid "During tournament"
-#~ msgstr "Tijdens het toernooi"
 
 #~ msgid "Women U15"
 #~ msgstr "Dames U15"
