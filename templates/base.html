@@ -11,10 +11,15 @@
        page_meta_description() in utils/seo.py, gebruikt in index.html en
        pages/view.html. #}
     <meta name="description" content="{% block meta_description %}{{ _('The biggest international handball tournament in the BeNeLux, held every year in Sint-Truiden.') }}{% endblock %}">
-    {# request.base_url bevat geen querystring (bv. ?next=... op /login) -
-       zonder canonical zou zo'n URL-variant als een aparte pagina kunnen
-       tellen in zoekmachines. #}
-    <link rel="canonical" href="{{ request.base_url }}">
+    {# Vaste canonieke basis-URL (config.CANONICAL_BASE_URL) i.p.v.
+       request.base_url: dat laatste weerspiegelt gewoon de binnenkomende
+       host/schema van elke request, dus elke URL-variant (www/non-www,
+       http/https) verklaarde zichzelf canoniek i.p.v. één vaste pagina aan
+       te wijzen - reden dat Google Search Console zelf een andere
+       canonieke pagina koos dan bedoeld. request.path bevat geen
+       querystring (bv. ?next=... op /login). In development (geen
+       CANONICAL_BASE_URL geconfigureerd) valt dit terug op request.base_url. #}
+    <link rel="canonical" href="{{ (config.CANONICAL_BASE_URL ~ request.path) if config.CANONICAL_BASE_URL else request.base_url }}">
 
     {# self.title()/self.meta_description() hergebruiken hierboven al
        gerenderde blocks i.p.v. de titel/omschrijving een tweede keer op te
@@ -24,7 +29,7 @@
     <meta property="og:locale" content="{{ current_lang }}">
     <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
     <meta property="og:description" content="{{ self.meta_description() }}">
-    <meta property="og:url" content="{{ request.base_url }}">
+    <meta property="og:url" content="{{ (config.CANONICAL_BASE_URL ~ request.path) if config.CANONICAL_BASE_URL else request.base_url }}">
     {% block og_image %}{% endblock %}
     <meta name="twitter:card" content="summary_large_image">
 

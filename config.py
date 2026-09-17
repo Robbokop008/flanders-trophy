@@ -98,6 +98,10 @@ class Config:
     DOCUMENT_UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "documents")
     MAX_CONTENT_LENGTH = 8 * 1024 * 1024   # 8 MB, voorkomt te grote uploads
 
+    # Vaste canonieke basis-URL (zie templates/base.html) - None hier zodat
+    # de canonical-tag in development gewoon op request.base_url terugvalt.
+    CANONICAL_BASE_URL = None
+
 
 class DevelopmentConfig(Config):
     """Instellingen voor lokaal ontwikkelen."""
@@ -118,6 +122,14 @@ class ProductionConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = _normalize_database_url(os.environ.get("DATABASE_URL")) or _DEFAULT_SQLITE_URI
     SESSION_COOKIE_SECURE = True
+
+    # Vaste canonieke host (https, zonder www) waarop de site ook effectief
+    # bereikbaar is via de 301-redirects in deploy/hetzner/.htaccess. Zonder
+    # deze vaste waarde bouwde templates/base.html de canonical-tag op uit
+    # request.base_url, waardoor elke URL-variant (www/non-www, http/https)
+    # zichzelf canoniek verklaarde - Google Search Console koos daardoor zelf
+    # een canonieke pagina i.p.v. de bedoelde.
+    CANONICAL_BASE_URL = os.environ.get("CANONICAL_BASE_URL", "https://flanderstrophy.be")
 
 
 # Maak het eenvoudig om per omgeving de juiste config te kiezen
