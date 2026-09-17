@@ -32,13 +32,15 @@ def _send(msg):
 
 
 def send_contact_mail(name, email, message, topic=None):
-    """Stuurt een kopie van het contactformulier naar de organisatiemail."""
+    """Stuurt een kopie van het contactformulier naar CONTACT_EMAIL (valt
+    terug op GMAIL_USER als die niet apart ingesteld is)."""
     gmail_user = current_app.config["GMAIL_USER"]
+    contact_email = current_app.config["CONTACT_EMAIL"]
     topic = _veilige_header_waarde(topic) or "General questions"
 
     msg = MIMEMultipart()
     msg["From"] = gmail_user
-    msg["To"] = gmail_user
+    msg["To"] = contact_email
     msg["Subject"] = f"[{topic}] Nieuw contactformulier bericht"
     msg["Reply-To"] = _veilige_header_waarde(email)
 
@@ -110,15 +112,19 @@ def send_new_admin_mail(new_user, created_by):
 
 
 def send_offer_request_mail(offer_request):
-    """Stuurt een notificatiemail naar de organisatiemail bij een nieuwe
-    offerteaanvraag (models.OfferRequest), zodat het team meteen een offerte
-    kan voorbereiden. Geen automatische bevestigingsmail naar de club zelf -
-    die krijgt enkel de bevestiging op het scherm (zie routes/offers.py)."""
+    """Stuurt een notificatiemail naar OFFER_EMAIL bij een nieuwe
+    offerteaanvraag (models.OfferRequest, valt terug op GMAIL_USER als die
+    niet apart ingesteld is), zodat het team meteen een offerte kan
+    voorbereiden. OFFER_EMAIL kan meerdere adressen bevatten (config.py zet
+    dit om naar een lijst) - iedereen daarin krijgt de mail. Geen
+    automatische bevestigingsmail naar de club zelf - die krijgt enkel de
+    bevestiging op het scherm (zie routes/offers.py)."""
     gmail_user = current_app.config["GMAIL_USER"]
+    offer_emails = current_app.config["OFFER_EMAIL"]
 
     msg = MIMEMultipart()
     msg["From"] = gmail_user
-    msg["To"] = gmail_user
+    msg["To"] = ", ".join(offer_emails)
     msg["Subject"] = f"Nieuwe offerteaanvraag - {_veilige_header_waarde(offer_request.club_name)}"
     msg["Reply-To"] = _veilige_header_waarde(offer_request.email)
 

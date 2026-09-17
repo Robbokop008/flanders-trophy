@@ -190,6 +190,7 @@ class OfferRequest(db.Model):
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_handled = db.Column(db.Boolean, nullable=False, default=False)
+    internal_note = db.Column(db.Text)
 
     TEAM_FIELDS = [
         ("women_u15", "Women U15"), ("women_u17", "Women U17"),

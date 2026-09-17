@@ -1,0 +1,63 @@
+{% extends "admin/_shell.html" %}
+
+{% block title %}Adminpagina - {{ o.club_name }}{% endblock %}
+
+{% block admin_content %}
+<div class="admin-page-header">
+    <p style="margin:0 0 8px;"><a href="{{ url_for('admin.offer_requests') }}">&larr; Terug naar offerteaanvragen</a></p>
+    <h1>{{ o.club_name }}</h1>
+    <p>
+        Aanvraag van {{ o.created_at.strftime('%d/%m/%Y %H:%M') if o.created_at else '-' }}
+        &mdash;
+        {% if o.is_handled %}<span class="muted">Verwerkt ✓</span>{% else %}<span class="muted">Nog niet verwerkt</span>{% endif %}
+    </p>
+</div>
+
+<section class="section">
+    <form method="POST" action="{{ url_for('admin.toggle_offer_request_handled', offer_request_id=o.id) }}" style="margin-bottom:20px;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="next" value="{{ url_for('admin.offer_request_detail', offer_request_id=o.id) }}">
+        <button type="submit" class="btn {{ 'btn-secondary' if o.is_handled else 'btn-primary' }}">
+            {{ 'Markeer als niet verwerkt' if o.is_handled else 'Markeer verwerkt' }}
+        </button>
+    </form>
+
+    <div class="admin-form">
+        <div>
+            <h3 style="margin-top:0;">Club &amp; contact</h3>
+            <p><strong>Club</strong><br>{{ o.club_name }}</p>
+            <p><strong>Land</strong><br>{{ o.country }}</p>
+            <p><strong>Contactpersoon</strong><br>{{ o.contact_person }}</p>
+            <p><strong>E-mail</strong><br><a href="mailto:{{ o.email }}">{{ o.email }}</a></p>
+            {% if o.phone %}<p><strong>Telefoon</strong><br>{{ o.phone }}</p>{% endif %}
+        </div>
+
+        <div>
+            <h3 style="margin-top:0;">Aanvraag</h3>
+            <p><strong>Teams</strong> ({{ o.total_teams }} totaal)</p>
+            <ul style="margin:0 0 16px;padding-left:18px;">
+                {% for veld, label in o.TEAM_FIELDS %}
+                {% set aantal = o|attr(veld) %}
+                {% if aantal %}<li>{{ label }}: {{ aantal }}</li>{% endif %}
+                {% endfor %}
+            </ul>
+            {% if o.nights %}<p><strong>Nachten</strong><br>{{ o.nights }}</p>{% endif %}
+            {% if o.preferred_package %}<p><strong>Tarief</strong><br>{{ o.preferred_package }}</p>{% endif %}
+            {% if o.expected_participants %}<p><strong>Verwachte deelnemers</strong><br>{{ o.expected_participants }}</p>{% endif %}
+            {% if o.comments %}<p><strong>Opmerkingen van de club</strong><br>{{ o.comments }}</p>{% endif %}
+        </div>
+    </div>
+
+    <hr style="margin:28px 0;border:none;border-top:1px solid var(--border);">
+
+    <h3 style="margin-top:0;">Interne notitie</h3>
+    <p class="muted" style="font-size:13px;margin-top:-8px;">Enkel zichtbaar voor admins, bv. "offerte verstuurd op 3/10".</p>
+    <form method="POST" action="{{ url_for('admin.update_offer_request_note', offer_request_id=o.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <textarea name="internal_note" rows="4" style="max-width:600px;">{{ o.internal_note or '' }}</textarea>
+        <div class="form-actions">
+            <button type="submit" class="admin-button">Notitie opslaan</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

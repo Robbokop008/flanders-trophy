@@ -62,9 +62,19 @@ class Config:
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
 
-    # Mail (contactformulier)
+    # Mail (contactformulier + offerteaanvragen) - verstuurd via één Gmail-account
+    # (GMAIL_USER/GMAIL_APP_PASSWORD), maar contactberichten en offerteaanvragen
+    # kunnen elk naar een ander ontvangend adres gaan (bv. info@ vs offertes@).
+    # Zonder CONTACT_EMAIL/OFFER_EMAIL in .env vallen beide terug op GMAIL_USER,
+    # zoals voorheen. OFFER_EMAIL mag meerdere adressen bevatten, gescheiden
+    # door een komma (bv. "offertes@..., voorzitter@...") - handig als
+    # meerdere mensen een offerteaanvraag meteen moeten zien.
     GMAIL_USER = os.environ.get("GMAIL_USER")
     GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD")
+    CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL") or GMAIL_USER
+    OFFER_EMAIL = [
+        adres.strip() for adres in (os.environ.get("OFFER_EMAIL") or "").split(",") if adres.strip()
+    ] or [GMAIL_USER]
 
     # Automatische vertaling van CMS-paginatitels/-inhoud (zie utils/translate.py) -
     # optioneel: zonder key wordt er simpelweg niet vertaald (utils/translate.py

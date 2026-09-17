@@ -1,6 +1,15 @@
 # Hernoem dit bestand naar ".htaccess" en plaats het in de document root
 # (naast app.fcgi) op Hetzner Webhosting. Stuurt alle requests die geen
 # bestaand bestand zijn (dus geen /static/...) door naar de FastCGI-app.
+
+# Expliciet .fcgi als FastCGI-script laten behandelen - probeersel om uit te
+# sluiten dat Hetzner's standaardkoppeling hiervoor is verstoord na het
+# toevoegen van een tweede domein op dit account.
+<IfModule mod_fcgid.c>
+  Options +ExecCGI
+  AddHandler fcgid-script .fcgi
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /

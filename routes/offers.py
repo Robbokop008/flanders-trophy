@@ -71,18 +71,28 @@ def request_offer():
 
     if request.method != "POST":
         return render_template(
-            "request_offer.html", tariff_choices=TARIFF_CHOICES, nights_choices=NIGHTS_CHOICES, form=_form_values()
+            "request_offer.html", tariff_choices=TARIFF_CHOICES, nights_choices=NIGHTS_CHOICES, form=_form_values(),
+            success=request.args.get("success") == "1",
         )
 
     form = _form_values()
 
     error = None
-    if not form["club_name"] or not form["country"] or not form["contact_person"] or not form["email"]:
-        error = _("Please fill in club, country, contact person and email address.")
+    if (
+        not form["club_name"] or not form["country"] or not form["contact_person"]
+        or not form["email"] or not form["phone"]
+    ):
+        error = _("Please fill in all fields, except the additional comments.")
     elif "@" not in form["email"]:
         error = _("Please enter a valid email address.")
     elif sum(_parse_int(form[veld]) for veld, _label in OfferRequest.TEAM_FIELDS) == 0:
         error = _("Please fill in at least one team in at least one category.")
+    elif not form["expected_participants_raw"] or _parse_int(form["expected_participants_raw"]) == 0:
+        error = _("Please fill in the expected number of participants.")
+    elif form["preferred_package"] not in TARIFF_CHOICES:
+        error = _("Please select a tariff.")
+    elif _parse_nights(form["nights_raw"]) is None:
+        error = _("Please select the number of nights.")
 
     if error:
         return render_template(
@@ -110,7 +120,7 @@ def request_offer():
         # database) - wel loggen, zelfde patroon als routes/main.contact.
         current_app.logger.error(f"Kon offerteaanvraag-mail niet versturen: {exc}")
 
-    return render_template(
-        "request_offer.html", tariff_choices=TARIFF_CHOICES, nights_choices=NIGHTS_CHOICES, form=_form_values(),
-        success=True,
-    )
+    # Redirect na POST (Post/Redirect/Get) i.p.v. de POST-pagina te
+    # hertonen: anders zorgt een refresh/terugknop voor een dubbele
+    # aanvraag (browser verstuurt het formulier gewoon opnieuw).
+    return redirect(url_for("offers.request_offer", success="1"))

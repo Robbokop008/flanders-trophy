@@ -34,7 +34,7 @@
             </thead>
             <tbody>
                 {% for o in offer_requests %}
-                <tr>
+                <tr class="row-link" data-href="{{ url_for('admin.offer_request_detail', offer_request_id=o.id) }}">
                     <td>{{ o.created_at.strftime('%d/%m/%Y %H:%M') if o.created_at else '-' }}</td>
                     <td>{{ o.club_name }}</td>
                     <td>{{ o.country }}</td>
@@ -43,21 +43,7 @@
                         <a href="mailto:{{ o.email }}">{{ o.email }}</a>
                         {% if o.phone %}<br>{{ o.phone }}{% endif %}
                     </td>
-                    <td>
-                        {{ o.total_teams }} team{{ 's' if o.total_teams != 1 }}
-                        <details>
-                            <summary class="muted" style="cursor:pointer;font-size:13px;">Detail</summary>
-                            <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;">
-                                {% for veld, label in o.TEAM_FIELDS %}
-                                {% set aantal = o|attr(veld) %}
-                                {% if aantal %}<li>{{ label }}: {{ aantal }}</li>{% endif %}
-                                {% endfor %}
-                            </ul>
-                        </details>
-                        {% if o.preferred_package %}<div class="muted" style="font-size:13px;">Tarief: {{ o.preferred_package }}</div>{% endif %}
-                        {% if o.expected_participants %}<div class="muted" style="font-size:13px;">{{ o.expected_participants }} deelnemers verwacht</div>{% endif %}
-                        {% if o.comments %}<div class="muted" style="font-size:13px;">"{{ o.comments }}"</div>{% endif %}
-                    </td>
+                    <td>{{ o.total_teams }} team{{ 's' if o.total_teams != 1 }}</td>
                     <td>{{ o.nights or '-' }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('admin.toggle_offer_request_handled', offer_request_id=o.id, show_handled=1 if show_handled else 0) }}">
@@ -76,4 +62,8 @@
         <p>{{ 'Nog geen offerteaanvragen binnengekomen.' if not show_handled else 'Geen aanvragen gevonden.' }}</p>
     {% endif %}
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/admin_row_link.js') }}" defer></script>
 {% endblock %}

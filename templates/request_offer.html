@@ -34,7 +34,7 @@
             <input type="email" id="email" name="email" value="{{ form.email }}" required>
 
             <label for="phone">{{ _('Phone') }}</label>
-            <input type="tel" id="phone" name="phone" value="{{ form.phone }}">
+            <input type="tel" id="phone" name="phone" value="{{ form.phone }}" required>
 
             <h2>{{ _('Teams') }}</h2>
             <p class="muted">{{ _('Number of teams per category.') }}</p>
@@ -54,10 +54,10 @@
 
             <h2>{{ _('Stay') }}</h2>
             <label for="expected_participants">{{ _('Expected number of participants') }}</label>
-            <input type="number" min="0" id="expected_participants" name="expected_participants" value="{{ form.expected_participants_raw }}">
+            <input type="number" min="1" id="expected_participants" name="expected_participants" value="{{ form.expected_participants_raw }}" required>
 
             <label for="preferred_package">{{ _('Tariff') }}</label>
-            <select id="preferred_package" name="preferred_package">
+            <select id="preferred_package" name="preferred_package" required>
                 <option value="">-</option>
                 {% for choice in tariff_choices %}
                 <option value="{{ choice }}" {% if form.preferred_package == choice %}selected{% endif %}>{{ _(choice) }}</option>
@@ -65,7 +65,7 @@
             </select>
 
             <label for="nights">{{ _('Number of nights') }}</label>
-            <select id="nights" name="nights">
+            <select id="nights" name="nights" required>
                 <option value="">-</option>
                 {% for value, label in nights_choices %}
                 <option value="{{ value }}" {% if form.nights_raw == value|string %}selected{% endif %}>{{ value }}: {{ _(label) }}</option>

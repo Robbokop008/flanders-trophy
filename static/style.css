@@ -2195,6 +2195,7 @@ body.content-page, body.auth-page { background: var(--blue); }
 .admin-table tbody tr:hover { background: var(--blue-light); }
 .admin-table tbody tr:last-child td { border-bottom: none; }
 .admin-table form { display: inline; }
+.admin-table tbody tr.row-link { cursor: pointer; }
 
 .variant-row {
   display: flex;

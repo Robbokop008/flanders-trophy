@@ -1048,4 +1048,23 @@ def toggle_offer_request_handled(offer_request_id):
     if offer_request is not None:
         offer_request.is_handled = not offer_request.is_handled
         db.session.commit()
+    next_url = request.form.get("next")
+    if next_url:
+        return redirect(next_url)
     return redirect(url_for("admin.offer_requests", show_handled=request.args.get("show_handled")))
+
+
+@admin_bp.route("/offer-requests/<int:offer_request_id>")
+@admin_required
+def offer_request_detail(offer_request_id):
+    offer_request = OfferRequest.query.get_or_404(offer_request_id)
+    return render_template("admin/offer_request_detail.html", user=g.user, o=offer_request)
+
+
+@admin_bp.route("/offer-requests/<int:offer_request_id>/note", methods=["POST"])
+@admin_required
+def update_offer_request_note(offer_request_id):
+    offer_request = OfferRequest.query.get_or_404(offer_request_id)
+    offer_request.internal_note = request.form.get("internal_note", "").strip() or None
+    db.session.commit()
+    return redirect(url_for("admin.offer_request_detail", offer_request_id=offer_request.id))
